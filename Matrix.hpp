@@ -138,30 +138,20 @@ void Matrix<T, StorageOrder>::compress()
         {
             temp_ind = it->first[0];
 
-            // add zeros to empty rows
+            // add same element to empty rows
             auto it_tmp = std::prev(it);
-            // std::cout << "**" << it_tmp->first[0];
             for( std::size_t k=it_tmp->first[0]+1; k<temp_ind; ++k )
             {
-                // std::cout << ".";
                 compressed_data[2].push_back(compressed_data[0].size()-1);
             }
-            // std::cout<< "**";
 
             //* rows
             temp_ind = it->first[0];
             compressed_data[2].push_back(compressed_data[0].size()-1);
         }
-        // std::cout << " - ";
     }
-    // std::cout<<std::endl;
     compressed_data[2].push_back(compressed_data[0].size()-1);
 
-    // for(auto it=compressed_data[2].cbegin(); it!=compressed_data[2].cend(); ++it)
-    // {
-    //     std::cout << *it << " ";
-    // }
-    // std::cout << std::endl;
 }
 
 // print
@@ -174,11 +164,6 @@ void Matrix<T, StorageOrder>::print() const
     {
 
         std::cout << "print compressed" << std::endl;
-        // std::cout << compressed_data[0].size() << " "
-        //         << compressed_data[1].size() << " " 
-        //         << compressed_data[2].size() << std::endl;
-        // std::cout << "start print" << std::endl;
-
 
         //* i = row index
         std::size_t i=0;
