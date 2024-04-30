@@ -64,6 +64,9 @@ int main()
     auto p = Mc[ {6,4} ];
     std::cout << p << std::endl; 
     Mc.print();
+
+    algebra::Matrix<double, algebra::Order> M4("data/zenios.mtx");
+    M4.print();
     
     return 0;
 }

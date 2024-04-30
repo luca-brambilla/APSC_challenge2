@@ -6,13 +6,17 @@
 #include <iostream>
 #include <cmath>
 
+#include <string>
+#include <fstream>
+#include <sstream>
+
 #ifndef MATRIX_HPP
 #define MATRIX_HPP
 
 namespace algebra{
 
 // tolerance to consider a number 0 for sparse matrix
-constexpr double ZERO_TOL = 1e-6;
+constexpr double ZERO_TOL = 1e-8;
 
 // enumerator for storage order
 enum Order {Column, Row};
@@ -33,6 +37,7 @@ public:
     Matrix();
     Matrix(uncompressed const &v);
     Matrix(Matrix const &r);
+    Matrix(std::string const &name);
 
     // compression utilities
     void compress();
@@ -99,6 +104,64 @@ Matrix<T, StorageOrder>::Matrix(const std::vector<std::vector<T>> &v)
         }
     }
 
+}
+
+
+// constructor reading from file
+template<typename T, typename StorageOrder>
+Matrix<T, StorageOrder>::Matrix(std::string const &name)
+/*
+read data from file
+*/
+{
+    // open the file
+    std::ifstream file(name);
+
+    // Check if the file is opened successfully
+    if (!file.is_open()) {
+        std::cerr << "Error opening file!" << std::endl;
+        return;
+    }
+    
+    // read first commented lines
+    std::string line;
+    getline(file, line);
+    while(line[0] == '%' )
+    {
+        getline(file, line);
+    }
+
+    // read number of rows and columns
+    std::istringstream iss(line);
+    iss >> nrow >> ncol;
+    std::cout << nrow << " " << ncol << std::endl;
+
+    // read each line from the file
+    while (getline(file, line))
+    {
+        // string stream from the line
+        std::istringstream iss(line);
+        
+        // hold data for each line
+        std::size_t i;
+        std::size_t j;
+        T num;
+
+        // read data from the line
+        if (iss >> i >> j >> num) {
+            // store value if above tolerance
+            if (std::abs(num) > ZERO_TOL)
+            {
+                dynamic_data.insert( { {i,j}, num} );
+            }
+        }
+        else {
+            std::cerr << "Error reading line: " << line << std::endl;
+        }
+    }
+
+    // close the file
+    file.close();
 }
 
 // is_compressed
