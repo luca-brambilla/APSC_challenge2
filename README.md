@@ -25,7 +25,7 @@ CHECKLIST:
 - [ ] friend matrix-vector `operator*`
 - [ ] extension to matrix-vector product with `Matrix` of just one column
 - [ ] matrix-matrix `operator*`
-- [ ] `norm()`
+- [x] `norm()`
 - [ ] extension of `norm()` working with complex
 - [ ] reader of matrix market format
 - [ ] test code with `Chrono` utility

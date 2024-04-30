@@ -1,8 +1,10 @@
 #include <cstddef>
+#include <cstdio>
 #include <map>
 #include <array>
 #include <vector>
 #include <iostream>
+#include <cmath>
 
 #ifndef MATRIX_HPP
 #define MATRIX_HPP
@@ -14,6 +16,7 @@ constexpr double ZERO_TOL = 1e-6;
 
 // enumerator for storage order
 enum Order {Column, Row};
+enum Norm {One, Infinity, Frobenius};
 
 // Matrix class template
 template <typename T, typename StorageOrder>
@@ -37,14 +40,14 @@ public:
     bool is_compressed() const;
 
     void print() const;
-    double norm() const;
+    double norm(Norm const &n) const;
 
     // operations
     Matrix matmul();
 
     // access operator
-    T operator[] (std::size_t const &i) const;
-    T& operator[] (std::size_t const &i);
+    T operator[] (indexes const &i) const;
+    T& operator[] (indexes const &i);
 
     
 private:
@@ -208,6 +211,128 @@ void Matrix<T, StorageOrder>::print() const
 
 
 }
+
+
+// norm
+template<typename T, typename StorageOrder>
+double Matrix<T, StorageOrder>::norm(Norm const &n) const
+{
+    double res = 0.;
+    double sum = 0.;
+    std::size_t id_tmp = dynamic_data.begin()->first[0];
+    std::vector<T> sums(ncol);
+
+
+    switch (n) {
+        case Norm::One:
+            // max of sum by columns
+
+            // save sum of each row
+            for(auto it = dynamic_data.cbegin(); it != dynamic_data.cend(); ++it)
+            {
+                sums[it->first[1]] += std::abs(it->second);
+            }
+
+            // find maximum among all elements of sums
+            for(std::size_t i = 0; i < sums.size(); ++i)
+            {
+                if (sums[i] > res)
+                {
+                    res = sums[i];
+                }
+            }
+
+            break;
+
+        case Norm::Infinity:
+            // max of sum by rows
+            for(auto it = dynamic_data.cbegin(); it != dynamic_data.cend(); ++it)
+            {
+                // change row - reset sum - change maximum
+                if (it->first[0] != id_tmp)
+                {
+                    if (sum > res)
+                    {
+                        res = sum;
+                    }
+                    sum = 0.;
+                    id_tmp = it->first[0];
+                }
+                
+                // update sum
+                sum += std::abs(it->second);
+            }
+
+            // check last sum for maximum
+            if (sum > res)
+            {
+                res = sum;
+            }
+            break;
+
+        case Norm::Frobenius:
+            // sum of all elements squared
+            for(auto it = dynamic_data.cbegin(); it != dynamic_data.cend(); ++it)
+            {
+                res += it->second * it->second;
+            }
+
+            res = std::sqrt(res);
+            break;
+    }
+
+    return res;
+}
+
+
+// operator[] access copy
+template<typename T, typename StorageOrder>
+T Matrix<T, StorageOrder>::operator[] (indexes const &i) const
+{
+    if (compressed)
+    {
+        // first element of selected row
+        std::size_t elem_first = compressed_data[2][ i[0] ];
+        return compressed_data[0][ elem_first + i[1]];
+    }
+
+    if (dynamic_data.count(i))
+    {
+        return dynamic_data.at(i);
+    }
+
+    if (i[0]>nrow or i[1]>ncol)
+    {
+        std::cerr << "out of bound index" << std::endl; 
+    }
+    
+    return 0;
+
+}
+
+// operator[] access assign
+template<typename T, typename StorageOrder>
+T& Matrix<T, StorageOrder>::operator[] (indexes const &i)
+{
+    if (compressed)
+    {
+        // first element of selected row
+        std::size_t elem_first = compressed_data[2][ i[0] ];
+        return compressed_data[0][ elem_first + i[1]];
+    }
+
+    // if (dynamic_data.count(i))
+    // {
+    //     return dynamic_data.at(i);
+    // }
+
+    // create new element
+    // returns 0 if value is not assigned in usage
+    return dynamic_data[i];
+}
+
+
+
 
 
 } // namespace algebra
