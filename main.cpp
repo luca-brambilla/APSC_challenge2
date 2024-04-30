@@ -1,10 +1,10 @@
-#include <cstddef>
 #include <iostream>
 #include "Matrix.hpp"
 
 int main()
 {
-    std::cout << "*** INPUT ***" << std::endl;
+    std::cout << "*** GENERIC MATRIX ***" << std::endl;
+    
     algebra::Matrix<double, algebra::Order>::uncompressed data{ {{1,2,3}, {4,5,6}, {7,8,9}} };
     for (size_t i=0; i<3; i++)
     {
@@ -15,11 +15,21 @@ int main()
         }
     }
 
-    algebra::Matrix<double, algebra::Order> M(data); 
-    std::cout << "*** OUTPUT ***" << std::endl;
+    std::cout << "*** READ INPUT SPARSE ***" << std::endl;
+    algebra::Matrix<double, algebra::Order>::uncompressed data2{ {{1,2,3, 4}, 
+                                                                    {5,6,7, 8},
+                                                                    {0,0,0, 0},
+                                                                    {9, 10, 11, 12}} };
+
+    algebra::Matrix<double, algebra::Order> M(data2); 
+    std::cout << "*** OUTPUT UNCOMPRESSED ***" << std::endl;
     M.print();
 
-    std::cout << "Hello" << std::endl;
+    std::cout << "*** COMPRESS ***" << std::endl;
+    M.compress();
+
+    std::cout << "*** OUTPUT COMPRESSED ***" << std::endl;
+    M.print();
 
     return 0;
 }

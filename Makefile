@@ -24,7 +24,7 @@ EXEC=$(exe_sources:.cpp=)
 # LDFLAGS  += -L$(mkBoostLib)
 # LDLIBS	 += -l boost_iostreams -l boost_system -l boost_filesystem
 
-all: $(EXEC)
+all: clean $(EXEC)
 
 # COMPILER
 %.o: %.cpp %.hpp
