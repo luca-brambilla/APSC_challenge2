@@ -28,8 +28,10 @@ class Matrix;
 
 // forward declaration of friend function inside class template
 template<typename T, typename StorageOrder>
-std::vector<T> operator*(const Matrix<T, StorageOrder> &m, const std::vector<T> &v );
+std::vector<T> operator*( Matrix<T, StorageOrder> const &m, std::vector<T> const &v );
 
+template<typename T, typename StorageOrder>
+Matrix<T,StorageOrder> operator*( Matrix<T,StorageOrder> const &m1, Matrix<T,StorageOrder> const &m2);
 
 // Matrix class template
 template <typename T, typename StorageOrder>
@@ -39,8 +41,6 @@ public:
     typedef std::array<std::size_t,2> indexes;
     typedef std::vector<std::vector<T>> uncompressed;
     typedef std::map<indexes,T> coo_matrix;
-    //! not all vector<T>, indices are size_t
-    typedef std::array<std::vector<T>,3> cs_matrix;
 
 public:
     // constructor
@@ -63,7 +63,7 @@ public:
 
     // operations
     friend std::vector<T> operator*<T,StorageOrder>(Matrix<T,StorageOrder> const &m, std::vector<T> const &v );
-    friend Matrix<T,StorageOrder> operator*( Matrix<T,StorageOrder> const &m1, Matrix const &m2);
+    friend Matrix<T,StorageOrder> operator*<T,StorageOrder>( Matrix<T,StorageOrder> const &m1, Matrix const &m2);
 
     // access operator
     T operator[] (indexes const &i) const;
@@ -73,7 +73,9 @@ public:
 private:
     bool compressed = false;
     coo_matrix dynamic_data;
-    cs_matrix compressed_data;
+    std::vector<size_t> IA;
+    std::vector<size_t> JA;
+    std::vector<T> AA;
 
     std::size_t ncol = 0;
     std::size_t nrow = 0;
@@ -204,15 +206,15 @@ void Matrix<T, StorageOrder>::compress()
     // keep track of row index change and element
     std::size_t temp_ind = dynamic_data.cbegin()->first[0];
     // first element row
-    compressed_data[2].push_back(temp_ind);
+    IA.push_back(temp_ind);
 
     for (auto it=dynamic_data.cbegin(); it!=dynamic_data.cend(); ++it)
     {
         //std::cout << it->first[0] << " " << std::next(it)->first[0];
         //* value
-        compressed_data[0].push_back(it->second);
+        AA.push_back(it->second);
         //* column
-        compressed_data[1].push_back(it->first[1]);
+        JA.push_back(it->first[1]);
         
         // index of new row
         if(it->first[0] != temp_ind)
@@ -223,15 +225,15 @@ void Matrix<T, StorageOrder>::compress()
             auto it_tmp = std::prev(it);
             for( std::size_t k=it_tmp->first[0]+1; k<temp_ind; ++k )
             {
-                compressed_data[2].push_back(compressed_data[0].size()-1);
+                IA.push_back(AA.size()-1);
             }
 
             //* rows
             temp_ind = it->first[0];
-            compressed_data[2].push_back(compressed_data[0].size()-1);
+            IA.push_back(AA.size()-1);
         }
     }
-    compressed_data[2].push_back(compressed_data[0].size()-1);
+    IA.push_back(AA.size()-1);
     dynamic_data.clear();
 }
 
@@ -251,25 +253,25 @@ void Matrix<T, StorageOrder>::uncompress()
     compressed = false;
 
     // sizes of arrays
-    std::size_t i_sz = compressed_data[2].size();
-    std::size_t j_sz = compressed_data[1].size();
+    std::size_t i_sz = IA.size();
+    std::size_t j_sz = JA.size();
 
     // insert elements in map
     for (std::size_t i=0; i<i_sz; ++i)
     {
         // use I vector to loop from index i to i+1 in vector J and data
-        for (std::size_t j=compressed_data[2][i]; j<compressed_data[2][i+1]; ++j)
+        for (std::size_t j=IA[i]; j<IA[i+1]; ++j)
         {
             // {col,     row}, data
-            dynamic_data.insert( { {i, compressed_data[1][j]}, compressed_data[0][j]} );
+            dynamic_data.insert( { {i, JA[j]}, AA[j]} );
         }
     }
 
     // insert last element
-    dynamic_data.insert( { {nrow-1, compressed_data[1][j_sz-1]}, compressed_data[0][j_sz-1]} );
-    compressed_data[0].clear();
-    compressed_data[1].clear();
-    compressed_data[2].clear();
+    dynamic_data.insert( { {nrow-1, JA[j_sz-1]}, AA[j_sz-1]} );
+    AA.clear();
+    JA.clear();
+    IA.clear();
 
 }
 
@@ -289,27 +291,27 @@ void Matrix<T, StorageOrder>::print() const
         std::size_t i=0;
 
         //* i_sz = dimension of row index vector
-        std::size_t i_sz = compressed_data[2].size();
+        std::size_t i_sz = IA.size();
 
         //* j index along element vector
-        for(std::size_t j=0; j<compressed_data[1].size(); )
+        for(std::size_t j=0; j<JA.size(); )
         {
 
             // if index of element vector equal to next element, then new rob
             // index of element vector must be different from last element
-            if ( (j == compressed_data[2][i+1]) and (j!=compressed_data[2][i_sz-1]) ) 
+            if ( (j == IA[i+1]) and (j!=IA[i_sz-1]) ) 
             {
                 ++i;
             }
 
             // if next index is the same, then it is an empty row
-            if (compressed_data[2][i+1] == compressed_data[2][i])
+            if (IA[i+1] == IA[i])
             {
                 ++i;
                 continue;
             }
 
-            std::cout << i << " " << j << ": " << compressed_data[0][j] << std::endl;
+            std::cout << i << " " << JA[j] << ": " << AA[j] << std::endl;
 
             ++j;
         }
@@ -410,8 +412,8 @@ T Matrix<T, StorageOrder>::operator[] (indexes const &i) const
     if (compressed)
     {
         // first element of selected row
-        std::size_t elem_first = compressed_data[2][ i[0] ];
-        return compressed_data[0][ elem_first + i[1]];
+        std::size_t elem_first = IA[ i[0] ];
+        return AA[ elem_first + i[1]];
     }
 
     if (dynamic_data.count(i))
@@ -435,8 +437,8 @@ T& Matrix<T, StorageOrder>::operator[] (indexes const &i)
     if (compressed)
     {
         // first element of selected row
-        std::size_t elem_first = compressed_data[2][ i[0] ];
-        return compressed_data[0][ elem_first + i[1]];
+        std::size_t elem_first = IA[ i[0] ];
+        return AA[ elem_first + i[1]];
     }
 
     // if (dynamic_data.count(i))
@@ -471,28 +473,26 @@ std::vector<T> operator*(Matrix<T,StorageOrder> const &m, std::vector<T> const &
     //* compressed format
     if (m.compressed)
     {
-
-        //&Matrix<T, StorageOrder>::cs_matrix data = m.compressed_data;
         // sizes of arrays
-        std::size_t i_sz = m.compressed_data[2].size();
-        std::size_t j_sz = m.compressed_data[1].size();
+        std::size_t i_sz = m.IA.size();
+        std::size_t j_sz = m.JA.size();
 
         // insert elements in map
         for (std::size_t i=0; i<i_sz; ++i)
         {
-            std::size_t k = m.compressed_data[2][i];
+            std::size_t k = m.IA[i];
             // use I vector to loop from index i to i+1 in vector J and data
-            for (std::size_t j=0; k+j<m.compressed_data[2][i+1]; ++j)
+            for (std::size_t j=0; k+j<m.IA[i+1]; ++j)
             {
                 // {col, row}
-                res[i] += m.compressed_data[0][k+j] * v[j];
+                res[i] += m.AA[k+j] * v[j];
 
                 //std::cout << i << ", " << j
-                //        << m.compressed_data[0][k+j] << " " << v[j] << std::endl;
+                //        << m.AA[k+j] << " " << v[j] << std::endl;
             }
 
         }
-        res[ res.size()-1 ] += m.compressed_data[0][j_sz-1] * v[v_sz-1];
+        res[ res.size()-1 ] += m.AA[j_sz-1] * v[v_sz-1];
         
         return res;
     }
@@ -511,6 +511,14 @@ std::vector<T> operator*(Matrix<T,StorageOrder> const &m, std::vector<T> const &
         res[i] += val_ij * v[j];
     }
 
+    return res;
+}
+
+//! matrix-matrix multiplication
+template<typename T, typename StorageOrder>
+Matrix<T,StorageOrder> operator*(Matrix<T,StorageOrder> const &m1, Matrix<T,StorageOrder> const &m2 )
+{
+    Matrix<T,StorageOrder> res;
     return res;
 }
 
