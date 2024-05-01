@@ -12,6 +12,8 @@ Representations:
 
 - CSC: compressed sparse column
 
+Documentation available at:
+https://luca-brambilla.github.io/APSC_challenge2/
 
 CHECKLIST:
 
