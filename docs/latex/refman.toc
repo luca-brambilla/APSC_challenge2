@@ -1,0 +1,24 @@
+\@ifundefined {etoctocstyle}{\let \etoc@startlocaltoc \@gobble \let \etoc@settocdepth \@gobble \let \etoc@depthtag \@gobble \let \etoc@setlocaltop \@gobble }{}
+\contentsline {chapter}{\numberline {1}APSC\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}challenge2}{1}{chapter.1}%
+\contentsline {chapter}{\numberline {2}Data Structure Index}{3}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Data Structures}{3}{section.2.1}%
+\contentsline {chapter}{\numberline {3}File Index}{5}{chapter.3}%
+\contentsline {section}{\numberline {3.1}File List}{5}{section.3.1}%
+\contentsline {chapter}{\numberline {4}Data Structure Documentation}{7}{chapter.4}%
+\contentsline {section}{\numberline {4.1}algebra\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}::Matrix$<$ T, Storage\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}Order $>$ Class Template Reference}{7}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}Constructor \& Destructor Documentation}{8}{subsection.4.1.1}%
+\contentsline {subsubsection}{\numberline {4.1.1.1}Matrix()\hspace {0.1cm}{\footnotesize \ttfamily [1/2]}}{8}{subsubsection.4.1.1.1}%
+\contentsline {subsubsection}{\numberline {4.1.1.2}Matrix()\hspace {0.1cm}{\footnotesize \ttfamily [2/2]}}{8}{subsubsection.4.1.1.2}%
+\contentsline {subsection}{\numberline {4.1.2}Member Function Documentation}{8}{subsection.4.1.2}%
+\contentsline {subsubsection}{\numberline {4.1.2.1}compress()}{8}{subsubsection.4.1.2.1}%
+\contentsline {subsubsection}{\numberline {4.1.2.2}is\_compressed()}{9}{subsubsection.4.1.2.2}%
+\contentsline {subsubsection}{\numberline {4.1.2.3}norm()}{9}{subsubsection.4.1.2.3}%
+\contentsline {subsubsection}{\numberline {4.1.2.4}operator[]()\hspace {0.1cm}{\footnotesize \ttfamily [1/2]}}{10}{subsubsection.4.1.2.4}%
+\contentsline {subsubsection}{\numberline {4.1.2.5}operator[]()\hspace {0.1cm}{\footnotesize \ttfamily [2/2]}}{10}{subsubsection.4.1.2.5}%
+\contentsline {subsubsection}{\numberline {4.1.2.6}print()}{10}{subsubsection.4.1.2.6}%
+\contentsline {subsubsection}{\numberline {4.1.2.7}uncompress()}{11}{subsubsection.4.1.2.7}%
+\contentsline {subsection}{\numberline {4.1.3}Friends And Related Symbol Documentation}{11}{subsection.4.1.3}%
+\contentsline {subsubsection}{\numberline {4.1.3.1}operator$\ast $}{11}{subsubsection.4.1.3.1}%
+\contentsline {chapter}{\numberline {5}File Documentation}{13}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Matrix.\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}hpp}{13}{section.5.1}%
+\contentsline {chapter}{Index}{21}{section*.4}%

@@ -1,0 +1,39 @@
+\chapter{APSC\+\_\+challenge2}
+\hypertarget{md_README}{}\label{md_README}\index{APSC\_challenge2@{APSC\_challenge2}}
+\label{md_README_autotoc_md0}%
+\Hypertarget{md_README_autotoc_md0}%
+ 919812 -\/ 10510718
+
+Implementation of the sparse Matrix
+
+Representations\+:
+
+
+\begin{DoxyItemize}
+\item COO\+: coordinates uncompressed, mapping indices to values
+\item CSR\+: compressed sparse row
+\item CSC\+: compressed sparse column
+\end{DoxyItemize}
+
+CHECKLIST\+:
+
+
+\begin{DoxyItemize}
+\item \mbox{[} \mbox{]} README
+\item \mbox{[} \mbox{]} comments
+\item \mbox{[} \mbox{]} dynamic constructor
+\item \mbox{[}x\mbox{]} {\ttfamily compress()}
+\item \mbox{[}x\mbox{]} {\ttfamily uncompress()}
+\item \mbox{[} \mbox{]} {\ttfamily is\+\_\+compressed()}
+\item \mbox{[} \mbox{]} call {\ttfamily operator\mbox{[}\mbox{]}}
+\item \mbox{[} \mbox{]} friend matrix-\/vector {\ttfamily operator\texorpdfstring{$\ast$}{*}}
+\item \mbox{[} \mbox{]} extension to matrix-\/vector product with {\ttfamily Matrix} of just one column
+\item \mbox{[} \mbox{]} matrix-\/matrix {\ttfamily operator\texorpdfstring{$\ast$}{*}}
+\item \mbox{[}x\mbox{]} {\ttfamily norm()}
+\item \mbox{[} \mbox{]} extension of {\ttfamily norm()} working with complex
+\item \mbox{[}x\mbox{]} reader of matrix market format
+\item \mbox{[} \mbox{]} test code with {\ttfamily Chrono} utility
+\item \mbox{[} \mbox{]} working for both compressed and uncompressed
+\item \mbox{[} \mbox{]} everything working for CSR
+\item \mbox{[} \mbox{]} everything working for CSC 
+\end{DoxyItemize}

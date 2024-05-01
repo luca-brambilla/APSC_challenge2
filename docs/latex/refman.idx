@@ -1,0 +1,22 @@
+\indexentry{APSC\_challenge2@{APSC\_challenge2}|hyperpage}{1}
+\indexentry{algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}|hyperpage}{7}
+\indexentry{algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}!Matrix@{Matrix}|hyperpage}{8}
+\indexentry{Matrix@{Matrix}!algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}|hyperpage}{8}
+\indexentry{algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}!Matrix@{Matrix}|hyperpage}{8}
+\indexentry{Matrix@{Matrix}!algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}|hyperpage}{8}
+\indexentry{algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}!compress@{compress}|hyperpage}{8}
+\indexentry{compress@{compress}!algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}|hyperpage}{8}
+\indexentry{algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}!is\_compressed@{is\_compressed}|hyperpage}{9}
+\indexentry{is\_compressed@{is\_compressed}!algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}|hyperpage}{9}
+\indexentry{algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}!norm@{norm}|hyperpage}{9}
+\indexentry{norm@{norm}!algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}|hyperpage}{9}
+\indexentry{algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}!operator\mbox{[}\mbox{]}@{operator[]}|hyperpage}{9}
+\indexentry{operator\mbox{[}\mbox{]}@{operator[]}!algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}|hyperpage}{9}
+\indexentry{algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}!operator\mbox{[}\mbox{]}@{operator[]}|hyperpage}{10}
+\indexentry{operator\mbox{[}\mbox{]}@{operator[]}!algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}|hyperpage}{10}
+\indexentry{algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}!print@{print}|hyperpage}{10}
+\indexentry{print@{print}!algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}|hyperpage}{10}
+\indexentry{algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}!uncompress@{uncompress}|hyperpage}{11}
+\indexentry{uncompress@{uncompress}!algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}|hyperpage}{11}
+\indexentry{algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}!operator\texorpdfstring{$\ast$}{*}@{operator\texorpdfstring{$\ast$}{*}}|hyperpage}{11}
+\indexentry{operator\texorpdfstring{$\ast$}{*}@{operator\texorpdfstring{$\ast$}{*}}!algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}|hyperpage}{11}

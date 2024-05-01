@@ -1,0 +1,52 @@
+\begin{theindex}
+
+  \item {algebra::Matrix$<$ T, StorageOrder $>$}, \hyperpage{7}
+    \subitem {compress}, \hyperpage{8}
+    \subitem {is\_compressed}, \hyperpage{9}
+    \subitem {Matrix}, \hyperpage{8}
+    \subitem {norm}, \hyperpage{9}
+    \subitem {operator[]}, \hyperpage{9, 10}
+    \subitem {operator\texorpdfstring{$\ast$}{*}}, \hyperpage{11}
+    \subitem {print}, \hyperpage{10}
+    \subitem {uncompress}, \hyperpage{11}
+  \item {APSC\_challenge2}, \hyperpage{1}
+
+  \indexspace
+
+  \item {compress}
+    \subitem {algebra::Matrix$<$ T, StorageOrder $>$}, \hyperpage{8}
+
+  \indexspace
+
+  \item {is\_compressed}
+    \subitem {algebra::Matrix$<$ T, StorageOrder $>$}, \hyperpage{9}
+
+  \indexspace
+
+  \item {Matrix}
+    \subitem {algebra::Matrix$<$ T, StorageOrder $>$}, \hyperpage{8}
+
+  \indexspace
+
+  \item {norm}
+    \subitem {algebra::Matrix$<$ T, StorageOrder $>$}, \hyperpage{9}
+
+  \indexspace
+
+  \item {operator[]}
+    \subitem {algebra::Matrix$<$ T, StorageOrder $>$}, 
+		\hyperpage{9, 10}
+  \item {operator\texorpdfstring{$\ast$}{*}}
+    \subitem {algebra::Matrix$<$ T, StorageOrder $>$}, \hyperpage{11}
+
+  \indexspace
+
+  \item {print}
+    \subitem {algebra::Matrix$<$ T, StorageOrder $>$}, \hyperpage{10}
+
+  \indexspace
+
+  \item {uncompress}
+    \subitem {algebra::Matrix$<$ T, StorageOrder $>$}, \hyperpage{11}
+
+\end{theindex}

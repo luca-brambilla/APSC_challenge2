@@ -1,0 +1,293 @@
+\doxysection{algebra\+::Matrix\texorpdfstring{$<$}{<} T, Storage\+Order \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classalgebra_1_1Matrix}{}\label{classalgebra_1_1Matrix}\index{algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classalgebra_1_1Matrix_a3f889801f0cee79f7337ffd367b510b7}\label{classalgebra_1_1Matrix_a3f889801f0cee79f7337ffd367b510b7} 
+\mbox{\hyperlink{classalgebra_1_1Matrix}{typedef}} std\+::array$<$ std\+::size\+\_\+t, 2 $>$ {\bfseries indexes}
+\item 
+\Hypertarget{classalgebra_1_1Matrix_a3013923b044f96d79f0df82b7fe86a9e}\label{classalgebra_1_1Matrix_a3013923b044f96d79f0df82b7fe86a9e} 
+\mbox{\hyperlink{classalgebra_1_1Matrix}{typedef}} std\+::vector$<$ std\+::vector$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}} $>$ $>$ {\bfseries uncompressed}
+\item 
+\Hypertarget{classalgebra_1_1Matrix_a330433fa7834185fe03f2e5073014361}\label{classalgebra_1_1Matrix_a330433fa7834185fe03f2e5073014361} 
+\mbox{\hyperlink{classalgebra_1_1Matrix}{typedef}} std\+::map$<$ indexes, \mbox{\hyperlink{classalgebra_1_1Matrix}{T}} $>$ {\bfseries coo\+\_\+matrix}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classalgebra_1_1Matrix_ae8f8c86f30eb11d46324ee2b5c793aec}{Matrix}} (uncompressed \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{v}})
+\begin{DoxyCompactList}\small\item\em costructor starting from a full matrix \end{DoxyCompactList}\item 
+\Hypertarget{classalgebra_1_1Matrix_ad2b1bdc924ce4867465b87c562fbff4c}\label{classalgebra_1_1Matrix_ad2b1bdc924ce4867465b87c562fbff4c} 
+{\bfseries Matrix} (\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}} \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{r}})
+\item 
+\mbox{\hyperlink{classalgebra_1_1Matrix_a131a3c48afe5f2b64898c6e4b1d076ea}{Matrix}} (std\+::string \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{name}})
+\begin{DoxyCompactList}\small\item\em constructor reading from file \end{DoxyCompactList}\item 
+\Hypertarget{classalgebra_1_1Matrix_ae94115ac04c303df67fcf386dd044729}\label{classalgebra_1_1Matrix_ae94115ac04c303df67fcf386dd044729} 
+std\+::size\+\_\+t {\bfseries ncols} ()
+\item 
+\Hypertarget{classalgebra_1_1Matrix_a95c1cb370edc577eae98d482e7e4feaa}\label{classalgebra_1_1Matrix_a95c1cb370edc577eae98d482e7e4feaa} 
+std\+::size\+\_\+t {\bfseries nrows} ()
+\item 
+\mbox{\hyperlink{classalgebra_1_1Matrix}{void}} \mbox{\hyperlink{classalgebra_1_1Matrix_af7ea67609bb49f6162c66939aa1a65e0}{compress}} ()
+\begin{DoxyCompactList}\small\item\em compress \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classalgebra_1_1Matrix}{void}} \mbox{\hyperlink{classalgebra_1_1Matrix_a3aae4eb6570b8f05b6edc23cec2324f3}{uncompress}} ()
+\begin{DoxyCompactList}\small\item\em uncompress \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classalgebra_1_1Matrix}{bool}} \mbox{\hyperlink{classalgebra_1_1Matrix_aa62526bccd145f05b6392b63f5f4dce3}{is\+\_\+compressed}} () \mbox{\hyperlink{classalgebra_1_1Matrix}{const}}
+\begin{DoxyCompactList}\small\item\em is\+\_\+compressed \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classalgebra_1_1Matrix}{void}} \mbox{\hyperlink{classalgebra_1_1Matrix_a466a55059e80fa52a4fbd4b22c1985b8}{print}} () \mbox{\hyperlink{classalgebra_1_1Matrix}{const}}
+\begin{DoxyCompactList}\small\item\em print \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classalgebra_1_1Matrix}{double}} \mbox{\hyperlink{classalgebra_1_1Matrix_ae268bd872098f155d22f83249a8be0e5}{norm}} (Norm \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{n}}) \mbox{\hyperlink{classalgebra_1_1Matrix}{const}}
+\begin{DoxyCompactList}\small\item\em norm \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classalgebra_1_1Matrix}{T}} \mbox{\hyperlink{classalgebra_1_1Matrix_ae48530a12b24fcb375585b3b6c35f0d0}{operator\mbox{[}$\,$\mbox{]}}} (indexes \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}) \mbox{\hyperlink{classalgebra_1_1Matrix}{const}}
+\item 
+\mbox{\hyperlink{classalgebra_1_1Matrix}{T}} \& \mbox{\hyperlink{classalgebra_1_1Matrix_a3591ea84cc03b3491ba08a6068f2977b}{operator\mbox{[}$\,$\mbox{]}}} (indexes \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{i}})
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classalgebra_1_1Matrix_ae2c2db81235ce59435caafce5395d18b}\label{classalgebra_1_1Matrix_ae2c2db81235ce59435caafce5395d18b} 
+std\+::vector$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}} $>$ {\bfseries operator\texorpdfstring{$\ast$}{*}} (\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$ \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{m}}, std\+::vector$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}} $>$ \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{v}})
+\item 
+\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$ \mbox{\hyperlink{classalgebra_1_1Matrix_ae73c1040b2445e12f59c856819686ac2}{operator\texorpdfstring{$\ast$}{*}}} (\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$ \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{m1}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}} \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{m2}})
+\begin{DoxyCompactList}\small\item\em matrix-\/matrix multiplication \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classalgebra_1_1Matrix_ae8f8c86f30eb11d46324ee2b5c793aec}\label{classalgebra_1_1Matrix_ae8f8c86f30eb11d46324ee2b5c793aec} 
+\index{algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}!Matrix@{Matrix}}
+\index{Matrix@{Matrix}!algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}}
+\doxysubsubsection{\texorpdfstring{Matrix()}{Matrix()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{classalgebra_1_1Matrix}{typename}} \mbox{\hyperlink{classalgebra_1_1Matrix}{T}} , \mbox{\hyperlink{classalgebra_1_1Matrix}{typename}} \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$ \\
+\mbox{\hyperlink{classalgebra_1_1Matrix}{algebra\+::\+Matrix}}$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$\+::\+Matrix (\begin{DoxyParamCaption}\item[{uncompressed \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&}]{v }\end{DoxyParamCaption})}
+
+
+
+costructor starting from a full matrix 
+
+Construct a new Matrix$<$ T,  Storage Order$>$\+:: \doxylink{classalgebra_1_1Matrix}{Matrix} object
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & \\
+\hline
+{\em Storage\+Order} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em v} & \\
+\hline
+\end{DoxyParams}
+error in output
+
+initialize -\/ loop over all elements could be done with swap? -\/ no... threshold\Hypertarget{classalgebra_1_1Matrix_a131a3c48afe5f2b64898c6e4b1d076ea}\label{classalgebra_1_1Matrix_a131a3c48afe5f2b64898c6e4b1d076ea} 
+\index{algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}!Matrix@{Matrix}}
+\index{Matrix@{Matrix}!algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}}
+\doxysubsubsection{\texorpdfstring{Matrix()}{Matrix()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{classalgebra_1_1Matrix}{typename}} \mbox{\hyperlink{classalgebra_1_1Matrix}{T}} , \mbox{\hyperlink{classalgebra_1_1Matrix}{typename}} \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$ \\
+\mbox{\hyperlink{classalgebra_1_1Matrix}{algebra\+::\+Matrix}}$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$\+::\+Matrix (\begin{DoxyParamCaption}\item[{std\+::string \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&}]{name }\end{DoxyParamCaption})}
+
+
+
+constructor reading from file 
+
+Construct a new Matrix$<$ T,  Storage Order$>$\+:: \doxylink{classalgebra_1_1Matrix}{Matrix} object
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & \\
+\hline
+{\em Storage\+Order} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em name} & \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classalgebra_1_1Matrix_af7ea67609bb49f6162c66939aa1a65e0}\label{classalgebra_1_1Matrix_af7ea67609bb49f6162c66939aa1a65e0} 
+\index{algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}!compress@{compress}}
+\index{compress@{compress}!algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}}
+\doxysubsubsection{\texorpdfstring{compress()}{compress()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{classalgebra_1_1Matrix}{typename}} \mbox{\hyperlink{classalgebra_1_1Matrix}{T}} , \mbox{\hyperlink{classalgebra_1_1Matrix}{typename}} \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$ \\
+\mbox{\hyperlink{classalgebra_1_1Matrix}{void}} \mbox{\hyperlink{classalgebra_1_1Matrix}{algebra\+::\+Matrix}}$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$\+::compress (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+compress 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & \\
+\hline
+{\em Storage\+Order} & \\
+\hline
+\end{DoxyTemplParams}
+\Hypertarget{classalgebra_1_1Matrix_aa62526bccd145f05b6392b63f5f4dce3}\label{classalgebra_1_1Matrix_aa62526bccd145f05b6392b63f5f4dce3} 
+\index{algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}!is\_compressed@{is\_compressed}}
+\index{is\_compressed@{is\_compressed}!algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}}
+\doxysubsubsection{\texorpdfstring{is\_compressed()}{is\_compressed()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{classalgebra_1_1Matrix}{typename}} \mbox{\hyperlink{classalgebra_1_1Matrix}{T}} , \mbox{\hyperlink{classalgebra_1_1Matrix}{typename}} \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$ \\
+\mbox{\hyperlink{classalgebra_1_1Matrix}{bool}} \mbox{\hyperlink{classalgebra_1_1Matrix}{algebra\+::\+Matrix}}$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$\+::is\+\_\+compressed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+is\+\_\+compressed 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & \\
+\hline
+{\em Storage\+Order} & \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+true 
+
+false 
+\end{DoxyReturn}
+\Hypertarget{classalgebra_1_1Matrix_ae268bd872098f155d22f83249a8be0e5}\label{classalgebra_1_1Matrix_ae268bd872098f155d22f83249a8be0e5} 
+\index{algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}!norm@{norm}}
+\index{norm@{norm}!algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}}
+\doxysubsubsection{\texorpdfstring{norm()}{norm()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{classalgebra_1_1Matrix}{typename}} \mbox{\hyperlink{classalgebra_1_1Matrix}{T}} , \mbox{\hyperlink{classalgebra_1_1Matrix}{typename}} \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$ \\
+\mbox{\hyperlink{classalgebra_1_1Matrix}{double}} \mbox{\hyperlink{classalgebra_1_1Matrix}{algebra\+::\+Matrix}}$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$\+::norm (\begin{DoxyParamCaption}\item[{Norm \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&}]{n }\end{DoxyParamCaption}) const}
+
+
+
+norm 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & \\
+\hline
+{\em Storage\+Order} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em n} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+double 
+\end{DoxyReturn}
+\Hypertarget{classalgebra_1_1Matrix_a3591ea84cc03b3491ba08a6068f2977b}\label{classalgebra_1_1Matrix_a3591ea84cc03b3491ba08a6068f2977b} 
+\index{algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}!operator\mbox{[}\mbox{]}@{operator[]}}
+\index{operator\mbox{[}\mbox{]}@{operator[]}!algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}}
+\doxysubsubsection{\texorpdfstring{operator[]()}{operator[]()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{classalgebra_1_1Matrix}{typename}} \mbox{\hyperlink{classalgebra_1_1Matrix}{T}} , \mbox{\hyperlink{classalgebra_1_1Matrix}{typename}} \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$ \\
+\mbox{\hyperlink{classalgebra_1_1Matrix}{T}} \& \mbox{\hyperlink{classalgebra_1_1Matrix}{algebra\+::\+Matrix}}$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$\+::operator\mbox{[}$\,$\mbox{]} (\begin{DoxyParamCaption}\item[{indexes \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&}]{i }\end{DoxyParamCaption})}
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & \\
+\hline
+{\em Storage\+Order} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em i} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+T\& 
+\end{DoxyReturn}
+\Hypertarget{classalgebra_1_1Matrix_ae48530a12b24fcb375585b3b6c35f0d0}\label{classalgebra_1_1Matrix_ae48530a12b24fcb375585b3b6c35f0d0} 
+\index{algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}!operator\mbox{[}\mbox{]}@{operator[]}}
+\index{operator\mbox{[}\mbox{]}@{operator[]}!algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}}
+\doxysubsubsection{\texorpdfstring{operator[]()}{operator[]()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{classalgebra_1_1Matrix}{typename}} \mbox{\hyperlink{classalgebra_1_1Matrix}{T}} , \mbox{\hyperlink{classalgebra_1_1Matrix}{typename}} \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$ \\
+\mbox{\hyperlink{classalgebra_1_1Matrix}{T}} \mbox{\hyperlink{classalgebra_1_1Matrix}{algebra\+::\+Matrix}}$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$\+::operator\mbox{[}$\,$\mbox{]} (\begin{DoxyParamCaption}\item[{indexes \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&}]{i }\end{DoxyParamCaption}) const}
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & \\
+\hline
+{\em Storage\+Order} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em i} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+T 
+\end{DoxyReturn}
+\Hypertarget{classalgebra_1_1Matrix_a466a55059e80fa52a4fbd4b22c1985b8}\label{classalgebra_1_1Matrix_a466a55059e80fa52a4fbd4b22c1985b8} 
+\index{algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}!print@{print}}
+\index{print@{print}!algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}}
+\doxysubsubsection{\texorpdfstring{print()}{print()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{classalgebra_1_1Matrix}{typename}} \mbox{\hyperlink{classalgebra_1_1Matrix}{T}} , \mbox{\hyperlink{classalgebra_1_1Matrix}{typename}} \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$ \\
+\mbox{\hyperlink{classalgebra_1_1Matrix}{void}} \mbox{\hyperlink{classalgebra_1_1Matrix}{algebra\+::\+Matrix}}$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$\+::print (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+print 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & \\
+\hline
+{\em Storage\+Order} & \\
+\hline
+\end{DoxyTemplParams}
+\Hypertarget{classalgebra_1_1Matrix_a3aae4eb6570b8f05b6edc23cec2324f3}\label{classalgebra_1_1Matrix_a3aae4eb6570b8f05b6edc23cec2324f3} 
+\index{algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}!uncompress@{uncompress}}
+\index{uncompress@{uncompress}!algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}}
+\doxysubsubsection{\texorpdfstring{uncompress()}{uncompress()}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{classalgebra_1_1Matrix}{typename}} \mbox{\hyperlink{classalgebra_1_1Matrix}{T}} , \mbox{\hyperlink{classalgebra_1_1Matrix}{typename}} \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$ \\
+\mbox{\hyperlink{classalgebra_1_1Matrix}{void}} \mbox{\hyperlink{classalgebra_1_1Matrix}{algebra\+::\+Matrix}}$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$\+::uncompress (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+uncompress 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & \\
+\hline
+{\em Storage\+Order} & \\
+\hline
+\end{DoxyTemplParams}
+
+
+\doxysubsection{Friends And Related Symbol Documentation}
+\Hypertarget{classalgebra_1_1Matrix_ae73c1040b2445e12f59c856819686ac2}\label{classalgebra_1_1Matrix_ae73c1040b2445e12f59c856819686ac2} 
+\index{algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}!operator\texorpdfstring{$\ast$}{*}@{operator\texorpdfstring{$\ast$}{*}}}
+\index{operator\texorpdfstring{$\ast$}{*}@{operator\texorpdfstring{$\ast$}{*}}!algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}}
+\doxysubsubsection{\texorpdfstring{operator\texorpdfstring{$\ast$}{*}}{operator*}}
+{\footnotesize\ttfamily template$<$\mbox{\hyperlink{classalgebra_1_1Matrix}{typename}} \mbox{\hyperlink{classalgebra_1_1Matrix}{T}} , \mbox{\hyperlink{classalgebra_1_1Matrix}{typename}} \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$ \\
+\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$ \mbox{\hyperlink{classalgebra_1_1Matrix}{operator}}\texorpdfstring{$\ast$}{*} (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$ \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&}]{m1,  }\item[{\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$ \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&}]{m2 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+matrix-\/matrix multiplication 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & \\
+\hline
+{\em Storage\+Order} & \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em m1} & \\
+\hline
+{\em m2} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Matrix$<$\+T,\+Storage\+Order$>$ 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Matrix.\+hpp\end{DoxyCompactItemize}
