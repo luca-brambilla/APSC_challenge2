@@ -85,6 +85,13 @@ private:
 
 
 //! costructor starting from a full matrix
+/**
+ * @brief Construct a new Matrix< T,  Storage Order>:: Matrix object
+ * 
+ * @tparam T 
+ * @tparam StorageOrder 
+ * @param v 
+ */
 template<typename T, typename StorageOrder>
 Matrix<T, StorageOrder>::Matrix(const std::vector<std::vector<T>> &v)
 {
@@ -125,6 +132,13 @@ Matrix<T, StorageOrder>::Matrix(const std::vector<std::vector<T>> &v)
 
 
 //! constructor reading from file
+/**
+ * @brief Construct a new Matrix< T,  Storage Order>:: Matrix object
+ * 
+ * @tparam T 
+ * @tparam StorageOrder 
+ * @param name 
+ */
 template<typename T, typename StorageOrder>
 Matrix<T, StorageOrder>::Matrix(std::string const &name)
 /*
@@ -182,6 +196,14 @@ read data from file
 }
 
 //! is_compressed
+/**
+ * @brief 
+ * 
+ * @tparam T 
+ * @tparam StorageOrder 
+ * @return true 
+ * @return false 
+ */
 template<typename T, typename StorageOrder>
 bool Matrix<T, StorageOrder>::is_compressed() const
 {
@@ -192,6 +214,12 @@ bool Matrix<T, StorageOrder>::is_compressed() const
 }
 
 //! compress
+/**
+ * @brief 
+ * 
+ * @tparam T 
+ * @tparam StorageOrder 
+ */
 template<typename T, typename StorageOrder>
 void Matrix<T, StorageOrder>::compress()
 {
@@ -239,7 +267,12 @@ void Matrix<T, StorageOrder>::compress()
 
 
 //! uncompress
-
+/**
+ * @brief 
+ * 
+ * @tparam T 
+ * @tparam StorageOrder 
+ */
 template<typename T, typename StorageOrder>
 void Matrix<T, StorageOrder>::uncompress()
 {
@@ -277,6 +310,12 @@ void Matrix<T, StorageOrder>::uncompress()
 
 
 //! print
+/**
+ * @brief 
+ * 
+ * @tparam T 
+ * @tparam StorageOrder 
+ */
 template<typename T, typename StorageOrder>
 void Matrix<T, StorageOrder>::print() const
 {
@@ -334,6 +373,14 @@ void Matrix<T, StorageOrder>::print() const
 
 //! norm
 // NOT working for both compressed and uncompressed
+/**
+ * @brief 
+ * 
+ * @tparam T 
+ * @tparam StorageOrder 
+ * @param n 
+ * @return double 
+ */
 template<typename T, typename StorageOrder>
 double Matrix<T, StorageOrder>::norm(Norm const &n) const
 {
@@ -406,6 +453,14 @@ double Matrix<T, StorageOrder>::norm(Norm const &n) const
 
 
 // operator[] access copy
+/**
+ * @brief 
+ * 
+ * @tparam T 
+ * @tparam StorageOrder 
+ * @param i 
+ * @return T 
+ */
 template<typename T, typename StorageOrder>
 T Matrix<T, StorageOrder>::operator[] (indexes const &i) const
 {
@@ -431,6 +486,14 @@ T Matrix<T, StorageOrder>::operator[] (indexes const &i) const
 }
 
 // operator[] access assign
+/**
+ * @brief 
+ * 
+ * @tparam T 
+ * @tparam StorageOrder 
+ * @param i 
+ * @return T& 
+ */
 template<typename T, typename StorageOrder>
 T& Matrix<T, StorageOrder>::operator[] (indexes const &i)
 {
@@ -515,6 +578,15 @@ std::vector<T> operator*(Matrix<T,StorageOrder> const &m, std::vector<T> const &
 }
 
 //! matrix-matrix multiplication
+/**
+ * @brief 
+ * 
+ * @tparam T 
+ * @tparam StorageOrder 
+ * @param m1 
+ * @param m2 
+ * @return Matrix<T,StorageOrder> 
+ */
 template<typename T, typename StorageOrder>
 Matrix<T,StorageOrder> operator*(Matrix<T,StorageOrder> const &m1, Matrix<T,StorageOrder> const &m2 )
 {

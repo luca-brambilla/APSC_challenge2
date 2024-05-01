@@ -16,7 +16,7 @@ int main()
                                                                     {9, 10, 11, 12}} };
 
     //! read and print from full
-    if (false)
+    if (true)
     {
         std::cout << "*** GENERIC MATRIX ***" << std::endl;
         
@@ -49,7 +49,7 @@ int main()
     }
 
     //! compress()
-    if (false)
+    if (true)
     {
         algebra::Matrix<double, algebra::Order>::uncompressed data3{ {{1,2,3, 4}, 
                                                                         {5,6,7, 8},
@@ -65,7 +65,7 @@ int main()
     }
 
     //! uncomrpess()
-    if (false)
+    if (true)
     {
         algebra::Matrix<double, algebra::Order> M_uncomp(data);
         std::cout << "*** COMPRESS ***" << std::endl;
@@ -81,7 +81,7 @@ int main()
     }
 
     //! norm()
-    if (false)
+    if (true)
     {
         algebra::Matrix<double, algebra::Order>::uncompressed data5{ {{1,2,3, 4}, 
                                                                         {5,6,7, 8},
@@ -94,7 +94,7 @@ int main()
     }
 
     //! subscript operator[]
-    if (false)
+    if (true)
     {
         algebra::Matrix<double, algebra::Order>::uncompressed data6{ {{1.,0,0, 0}, 
                                                                         {0,2.,0, 0},
