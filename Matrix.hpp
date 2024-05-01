@@ -30,6 +30,7 @@ public:
     typedef std::array<std::size_t,2> indexes;
     typedef std::vector<std::vector<T>> uncompressed;
     typedef std::map<indexes,T> coo_matrix;
+    //! not all vector<T>, indices are size_t
     typedef std::array<std::vector<T>,3> cs_matrix;
 
 public:
@@ -67,7 +68,7 @@ private:
 
 
 
-// costructor starting from a full matrix
+//! costructor starting from a full matrix
 template<typename T, typename StorageOrder>
 Matrix<T, StorageOrder>::Matrix(const std::vector<std::vector<T>> &v)
 {
@@ -107,7 +108,7 @@ Matrix<T, StorageOrder>::Matrix(const std::vector<std::vector<T>> &v)
 }
 
 
-// constructor reading from file
+//! constructor reading from file
 template<typename T, typename StorageOrder>
 Matrix<T, StorageOrder>::Matrix(std::string const &name)
 /*
@@ -164,7 +165,7 @@ read data from file
     file.close();
 }
 
-// is_compressed
+//! is_compressed
 template<typename T, typename StorageOrder>
 bool Matrix<T, StorageOrder>::is_compressed() const
 {
@@ -174,7 +175,7 @@ bool Matrix<T, StorageOrder>::is_compressed() const
         return false; 
 }
 
-// compress
+//! compress
 template<typename T, typename StorageOrder>
 void Matrix<T, StorageOrder>::compress()
 {
@@ -217,10 +218,46 @@ void Matrix<T, StorageOrder>::compress()
         }
     }
     compressed_data[2].push_back(compressed_data[0].size()-1);
+    dynamic_data.clear();
+}
+
+
+//! uncompress
+
+template<typename T, typename StorageOrder>
+void Matrix<T, StorageOrder>::uncompress()
+{
+    if (!compressed)
+    {
+        std::cout << "Matrix is already uncompressed" << std::endl;
+        return;
+    }
+
+    // compressed flag
+    compressed = false;
+
+    // sizes of arrays
+    std::size_t i_sz = compressed_data[2].size();
+    std::size_t j_sz = compressed_data[1].size();
+
+    // insert elements in map
+    for (std::size_t i=0; i<i_sz; ++i)
+    {
+        // use I vector to loop from index i to i+1 in vector J and data
+        for (std::size_t j=compressed_data[2][i]; j<compressed_data[2][i+1]; ++j)
+        {
+            // {col, row}, data
+            dynamic_data.insert( { {i, compressed_data[1][j]}, compressed_data[0][j]} );
+        }
+    }
+
+    // insert last element
+    dynamic_data.insert( { {nrow-1, compressed_data[1][j_sz-1]}, compressed_data[0][j_sz-1]} );
 
 }
 
-// print
+
+//! print
 template<typename T, typename StorageOrder>
 void Matrix<T, StorageOrder>::print() const
 {

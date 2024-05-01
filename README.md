@@ -18,8 +18,8 @@ CHECKLIST:
 - [ ] README
 - [ ] comments
 - [ ] dynamic constructor
-- [ ] `compress()`
-- [ ] `uncompress()`
+- [x] `compress()`
+- [x] `uncompress()`
 - [ ] `is_compressed()`
 - [ ] call `operator[]`
 - [ ] friend matrix-vector `operator*`
@@ -27,5 +27,5 @@ CHECKLIST:
 - [ ] matrix-matrix `operator*`
 - [x] `norm()`
 - [ ] extension of `norm()` working with complex
-- [ ] reader of matrix market format
+- [x] reader of matrix market format
 - [ ] test code with `Chrono` utility
