@@ -29,3 +29,6 @@ CHECKLIST:
 - [ ] extension of `norm()` working with complex
 - [x] reader of matrix market format
 - [ ] test code with `Chrono` utility
+- [ ] working for both compressed and uncompressed
+- [ ] everything working for CSR
+- [ ] everything working for CSC

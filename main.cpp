@@ -2,9 +2,13 @@
 #include <iostream>
 #include <vector>
 #include "Matrix.hpp"
+#include <chrono>
 
 int main()
 {
+    // start clock
+    auto start = std::chrono::high_resolution_clock::now();
+
 
     algebra::Matrix<double, algebra::Order>::uncompressed data{ {{1,2,3, 4}, 
                                                                     {5,6,7, 8},
@@ -61,7 +65,7 @@ int main()
     }
 
     //! uncomrpess()
-    if (true)
+    if (false)
     {
         algebra::Matrix<double, algebra::Order> M_uncomp(data);
         std::cout << "*** COMPRESS ***" << std::endl;
@@ -111,6 +115,28 @@ int main()
         std::cout << p << std::endl; 
         Mc.print();
     }
+
+    //! matrix mult
+    if(true)
+    {
+        algebra::Matrix<double, algebra::Order> M_mult(data);
+        M_mult.print();
+        //M_mult.compress();
+        std::vector<double> v( {1, 1, 1, 1} );
+        //std::vector<double> v_res;
+        
+        auto v_res = M_mult * v;
+
+        //v_res = M_mult * v;
+
+        for (auto it = v_res.cbegin(); it!= v_res.cend(); ++it)
+            std::cout << *(it) << std::endl;
+    }
+
+    // end clock
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+    std::cout << "Time taken: " << duration.count() << " microseconds" << std::endl;
 
     return 0;
 }

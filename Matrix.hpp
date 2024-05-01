@@ -22,6 +22,15 @@ constexpr double ZERO_TOL = 1e-8;
 enum Order {Column, Row};
 enum Norm {One, Infinity, Frobenius};
 
+// forward declaration matrix class
+template <typename T, typename StorageOrder>
+class Matrix;
+
+// forward declaration of friend function inside class template
+template<typename T, typename StorageOrder>
+std::vector<T> operator*(const Matrix<T, StorageOrder> &m, const std::vector<T> &v );
+
+
 // Matrix class template
 template <typename T, typename StorageOrder>
 class Matrix
@@ -40,6 +49,10 @@ public:
     Matrix(Matrix const &r);
     Matrix(std::string const &name);
 
+    // getters
+    std::size_t ncols() { return ncol; };
+    std::size_t nrows() { return nrow; };
+
     // compression utilities
     void compress();
     void uncompress();
@@ -49,7 +62,8 @@ public:
     double norm(Norm const &n) const;
 
     // operations
-    Matrix matmul();
+    friend std::vector<T> operator*<T,StorageOrder>(Matrix<T,StorageOrder> const &m, std::vector<T> const &v );
+    friend Matrix<T,StorageOrder> operator*( Matrix<T,StorageOrder> const &m1, Matrix const &m2);
 
     // access operator
     T operator[] (indexes const &i) const;
@@ -246,13 +260,16 @@ void Matrix<T, StorageOrder>::uncompress()
         // use I vector to loop from index i to i+1 in vector J and data
         for (std::size_t j=compressed_data[2][i]; j<compressed_data[2][i+1]; ++j)
         {
-            // {col, row}, data
+            // {col,     row}, data
             dynamic_data.insert( { {i, compressed_data[1][j]}, compressed_data[0][j]} );
         }
     }
 
     // insert last element
     dynamic_data.insert( { {nrow-1, compressed_data[1][j_sz-1]}, compressed_data[0][j_sz-1]} );
+    compressed_data[0].clear();
+    compressed_data[1].clear();
+    compressed_data[2].clear();
 
 }
 
@@ -313,7 +330,8 @@ void Matrix<T, StorageOrder>::print() const
 }
 
 
-// norm
+//! norm
+// NOT working for both compressed and uncompressed
 template<typename T, typename StorageOrder>
 double Matrix<T, StorageOrder>::norm(Norm const &n) const
 {
@@ -432,8 +450,69 @@ T& Matrix<T, StorageOrder>::operator[] (indexes const &i)
 }
 
 
+template<typename T, typename StorageOrder>
+std::vector<T> operator*(Matrix<T,StorageOrder> const &m, std::vector<T> const &v )
+{
+
+    std::size_t v_sz = v.size();
+    if ( m.nrow != v_sz )
+    {
+        std::cerr << "sizes are not compatible for multiplication: (" 
+            << m.nrow << ", " << m.ncol << ") * (" << v.size() << ", 1)"
+            << std::endl;
+        
+        std::vector<T> res;
+        return res;
+    }
+
+    std::vector<T> res(m.nrow);
 
 
+    //* compressed format
+    if (m.compressed)
+    {
+
+        //&Matrix<T, StorageOrder>::cs_matrix data = m.compressed_data;
+        // sizes of arrays
+        std::size_t i_sz = m.compressed_data[2].size();
+        std::size_t j_sz = m.compressed_data[1].size();
+
+        // insert elements in map
+        for (std::size_t i=0; i<i_sz; ++i)
+        {
+            std::size_t k = m.compressed_data[2][i];
+            // use I vector to loop from index i to i+1 in vector J and data
+            for (std::size_t j=0; k+j<m.compressed_data[2][i+1]; ++j)
+            {
+                // {col, row}
+                res[i] += m.compressed_data[0][k+j] * v[j];
+
+                //std::cout << i << ", " << j
+                //        << m.compressed_data[0][k+j] << " " << v[j] << std::endl;
+            }
+
+        }
+        res[ res.size()-1 ] += m.compressed_data[0][j_sz-1] * v[v_sz-1];
+        
+        return res;
+    }
+
+    //* uncompressed format
+    for (auto it=m.dynamic_data.cbegin(); it!=m.dynamic_data.cend(); ++it)
+    {
+        // row index
+        size_t i = it->first[0];
+        // column index
+        size_t j = it->first[1];
+        // matrix value
+        T val_ij = it->second;
+
+        // partial multiplication
+        res[i] += val_ij * v[j];
+    }
+
+    return res;
+}
 
 } // namespace algebra
 
