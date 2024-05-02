@@ -20,6 +20,8 @@ CHECKLIST:
 - [ ] README
 - [ ] comments
 - [ ] dynamic constructor
+- [ ] constructor taking dimensions
+- [ ] resize uncompressed
 - [x] `compress()`
 - [x] `uncompress()`
 - [ ] `is_compressed()`

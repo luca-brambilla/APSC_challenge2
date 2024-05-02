@@ -20,6 +20,8 @@ HEADERS=$(wildcard *.hpp)
 exe_sources=$(filter main%.cpp,$(SRCS))
 EXEC=$(exe_sources:.cpp=)
 
+# CPPFLAGS += -D ZERO_TOL=1e-4
+
 # CPPFLAGS += -I./include -I$(mkBoostInc)
 # LDFLAGS  += -L$(mkBoostLib)
 # LDLIBS	 += -l boost_iostreams -l boost_system -l boost_filesystem
