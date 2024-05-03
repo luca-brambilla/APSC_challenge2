@@ -23,8 +23,9 @@ constexpr double ZERO_TOL = 1e-8;
 // enumerator for storage order
 
 // Coordinates, Compressed Sparse Row, Compressed Sparse Column, Modified Sparse Row, Modified Sparse Column
-enum Order {COO, CSR, CSC, MSR, MSC};
+enum Order {Column_major, Row_major};
 enum Norm {One, Infinity, Frobenius};
+enum Compression {CSR, CSC};
 
 // forward declaration matrix class
 template <typename T, typename StorageOrder>
@@ -47,32 +48,30 @@ public:
     typedef std::map<indexes,T> coo_matrix;
 
 public:
-    // constructor
+    // constructors
     Matrix();
 
     Matrix(std::size_t const& r, size_t const& c);
 
-    Matrix(uncompressed const &m);
-    Matrix(uncompressed const &m, Order const &o);
+    Matrix(uncompressed const &m, Order const &o=Row_major);
     
     Matrix(Matrix const &m);
     
     Matrix(std::string const &name);
-    Matrix(std::string const &name, Order const &o);
+    Matrix(std::string const &name, Order const &o=Row_major);
 
     // getters
     std::size_t ncols() { return ncol; };
     std::size_t nrows() { return nrow; };
 
-    //
+    // utilities
     void resize(std::size_t const& r, size_t const& c);
+    void print() const;
 
     // compression utilities
-    void compress(Order const &o);
+    void compress(Compression const &c);
     void uncompress();
     bool is_compressed() const;
-
-    void print() const;
 
     // norms
     double norm_one() const;
@@ -90,7 +89,8 @@ public:
 
     
 private:
-    Order ordering = Order::COO;
+    Order ordering = Order::Column_major;
+    Compression compression = Compression::CSR;
 
     bool compressed = false;
 
@@ -105,102 +105,90 @@ private:
 };
 
 /**
- * @brief Construct a new Matrix< T,  Storage Order>:: Matrix object
+ * @brief Construct a new empty Matrix object assigning the shape
  * 
- * @tparam T 
- * @tparam StorageOrder 
- * @param r 
- * @param c 
+ * @param r         number of rows
+ * @param c         number of columns
  */
 template<typename T, typename StorageOrder>
 Matrix<T, StorageOrder>::Matrix(std::size_t const& r, size_t const& c) :
     nrow(r), ncol(c) {}
 
-//! costructor starting from a full matrix
+
+
 /**
- * @brief Construct a new Matrix< T,  Storage Order>:: Matrix object
+ * @brief Construct a new Matrix starting from a full matrix (vector of vector
+ * representation) with a given ordering (default is row-major).
  * 
- * @tparam T 
- * @tparam StorageOrder 
- * @param v 
- * @param o 
+ * @param m         input matrix
+ * @param o         ordering
  */
 template<typename T, typename StorageOrder>
-Matrix<T, StorageOrder>::Matrix(const std::vector<std::vector<T>> &m)
+Matrix<T, StorageOrder>::Matrix(const std::vector<std::vector<T>> &m,
+                                Order const &o)
 {
-    // loop over matrix (vector of vectors)
-    // for (auto iti=v.cbegin(); iti!=v.cend(); ++iti)
-    // {
-    //     for (auto itj = iti->cbegin(); itj != iti->cend(); ++itj)
-    //     {
-            
-    //     }
-    // }
 
     ncol = m[0].size();
     nrow = m.size();
-    for (std::size_t i=0; i<nrow; ++i)
-    {
-        //! error in output
-        if (m[i].size() != ncol)
-        {
-            std::cerr << "number of elements in columns is not consistent" << std::endl;
-            return;
-        }
 
-        //! initialize - loop over all elements
-        //! could be done with swap? - no... threshold
-        for (std::size_t j = 0; j<ncol; ++j)
+    switch (ordering){
+    case Row_major:
+    {
+        for (std::size_t i=0; i<nrow; ++i)
         {
-            if (std::abs(m[i][j]) > ZERO_TOL)
+            // error in output
+            if (m[i].size() != ncol)
             {
-                dynamic_data.insert( { {i,j}, m[i][j]} );
+                std::cerr << "number of elements in columns is not consistent" << std::endl;
+                return;
+            }
+
+            // initialize - loop over all elements
+            for (std::size_t j = 0; j<ncol; ++j)
+            {
+                // rows first, columns second
+                if (std::abs(m[i][j]) > ZERO_TOL)
+                {
+                    dynamic_data.insert( { {i,j}, m[i][j]} );
+                }
             }
         }
+        break;
     }
 
-}
-
-/**
- * @brief Construct a new Matrix< T,  Storage Order>:: Matrix object
- * 
- * @tparam T 
- * @tparam StorageOrder 
- * @param m 
- * @param o 
- */
-template<typename T, typename StorageOrder>
-Matrix<T, StorageOrder>::Matrix(const std::vector<std::vector<T>> &m, Order const &o) :
-    Matrix(m)
-{
-    ordering = o;
-    switch (ordering)
+    case Column_major:
     {
-    case Order::COO:
-        std::cout << "COO initialization" << std::endl;
-        break;
-    case Order::CSR:
-        std::cout << "CSR initialization" << std::endl;
-        break;
-    case Order::CSC:
-        std::cout << "CSC initialization" << std::endl;
-        break;
-    case Order::MSR:
-        std::cout << "MSR initialization" << std::endl;
-        break;
-    case Order::MSC:
-        std::cout << "MSC initialization" << std::endl;
+        for (std::size_t i=0; i<nrow; ++i)
+        {
+            // error in output
+            if (m[i].size() != ncol)
+            {
+                std::cerr << "number of elements in columns is not consistent" << std::endl;
+                return;
+            }
+
+            // initialize - loop over all elements
+            for (std::size_t j = 0; j<ncol; ++j)
+            {
+                // columns first, rows second
+                if (std::abs(m[j][i]) > ZERO_TOL)
+                {
+                    dynamic_data.insert( { {j,i}, m[j][i]} );
+                }
+            }
+        }
         break;
     }
+    
+    } // switch(ordering)
+
 }
 
-//! constructor reading from file
+
 /**
- * @brief Construct a new Matrix< T,  Storage Order>:: Matrix object
+ * @brief Construct a new Matrix object reading from a file.
  * 
- * @tparam T 
- * @tparam StorageOrder 
- * @param name 
+ * @param name        String containing the path to the file to read.
  */
 template<typename T, typename StorageOrder>
 Matrix<T, StorageOrder>::Matrix(std::string const &name)
@@ -256,12 +244,23 @@ Matrix<T, StorageOrder>::Matrix(std::string const &name)
 }
 
 /**
- * @brief 
+ * @brief Construct a new Matrix object starting from an existing Matrix.
  * 
- * @tparam T 
- * @tparam StorageOrder 
- * @param r 
- * @param c 
+ * @param m             Matrix object
+ */
+template<typename T, typename StorageOrder>
+Matrix<T, StorageOrder>::Matrix(Matrix const &m) :
+    ordering(m.ordering), compression(m.compression), compressed(m.compressed),
+    dynamic_data(m.dynamic_data), IA(m.IA), JA(m.JA), AA(m.AA),
+    ncol(m.ncol), nrow(m.nrow)
+{}
+
+
+/**
+ * @brief Reshape the matrix passing the new number of rows and columns
+ * 
+ * @param r         new number of rows
+ * @param c         new number of columns
  */
 template<typename T, typename StorageOrder>
 void Matrix<T, StorageOrder>::resize(std::size_t const& r, size_t const& c)
@@ -272,18 +271,22 @@ void Matrix<T, StorageOrder>::resize(std::size_t const& r, size_t const& c)
         return;
     }
     
+    //! delete elements if reshape with smaller size
+    if ( (r<nrow) or (c<ncol) )
+    {
+
+    }
+
     ncol = r;
     nrow = c;
+
 }
 
-//! is_compressed
 /**
- * @brief 
+ * @brief Checks if the matrix is compressed and returns true if compressed, false 
+ * otherwise.
  * 
- * @tparam T 
- * @tparam StorageOrder 
- * @return true 
- * @return false 
+ * @return bool
  */
 template<typename T, typename StorageOrder>
 bool Matrix<T, StorageOrder>::is_compressed() const
@@ -294,15 +297,15 @@ bool Matrix<T, StorageOrder>::is_compressed() const
         return false; 
 }
 
-//! compress
 /**
- * @brief 
+ * @brief Pass from a coordinate representation to a compressed representation.
+ * Possible representations are:
+ * - Compressed Sparse Row (CSR)
+ * - Compressed Sparse Column (CSC) 
  * 
- * @tparam T 
- * @tparam StorageOrder 
  */
 template<typename T, typename StorageOrder>
-void Matrix<T, StorageOrder>::compress(Order const &o)
+void Matrix<T, StorageOrder>::compress(Compression const &c)
 {
     if (compressed)
     {
@@ -310,18 +313,17 @@ void Matrix<T, StorageOrder>::compress(Order const &o)
         return;
     }
 
-    // compressed flag
-    compressed = true;
-    ordering = o;
-    switch (ordering)
+
+    switch (c)
     {
-    case Order::COO:
+    case Compression::CSR:
     {
-        compressed = false;
-        return;
-    }
-    case Order::CSR:
-    {
+        if (ordering != Order::Row_major)
+        {
+            std::cerr << "only compress to CSR if row-major ordering" << std::endl;
+            return;
+        }
+
         // keep track of row index change and element
         std::size_t temp_ind = dynamic_data.cbegin()->first[0];
         // first element row
@@ -357,27 +359,31 @@ void Matrix<T, StorageOrder>::compress(Order const &o)
         break;
     }
 
-    case Order::CSC:
-        break;
+    case Compression::CSC:
+    {
+        if (ordering != Order::Column_major)
+        {
+            std::cerr << "only compress to CSC if column-major ordering" << std::endl;
+            return;
+        }
 
-    case Order::MSC:
-        break;
 
-    case Order::MSR:
         break;
-    } // switch(orderign)
+    }
 
+    } // switch(compression)
+
+    // compressed flag
+    compressed = true;
+    compression = c;
     // clear memory
     dynamic_data.clear();
 }
 
 
-//! uncompress
 /**
- * @brief 
+ * @brief Pass from a compressed representation to the coordinate representation.
  * 
- * @tparam T 
- * @tparam StorageOrder 
  */
 template<typename T, typename StorageOrder>
 void Matrix<T, StorageOrder>::uncompress()
@@ -388,17 +394,17 @@ void Matrix<T, StorageOrder>::uncompress()
         return;
     }
 
-    // compressed flag
-    compressed = false;
-
-    switch (ordering) 
+    switch (compression) 
     {
-    case Order::COO:
-        compressed = true;
-        return;
-
-    case Order::CSC:
+    case Compression::CSR:
         {
+
+        if (ordering != Order::Row_major)
+        {
+            std::cerr << "only decompress from CSR if column-major ordering" << std::endl;
+            return;
+        }
+
         // sizes of arrays
         std::size_t i_sz = IA.size();
         std::size_t j_sz = JA.size();
@@ -418,33 +424,19 @@ void Matrix<T, StorageOrder>::uncompress()
         dynamic_data.insert( { {nrow-1, JA[j_sz-1]}, AA[j_sz-1]} );
         }
 
-    case Order::CSR:
-        break;
-
-    case Order::MSC:
-        break;
-
-    case Order::MSR:
-        break;
-    }
-
-    // sizes of arrays
-    std::size_t i_sz = IA.size();
-    std::size_t j_sz = JA.size();
-
-    // insert elements in map
-    for (std::size_t i=0; i<i_sz; ++i)
+    case Compression::CSC:
     {
-        // use I vector to loop from index i to i+1 in vector J and data
-        for (std::size_t j=IA[i]; j<IA[i+1]; ++j)
+        if (ordering != Order::Column_major)
         {
-            // {col,     row}, data
-            dynamic_data.insert( { {i, JA[j]}, AA[j]} );
+            std::cerr << "only decompress from CSC if column-major ordering" << std::endl;
+            return;
         }
+
+        break;
     }
 
-    // insert last element
-    dynamic_data.insert( { {nrow-1, JA[j_sz-1]}, AA[j_sz-1]} );
+    } //switch(compression)
+
     AA.clear();
     JA.clear();
     IA.clear();
@@ -452,9 +444,8 @@ void Matrix<T, StorageOrder>::uncompress()
 }
 
 
-//! print
 /**
- * @brief 
+ * @brief Print in coordinate representation
  * 
  * @tparam T 
  * @tparam StorageOrder 
@@ -462,13 +453,23 @@ void Matrix<T, StorageOrder>::uncompress()
 template<typename T, typename StorageOrder>
 void Matrix<T, StorageOrder>::print() const
 {
+    // print if not compressed
+    if (!compressed)
+    {
+        std::cout << "print uncompressed" << std::endl;
+        for (auto it=dynamic_data.cbegin(); it!=dynamic_data.cend(); ++it)
+        {
+            std::cout << it->first[0] << " " << it->first[1] << ": " << it->second << std::endl;
+        }
+    }
 
     // print if compressed format
-    if (compressed)
+    std::cout << "print compressed" << std::endl;
+
+    switch(compression)
     {
-
-        std::cout << "print compressed" << std::endl;
-
+    case Compression::CSR:
+    {
         //* i = row index
         std::size_t i=0;
 
@@ -497,22 +498,25 @@ void Matrix<T, StorageOrder>::print() const
 
             ++j;
         }
-
         return;
     }
-    // print if not compressed
-    else
+    case Compression::CSR:
     {
-        std::cout << "print uncompressed" << std::endl;
-        for (auto it=dynamic_data.cbegin(); it!=dynamic_data.cend(); ++it)
-        {
-            std::cout << it->first[0] << " " << it->first[1] << ": " << it->second << std::endl;
-        }
+        return;
     }
+
+    } //switch(ordering)
+
 
 
 }
 
+
+/**
+ * @brief Compute the 1-norm of the matrix.
+ * 
+ * @return double 
+ */
 template<typename T, typename StorageOrder>
 double Matrix<T, StorageOrder>::norm_one() const
 {
@@ -520,9 +524,8 @@ double Matrix<T, StorageOrder>::norm_one() const
     std::vector<T> sums(ncol);
     // max of sum by columns
 
-    switch (ordering)
-    {
-    case Order::COO:
+
+    if (!compressed)
     {
         std::cout << "COO norm-1" << std::endl;
 
@@ -540,26 +543,33 @@ double Matrix<T, StorageOrder>::norm_one() const
                 res = sums[i];
             }
         }
-
-        break;
     }
-    case Order::CSR:
+
+
+    switch (compression)
+    {
+    case Compression::CSR:
+    {
         std::cout << "CSR norm-1" << std::endl;
         break;
-    case Order::CSC:
+    }
+    case Compression::CSC:
+    {
         std::cout << "CSC norm-1" << std::endl;
         break;
-    case Order::MSR:
-        std::cout << "MSR norm-1" << std::endl;
-        break;
-    case Order::MSC:
-        std::cout << "MSC norm-1" << std::endl;
-        break;
     }
+
+    } //switch(compression)
 
     return res;
 }
 
+
+/**
+ * @brief Compute the infinity norm of the matrix.
+ * 
+ * @return double 
+ */
 template<typename T, typename StorageOrder>
 double Matrix<T, StorageOrder>::norm_infty() const
 {
@@ -568,11 +578,9 @@ double Matrix<T, StorageOrder>::norm_infty() const
     std::size_t id_tmp = dynamic_data.begin()->first[0];
     // max of sum by rows
 
-    switch (ordering)
+    if (!compressed)
     {
-    case Order::COO:
-    {
-        std::cout << "COO norm-infinity" << std::endl;
+        std::cout << "COO infinity norm" << std::endl;
 
         for(auto it = dynamic_data.cbegin(); it != dynamic_data.cend(); ++it)
         {
@@ -596,35 +604,41 @@ double Matrix<T, StorageOrder>::norm_infty() const
         {
             res = sum;
         }
+    }
+
+
+    switch(compression)
+    {
+    case Compression::CSR:
+    {
+        std::cout << "CSR infinity norm" << std::endl;
         break;
     }
-    case Order::CSR:
-        std::cout << "CSR norm-infinity" << std::endl;
-        break;
-    case Order::CSC:
-        std::cout << "CSC norm-infinity" << std::endl;
-        break;
-    case Order::MSR:
-        std::cout << "MSR norm-infinity" << std::endl;
-        break;
-    case Order::MSC:
-        std::cout << "MSC norm-infinity" << std::endl;
+    case Compression::CSC:
+    {
+        std::cout << "CSC infinity norm" << std::endl;
         break;
     }
+
+    } //switch(compression)
 
     return res;
 }
 
+
+/**
+ * @brief Compute the Frobenius norm of the matrix.
+ * 
+ * @return double 
+ */
 template<typename T, typename StorageOrder>
 double Matrix<T, StorageOrder>::norm_frob() const
 {
     double res=0.0;
 
-    switch (ordering)
+    if (!compressed)
     {
-    case Order::COO:
-    {
-        std::cout << "COO norm-frobenius" << std::endl;
+        std::cout << "COO Frobenius norm" << std::endl;
 
         // sum of all elements squared
         for(auto it = dynamic_data.cbegin(); it != dynamic_data.cend(); ++it)
@@ -632,33 +646,31 @@ double Matrix<T, StorageOrder>::norm_frob() const
             res += std::abs(it->second) * std::abs(it->second);
         }
 
-        break;
     }
-    case Order::CSR:
-        std::cout << "CSR norm-frobenius" << std::endl;
+    switch (ordering) {
+    
+    case Compression::CSR:
+        std::cout << "CSR Frobenius norm" << std::endl;
         break;
-    case Order::CSC:
-        std::cout << "CSC norm-frobenius" << std::endl;
+    case Compression::CSC:
+        std::cout << "CSC Frobenius norm" << std::endl;
         break;
-    case Order::MSR:
-        std::cout << "MSR norm-frobenius" << std::endl;
-        break;
-    case Order::MSC:
-        std::cout << "MSC norm-frobenius" << std::endl;
-        break;
-    }
+
+    } // switch(ordering)
 
     return std::sqrt(res);
 }
 
-//! norm
-// NOT working for both compressed and uncompressed
+
+//! NOT working for both compressed and uncompressed
 /**
- * @brief 
+ * @brief Given an enumerator, return the desired matrix norm.
+ * Possible norms are:
+ * - 1-norm
+ * - Infinity norm
+ * - Frobenius norm
  * 
- * @tparam T 
- * @tparam StorageOrder 
- * @param n 
+ * @param n             enum
  * @return double 
  */
 template<typename T, typename StorageOrder>
@@ -689,19 +701,15 @@ double Matrix<T, StorageOrder>::norm(Norm const &n) const
 
 // operator[] access copy
 /**
- * @brief 
+ * @brief Const version of subscript operator. If a
  * 
- * @tparam T 
- * @tparam StorageOrder 
  * @param i 
  * @return T 
  */
 template<typename T, typename StorageOrder>
 T Matrix<T, StorageOrder>::operator[] (indexes const &i) const
 {
-    switch (ordering)
-    {
-    case Order::COO:
+    if (!compressed)
     {
         std::cout << "COO subscript copy" << std::endl;
 
@@ -719,7 +727,11 @@ T Matrix<T, StorageOrder>::operator[] (indexes const &i) const
         
         return 0;
     }
-    case Order::CSR:
+
+
+    switch (compression)
+    {
+    case Compression::CSR:
     {
         std::cout << "CSR subscript copy" << std::endl;
         
@@ -727,16 +739,13 @@ T Matrix<T, StorageOrder>::operator[] (indexes const &i) const
         std::size_t elem_first = IA[ i[0] ];
         return AA[ elem_first + i[1]];
     }
-    case Order::CSC:
+    case Compression::CSC:
+    {
         std::cout << "CSC subscript copy" << std::endl;
         break;
-    case Order::MSR:
-        std::cout << "MSR subscript copy" << std::endl;
-        break;
-    case Order::MSC:
-        std::cout << "MSC subscript copy" << std::endl;
-        break;
     }
+
+    } //switch(compression)
 
 }
 
@@ -744,8 +753,6 @@ T Matrix<T, StorageOrder>::operator[] (indexes const &i) const
 /**
  * @brief 
  * 
- * @tparam T 
- * @tparam StorageOrder 
  * @param i 
  * @return T& 
  */
@@ -753,9 +760,7 @@ template<typename T, typename StorageOrder>
 T& Matrix<T, StorageOrder>::operator[] (indexes const &i)
 {
 
-    switch (ordering)
-    {
-    case Order::COO:
+    if (!compression)
     {
         std::cout << "COO subscript reference" << std::endl;
         // cannot tell if access for assignment or copy for non-const Matrix
@@ -769,7 +774,12 @@ T& Matrix<T, StorageOrder>::operator[] (indexes const &i)
         // add new element if not present
         return dynamic_data[i];
     }
-    case Order::CSR:
+
+
+    switch (ordering)
+    {
+    
+    case Compression::CSR:
     {
         std::cout << "CSR subscript reference" << std::endl;
 
@@ -777,20 +787,23 @@ T& Matrix<T, StorageOrder>::operator[] (indexes const &i)
         std::size_t elem_first = IA[ i[0] ];
         return AA[ elem_first + i[1]];
     }
-    case Order::CSC:
+    case Compression::CSC:
+    {
         std::cout << "CSC subscript reference" << std::endl;
-        break;
-    case Order::MSR:
-        std::cout << "MSR subscript reference" << std::endl;
-        break;
-    case Order::MSC:
-        std::cout << "MSC subscript reference" << std::endl;
         break;
     }
 
+    } // switch(ordering)
+
 }
 
-
+/**
+ * @brief Matrix-vector multiplication.
+ * 
+ * @param m             Matrix object
+ * @param v             Standard vector
+ * @return std::vector<T> 
+ */
 template<typename T, typename StorageOrder>
 std::vector<T> operator*(Matrix<T,StorageOrder> const &m, std::vector<T> const &v )
 {
@@ -808,9 +821,7 @@ std::vector<T> operator*(Matrix<T,StorageOrder> const &m, std::vector<T> const &
 
     std::vector<T> res(m.nrow);
 
-    switch (m.ordering)
-    {
-    case Order::COO:
+    if (!m.compressed)
     {
         std::cout << "COO matrix-vector multiplication" << std::endl;
 
@@ -826,9 +837,12 @@ std::vector<T> operator*(Matrix<T,StorageOrder> const &m, std::vector<T> const &
             // partial multiplication
             res[i] += val_ij * v[j];
         }
-        break;
     }
-    case Order::CSR:
+
+    switch (m.compression) {
+    
+
+    case Compression::CSR:
     {
         std::cout << "CSR matrix-vector multiplication" << std::endl;
 
@@ -853,28 +867,21 @@ std::vector<T> operator*(Matrix<T,StorageOrder> const &m, std::vector<T> const &
         res[ res.size()-1 ] += m.AA[j_sz-1] * v[v_sz-1];
         break;
     }
-    case Order::CSC:
+    case Compression::CSC:
         std::cout << "CSC matrix-vector multiplication" << std::endl;
-        break;
-    case Order::MSR:
-        std::cout << "MSR matrix-vector multiplication" << std::endl;
-        break;
-    case Order::MSC:
-        std::cout << "MSC matrix-vector multiplication" << std::endl;
         break;
     }
 
     return res;
 }
 
-//! matrix-matrix multiplication
+
 /**
- * @brief 
+ * @brief Matrix-Matrix multiplication. Only works if objects have the same ordering
+ * and the same compression.
  * 
- * @tparam T 
- * @tparam StorageOrder 
- * @param m1 
- * @param m2 
+ * @param m1            First matrix object
+ * @param m2            Second matrix object
  * @return Matrix<T,StorageOrder> 
  */
 template<typename T, typename StorageOrder>
@@ -888,22 +895,18 @@ Matrix<T,StorageOrder> operator*(Matrix<T,StorageOrder> const &m1, Matrix<T,Stor
 
     }
 
-    switch (m1.ordering)
+    if (!m1.compressed)
     {
-    case Order::COO:
-        std::cout << "COO matrix-matrix multiplication" << std::endl;
-        break;
-    case Order::CSR:
+
+    }
+
+    switch (m1.compression)
+    {
+    case Compression::CSR:
         std::cout << "CSR matrix-matrix multiplication" << std::endl;
         break;
-    case Order::CSC:
+    case Compression::CSC:
         std::cout << "CSC matrix-matrix multiplication" << std::endl;
-        break;
-    case Order::MSR:
-        std::cout << "MSR matrix-matrix multiplication" << std::endl;
-        break;
-    case Order::MSC:
-        std::cout << "MSC initialization" << std::endl;
         break;
     }
 

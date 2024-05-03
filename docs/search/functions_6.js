@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['uncompress_0',['uncompress',['../classalgebra_1_1Matrix.html#a3aae4eb6570b8f05b6edc23cec2324f3',1,'algebra::Matrix']]]
+  ['resize_0',['resize',['../classalgebra_1_1Matrix.html#a27e14f1cd684dbd830e17fd5ee32f655',1,'algebra::Matrix']]]
 ];

@@ -19,509 +19,799 @@
 \DoxyCodeLine{00016\ \textcolor{keyword}{namespace\ }algebra\{}
 \DoxyCodeLine{00017\ }
 \DoxyCodeLine{00018\ \textcolor{comment}{//\ tolerance\ to\ consider\ a\ number\ 0\ for\ sparse\ matrix}}
-\DoxyCodeLine{00019\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{double}\ ZERO\_TOL\ =\ 1e-\/8;}
-\DoxyCodeLine{00020\ }
-\DoxyCodeLine{00021\ \textcolor{comment}{//\ enumerator\ for\ storage\ order}}
-\DoxyCodeLine{00022\ \textcolor{keyword}{enum}\ Order\ \{Column,\ Row\};}
-\DoxyCodeLine{00023\ \textcolor{keyword}{enum}\ Norm\ \{One,\ Infinity,\ Frobenius\};}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#ifndef\ ZERO\_TOL}}
+\DoxyCodeLine{00020\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{double}\ ZERO\_TOL\ =\ 1e-\/8;}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{comment}{//\ enumerator\ for\ storage\ order}}
 \DoxyCodeLine{00024\ }
-\DoxyCodeLine{00025\ \textcolor{comment}{//\ forward\ declaration\ matrix\ class}}
-\DoxyCodeLine{00026\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
-\DoxyCodeLine{00027\ \textcolor{keyword}{class\ }Matrix;}
-\DoxyCodeLine{00028\ }
-\DoxyCodeLine{00029\ \textcolor{comment}{//\ forward\ declaration\ of\ friend\ function\ inside\ class\ template}}
-\DoxyCodeLine{00030\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
-\DoxyCodeLine{00031\ std::vector<T>\ operator*(\ Matrix<T,\ StorageOrder>\ \textcolor{keyword}{const}\ \&m,\ std::vector<T>\ \textcolor{keyword}{const}\ \&v\ );}
-\DoxyCodeLine{00032\ }
-\DoxyCodeLine{00033\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
-\DoxyCodeLine{00034\ Matrix<T,StorageOrder>\ operator*(\ Matrix<T,StorageOrder>\ \textcolor{keyword}{const}\ \&m1,\ Matrix<T,StorageOrder>\ \textcolor{keyword}{const}\ \&m2);}
-\DoxyCodeLine{00035\ }
-\DoxyCodeLine{00036\ \textcolor{comment}{//\ Matrix\ class\ template}}
-\DoxyCodeLine{00037\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
-\DoxyCodeLine{00038\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}}
-\DoxyCodeLine{00039\ \{}
-\DoxyCodeLine{00040\ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{typedef}\ std::array<std::size\_t,2>\ indexes;}
-\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{typedef}\ std::vector<std::vector<T>>\ uncompressed;}
-\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{typedef}\ std::map<indexes,T>\ coo\_matrix;}
-\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00025\ \textcolor{comment}{//\ Coordinates,\ Compressed\ Sparse\ Row,\ Compressed\ Sparse\ Column,\ Modified\ Sparse\ Row,\ Modified\ Sparse\ Column}}
+\DoxyCodeLine{00026\ \textcolor{keyword}{enum}\ Order\ \{Column\_major,\ Row\_major\};}
+\DoxyCodeLine{00027\ \textcolor{keyword}{enum}\ Norm\ \{One,\ Infinity,\ Frobenius\};}
+\DoxyCodeLine{00028\ \textcolor{keyword}{enum}\ Compression\ \{CSR,\ CSC\};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{comment}{//\ forward\ declaration\ matrix\ class}}
+\DoxyCodeLine{00031\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
+\DoxyCodeLine{00032\ \textcolor{keyword}{class\ }Matrix;}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{comment}{//\ forward\ declaration\ of\ friend\ function\ inside\ class\ template}}
+\DoxyCodeLine{00035\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
+\DoxyCodeLine{00036\ std::vector<T>\ operator*(\ Matrix<T,\ StorageOrder>\ \textcolor{keyword}{const}\ \&m,\ std::vector<T>\ \textcolor{keyword}{const}\ \&v\ );}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
+\DoxyCodeLine{00039\ Matrix<T,StorageOrder>\ operator*(\ Matrix<T,StorageOrder>\ \textcolor{keyword}{const}\ \&m1,\ Matrix<T,StorageOrder>\ \textcolor{keyword}{const}\ \&m2);}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \textcolor{comment}{//\ Matrix\ class\ template}}
+\DoxyCodeLine{00042\ \textcolor{keyword}{template}\ <\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
+\DoxyCodeLine{00043\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}}
+\DoxyCodeLine{00044\ \{}
 \DoxyCodeLine{00045\ \textcolor{keyword}{public}:}
-\DoxyCodeLine{00046\ \ \ \ \ \textcolor{comment}{//\ constructor}}
-\DoxyCodeLine{00047\ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}();}
-\DoxyCodeLine{00048\ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}(uncompressed\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{v}});}
-\DoxyCodeLine{00049\ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}(\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{r}});}
-\DoxyCodeLine{00050\ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}(std::string\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{name}});}
-\DoxyCodeLine{00051\ }
-\DoxyCodeLine{00052\ \ \ \ \ \textcolor{comment}{//\ getters}}
-\DoxyCodeLine{00053\ \ \ \ \ std::size\_t\ ncols()\ \{\ \textcolor{keywordflow}{return}\ ncol;\ \};}
-\DoxyCodeLine{00054\ \ \ \ \ std::size\_t\ nrows()\ \{\ \textcolor{keywordflow}{return}\ nrow;\ \};}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{typedef}\ std::array<std::size\_t,2>\ indexes;}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{typedef}\ std::vector<std::vector<T>>\ uncompressed;}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{typedef}\ std::map<indexes,T>\ coo\_matrix;}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{comment}{//\ constructors}}
+\DoxyCodeLine{00052\ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}();}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}(std::size\_t\ \textcolor{keyword}{const}\&\ \mbox{\hyperlink{classalgebra_1_1Matrix}{r}},\ \textcolor{keywordtype}{size\_t}\ \textcolor{keyword}{const}\&\ \mbox{\hyperlink{classalgebra_1_1Matrix}{c}});}
 \DoxyCodeLine{00055\ }
-\DoxyCodeLine{00056\ \ \ \ \ \textcolor{comment}{//\ compression\ utilities}}
-\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classalgebra_1_1Matrix_af7ea67609bb49f6162c66939aa1a65e0}{compress}}();}
-\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classalgebra_1_1Matrix_a3aae4eb6570b8f05b6edc23cec2324f3}{uncompress}}();}
-\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classalgebra_1_1Matrix_aa62526bccd145f05b6392b63f5f4dce3}{is\_compressed}}()\ \textcolor{keyword}{const};}
-\DoxyCodeLine{00060\ }
-\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classalgebra_1_1Matrix_a466a55059e80fa52a4fbd4b22c1985b8}{print}}()\ \textcolor{keyword}{const};}
-\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classalgebra_1_1Matrix_ae268bd872098f155d22f83249a8be0e5}{norm}}(Norm\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{n}})\ \textcolor{keyword}{const};}
-\DoxyCodeLine{00063\ }
-\DoxyCodeLine{00064\ \ \ \ \ \textcolor{comment}{//\ operations}}
-\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keyword}{friend}\ std::vector<T>\ \textcolor{keyword}{operator}*<\mbox{\hyperlink{classalgebra_1_1Matrix}{T}},\mbox{\hyperlink{classalgebra_1_1Matrix}{StorageOrder}}>(\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix<T,StorageOrder>}}\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{m}},\ std::vector<T>\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{v}}\ );}
-\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keyword}{friend}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix<T,StorageOrder>}}\ \textcolor{keyword}{operator}*<\mbox{\hyperlink{classalgebra_1_1Matrix}{T}},\mbox{\hyperlink{classalgebra_1_1Matrix}{StorageOrder}}>(\ \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix<T,StorageOrder>}}\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{m1}},\ \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{m2}});}
-\DoxyCodeLine{00067\ }
-\DoxyCodeLine{00068\ \ \ \ \ \textcolor{comment}{//\ access\ operator}}
-\DoxyCodeLine{00069\ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}\ \mbox{\hyperlink{classalgebra_1_1Matrix_ae48530a12b24fcb375585b3b6c35f0d0}{operator[]\ }}(indexes\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{i}})\ \textcolor{keyword}{const};}
-\DoxyCodeLine{00070\ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}\&\ \mbox{\hyperlink{classalgebra_1_1Matrix_ae48530a12b24fcb375585b3b6c35f0d0}{operator[]\ }}(indexes\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{i}});}
-\DoxyCodeLine{00071\ }
-\DoxyCodeLine{00072\ \ \ \ \ }
-\DoxyCodeLine{00073\ \textcolor{keyword}{private}:}
-\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keywordtype}{bool}\ compressed\ =\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00075\ \ \ \ \ coo\_matrix\ dynamic\_data;}
-\DoxyCodeLine{00076\ \ \ \ \ std::vector<size\_t>\ IA;}
-\DoxyCodeLine{00077\ \ \ \ \ std::vector<size\_t>\ JA;}
-\DoxyCodeLine{00078\ \ \ \ \ std::vector<T>\ AA;}
-\DoxyCodeLine{00079\ }
-\DoxyCodeLine{00080\ \ \ \ \ std::size\_t\ ncol\ =\ 0;}
-\DoxyCodeLine{00081\ \ \ \ \ std::size\_t\ nrow\ =\ 0;}
-\DoxyCodeLine{00082\ \};}
-\DoxyCodeLine{00083\ }
-\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00056\ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}(uncompressed\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{m}},\ Order\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{o}}=Row\_major);}
+\DoxyCodeLine{00057\ \ \ \ \ }
+\DoxyCodeLine{00058\ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}(\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{m}});}
+\DoxyCodeLine{00059\ \ \ \ \ }
+\DoxyCodeLine{00060\ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}(std::string\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{name}});}
+\DoxyCodeLine{00061\ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}(std::string\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{name}},\ Order\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{o}}=Row\_major);}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{comment}{//\ getters}}
+\DoxyCodeLine{00064\ \ \ \ \ std::size\_t\ ncols()\ \{\ \textcolor{keywordflow}{return}\ ncol;\ \};}
+\DoxyCodeLine{00065\ \ \ \ \ std::size\_t\ nrows()\ \{\ \textcolor{keywordflow}{return}\ nrow;\ \};}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{comment}{//\ utilities}}
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classalgebra_1_1Matrix_a27e14f1cd684dbd830e17fd5ee32f655}{resize}}(std::size\_t\ \textcolor{keyword}{const}\&\ \mbox{\hyperlink{classalgebra_1_1Matrix}{r}},\ \textcolor{keywordtype}{size\_t}\ \textcolor{keyword}{const}\&\ \mbox{\hyperlink{classalgebra_1_1Matrix}{c}});}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classalgebra_1_1Matrix_a466a55059e80fa52a4fbd4b22c1985b8}{print}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{comment}{//\ compression\ utilities}}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classalgebra_1_1Matrix_a0271f677b1efdb0a70bc00f8697e6b12}{compress}}(Compression\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{c}});}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classalgebra_1_1Matrix_a3aae4eb6570b8f05b6edc23cec2324f3}{uncompress}}();}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classalgebra_1_1Matrix_aa62526bccd145f05b6392b63f5f4dce3}{is\_compressed}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{comment}{//\ norms}}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classalgebra_1_1Matrix_adade59d6b88ecf597eea9474ce3e9d72}{norm\_one}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classalgebra_1_1Matrix_accca731f4e5eae3144fc60211f102ab2}{norm\_infty}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classalgebra_1_1Matrix_abba5ddc347c63a859f15b16f4420bc21}{norm\_frob}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classalgebra_1_1Matrix_ae268bd872098f155d22f83249a8be0e5}{norm}}(Norm\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{n}})\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{comment}{//\ operations}}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keyword}{friend}\ std::vector<T>\ \textcolor{keyword}{operator}*<\mbox{\hyperlink{classalgebra_1_1Matrix}{T}},\mbox{\hyperlink{classalgebra_1_1Matrix}{StorageOrder}}>(\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix<T,StorageOrder>}}\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{m}},\ std::vector<T>\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{v}}\ );}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keyword}{friend}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix<T,StorageOrder>}}\ \textcolor{keyword}{operator}*<\mbox{\hyperlink{classalgebra_1_1Matrix}{T}},\mbox{\hyperlink{classalgebra_1_1Matrix}{StorageOrder}}>(\ \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix<T,StorageOrder>}}\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{m1}},\ \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{m2}});}
 \DoxyCodeLine{00085\ }
-\DoxyCodeLine{00086\ }
-\DoxyCodeLine{00088\ }
-\DoxyCodeLine{00095\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
-\DoxyCodeLine{00096\ \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix<T,\ StorageOrder>::Matrix}}(\textcolor{keyword}{const}\ std::vector<std::vector<T>>\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{v}})}
-\DoxyCodeLine{00097\ \{}
-\DoxyCodeLine{00098\ \ \ \ \ \textcolor{comment}{//\ loop\ over\ matrix\ (vector\ of\ vectors)}}
-\DoxyCodeLine{00099\ \ \ \ \ \textcolor{comment}{//\ for\ (auto\ iti=v.cbegin();\ iti!=v.cend();\ ++iti)}}
-\DoxyCodeLine{00100\ \ \ \ \ \textcolor{comment}{//\ \{}}
-\DoxyCodeLine{00101\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ for\ (auto\ itj\ =\ iti-\/>cbegin();\ itj\ !=\ iti-\/>cend();\ ++itj)}}
-\DoxyCodeLine{00102\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \{}}
-\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00104\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \}}}
-\DoxyCodeLine{00105\ \ \ \ \ \textcolor{comment}{//\ \}}}
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{comment}{//\ access\ operator}}
+\DoxyCodeLine{00087\ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}\ \mbox{\hyperlink{classalgebra_1_1Matrix_ae48530a12b24fcb375585b3b6c35f0d0}{operator[]\ }}(indexes\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{i}})\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00088\ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}\&\ \mbox{\hyperlink{classalgebra_1_1Matrix_ae48530a12b24fcb375585b3b6c35f0d0}{operator[]\ }}(indexes\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{i}});}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \ \ \ \ }
+\DoxyCodeLine{00091\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00092\ \ \ \ \ Order\ ordering\ =\ Order::Column\_major;}
+\DoxyCodeLine{00093\ \ \ \ \ Compression\ compression\ =\ Compression::CSR;}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keywordtype}{bool}\ compressed\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \ \ \ \ coo\_matrix\ dynamic\_data;}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \ \ \ \ std::vector<size\_t>\ IA;}
+\DoxyCodeLine{00100\ \ \ \ \ std::vector<size\_t>\ JA;}
+\DoxyCodeLine{00101\ \ \ \ \ std::vector<T>\ AA;}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \ \ std::size\_t\ ncol\ =\ 0;}
+\DoxyCodeLine{00104\ \ \ \ \ std::size\_t\ nrow\ =\ 0;}
+\DoxyCodeLine{00105\ \};}
 \DoxyCodeLine{00106\ }
-\DoxyCodeLine{00107\ \ \ \ \ ncol\ =\ \mbox{\hyperlink{classalgebra_1_1Matrix}{v}}[0].size();}
-\DoxyCodeLine{00108\ \ \ \ \ nrow\ =\ \mbox{\hyperlink{classalgebra_1_1Matrix}{v}}.size();}
-\DoxyCodeLine{00109\ \ \ \ \ indexes\ \mbox{\hyperlink{classalgebra_1_1Matrix}{ind}};}
-\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keywordflow}{for}\ (std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}}=0;\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}}<nrow;\ ++\mbox{\hyperlink{classalgebra_1_1Matrix}{i}})}
-\DoxyCodeLine{00111\ \ \ \ \ \{}
-\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{ind}}[0]=\mbox{\hyperlink{classalgebra_1_1Matrix}{i}};}
-\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classalgebra_1_1Matrix}{v}}[\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}].\mbox{\hyperlink{classalgebra_1_1Matrix}{size}}()\ !=\ ncol)}
-\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}number\ of\ elements\ in\ columns\ is\ not\ consistent"{}}\ <<\ std::endl;}
-\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00113\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
+\DoxyCodeLine{00114\ \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix<T,\ StorageOrder>::Matrix}}(std::size\_t\ \textcolor{keyword}{const}\&\ \mbox{\hyperlink{classalgebra_1_1Matrix}{r}},\ \textcolor{keywordtype}{size\_t}\ \textcolor{keyword}{const}\&\ \mbox{\hyperlink{classalgebra_1_1Matrix}{c}})\ :}
+\DoxyCodeLine{00115\ \ \ \ \ nrow(\mbox{\hyperlink{classalgebra_1_1Matrix}{r}}),\ ncol(\mbox{\hyperlink{classalgebra_1_1Matrix}{c}})\ \{\}}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ }
 \DoxyCodeLine{00118\ }
-\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{j}}\ =\ 0;\ \mbox{\hyperlink{classalgebra_1_1Matrix}{j}}<ncol;\ ++\mbox{\hyperlink{classalgebra_1_1Matrix}{j}})}
-\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (std::abs(\mbox{\hyperlink{classalgebra_1_1Matrix}{v}}[\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}][\mbox{\hyperlink{classalgebra_1_1Matrix}{j}}])\ >\ ZERO\_TOL)}
-\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{ind}}[1]=\mbox{\hyperlink{classalgebra_1_1Matrix}{j}};}
-\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dynamic\_data.insert(\ \{\mbox{\hyperlink{classalgebra_1_1Matrix}{ind}},\ \mbox{\hyperlink{classalgebra_1_1Matrix}{v}}[\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}][\mbox{\hyperlink{classalgebra_1_1Matrix}{j}}]\}\ );}
-\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00129\ \ \ \ \ \}}
+\DoxyCodeLine{00126\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
+\DoxyCodeLine{00127\ \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix<T,\ StorageOrder>::Matrix}}(\textcolor{keyword}{const}\ std::vector<std::vector<T>>\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{m}},}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Order\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{o}})}
+\DoxyCodeLine{00129\ \{}
 \DoxyCodeLine{00130\ }
-\DoxyCodeLine{00131\ \}}
-\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00131\ \ \ \ \ ncol\ =\ \mbox{\hyperlink{classalgebra_1_1Matrix}{m}}[0].size();}
+\DoxyCodeLine{00132\ \ \ \ \ nrow\ =\ \mbox{\hyperlink{classalgebra_1_1Matrix}{m}}.size();}
 \DoxyCodeLine{00133\ }
-\DoxyCodeLine{00135\ }
-\DoxyCodeLine{00142\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
-\DoxyCodeLine{00143\ \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix<T,\ StorageOrder>::Matrix}}(std::string\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{name}})}
-\DoxyCodeLine{00144\ \textcolor{comment}{/*}}
-\DoxyCodeLine{00145\ \textcolor{comment}{read\ data\ from\ file}}
-\DoxyCodeLine{00146\ \textcolor{comment}{*/}}
-\DoxyCodeLine{00147\ \{}
-\DoxyCodeLine{00148\ \ \ \ \ \textcolor{comment}{//\ open\ the\ file}}
-\DoxyCodeLine{00149\ \ \ \ \ std::ifstream\ \mbox{\hyperlink{classalgebra_1_1Matrix}{file}}(\mbox{\hyperlink{classalgebra_1_1Matrix}{name}});}
-\DoxyCodeLine{00150\ }
-\DoxyCodeLine{00151\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ file\ is\ opened\ successfully}}
-\DoxyCodeLine{00152\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classalgebra_1_1Matrix}{file}}.is\_open())\ \{}
-\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}Error\ opening\ file!"{}}\ <<\ std::endl;}
-\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{00155\ \ \ \ \ \}}
-\DoxyCodeLine{00156\ \ \ \ \ }
-\DoxyCodeLine{00157\ \ \ \ \ \textcolor{comment}{//\ read\ first\ commented\ lines}}
-\DoxyCodeLine{00158\ \ \ \ \ std::string\ \mbox{\hyperlink{classalgebra_1_1Matrix}{line}};}
-\DoxyCodeLine{00159\ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{getline}}(\mbox{\hyperlink{classalgebra_1_1Matrix}{file}},\ \mbox{\hyperlink{classalgebra_1_1Matrix}{line}});}
-\DoxyCodeLine{00160\ \ \ \ \ \textcolor{keywordflow}{while}(\mbox{\hyperlink{classalgebra_1_1Matrix}{line}}[0]\ ==\ \textcolor{charliteral}{'\%'}\ )}
-\DoxyCodeLine{00161\ \ \ \ \ \{}
-\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{getline}}(\mbox{\hyperlink{classalgebra_1_1Matrix}{file}},\ \mbox{\hyperlink{classalgebra_1_1Matrix}{line}});}
-\DoxyCodeLine{00163\ \ \ \ \ \}}
-\DoxyCodeLine{00164\ }
-\DoxyCodeLine{00165\ \ \ \ \ \textcolor{comment}{//\ read\ number\ of\ rows\ and\ columns}}
-\DoxyCodeLine{00166\ \ \ \ \ std::istringstream\ \mbox{\hyperlink{classalgebra_1_1Matrix}{iss}}(\mbox{\hyperlink{classalgebra_1_1Matrix}{line}});}
-\DoxyCodeLine{00167\ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{iss}}\ >>\ nrow\ >>\ ncol;}
-\DoxyCodeLine{00168\ \ \ \ \ std::cout\ <<\ nrow\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ ncol\ <<\ std::endl;}
+\DoxyCodeLine{00134\ \ \ \ \ \textcolor{keywordflow}{switch}\ (ordering)\{}
+\DoxyCodeLine{00135\ \ \ \ \ \textcolor{keywordflow}{case}\ Row\_major:}
+\DoxyCodeLine{00136\ \ \ \ \ \{}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}}=0;\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}}<nrow;\ ++\mbox{\hyperlink{classalgebra_1_1Matrix}{i}})}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ error\ in\ output}}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classalgebra_1_1Matrix}{m}}[\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}].\mbox{\hyperlink{classalgebra_1_1Matrix}{size}}()\ !=\ ncol)}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}number\ of\ elements\ in\ columns\ is\ not\ consistent"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ initialize\ -\/\ loop\ over\ all\ elements}}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{j}}\ =\ 0;\ \mbox{\hyperlink{classalgebra_1_1Matrix}{j}}<ncol;\ ++\mbox{\hyperlink{classalgebra_1_1Matrix}{j}})}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ rows\ first,\ columns\ second}}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (std::abs(\mbox{\hyperlink{classalgebra_1_1Matrix}{m}}[\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}][\mbox{\hyperlink{classalgebra_1_1Matrix}{j}}])\ >\ ZERO\_TOL)}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dynamic\_data.insert(\ \{\ \{\mbox{\hyperlink{classalgebra_1_1Matrix}{i}},\mbox{\hyperlink{classalgebra_1_1Matrix}{j}}\},\ \mbox{\hyperlink{classalgebra_1_1Matrix}{m}}[\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}][\mbox{\hyperlink{classalgebra_1_1Matrix}{j}}]\}\ );}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00157\ \ \ \ \ \}}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ \ \ \ \ \textcolor{keywordflow}{case}\ Column\_major:}
+\DoxyCodeLine{00160\ \ \ \ \ \{}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}}=0;\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}}<nrow;\ ++\mbox{\hyperlink{classalgebra_1_1Matrix}{i}})}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ error\ in\ output}}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classalgebra_1_1Matrix}{m}}[\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}].\mbox{\hyperlink{classalgebra_1_1Matrix}{size}}()\ !=\ ncol)}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}number\ of\ elements\ in\ columns\ is\ not\ consistent"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00169\ }
-\DoxyCodeLine{00170\ \ \ \ \ \textcolor{comment}{//\ read\ each\ line\ from\ the\ file}}
-\DoxyCodeLine{00171\ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classalgebra_1_1Matrix}{getline}}(\mbox{\hyperlink{classalgebra_1_1Matrix}{file}},\ \mbox{\hyperlink{classalgebra_1_1Matrix}{line}}))}
-\DoxyCodeLine{00172\ \ \ \ \ \{}
-\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ string\ stream\ from\ the\ line}}
-\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ std::istringstream\ \mbox{\hyperlink{classalgebra_1_1Matrix}{iss}}(\mbox{\hyperlink{classalgebra_1_1Matrix}{line}});}
-\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ hold\ data\ for\ each\ line}}
-\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}};}
-\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{j}};}
-\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{num}};}
-\DoxyCodeLine{00180\ }
-\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ read\ data\ from\ the\ line}}
-\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classalgebra_1_1Matrix}{iss}}\ >>\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}}\ >>\ \mbox{\hyperlink{classalgebra_1_1Matrix}{j}}\ >>\ \mbox{\hyperlink{classalgebra_1_1Matrix}{num}})\ \{}
-\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ store\ value\ if\ above\ tolerance}}
-\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (std::abs(\mbox{\hyperlink{classalgebra_1_1Matrix}{num}})\ >\ ZERO\_TOL)}
-\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dynamic\_data.insert(\ \{\ \{\mbox{\hyperlink{classalgebra_1_1Matrix}{i}},\mbox{\hyperlink{classalgebra_1_1Matrix}{j}}\},\ \mbox{\hyperlink{classalgebra_1_1Matrix}{num}}\}\ );}
-\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}Error\ reading\ line:\ "{}}\ <<\ \mbox{\hyperlink{classalgebra_1_1Matrix}{line}}\ <<\ std::endl;}
-\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00192\ \ \ \ \ \}}
-\DoxyCodeLine{00193\ }
-\DoxyCodeLine{00194\ \ \ \ \ \textcolor{comment}{//\ close\ the\ file}}
-\DoxyCodeLine{00195\ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{file}}.close();}
-\DoxyCodeLine{00196\ \}}
-\DoxyCodeLine{00197\ }
-\DoxyCodeLine{00199\ }
-\DoxyCodeLine{00207\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
-\DoxyCodeLine{00208\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classalgebra_1_1Matrix_aa62526bccd145f05b6392b63f5f4dce3}{Matrix<T,\ StorageOrder>::is\_compressed}}()\textcolor{keyword}{\ const}}
-\DoxyCodeLine{00209\ \textcolor{keyword}{}\{}
-\DoxyCodeLine{00210\ \ \ \ \ \textcolor{keywordflow}{if}\ (compressed)}
-\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
-\DoxyCodeLine{00212\ \ \ \ \ \textcolor{keywordflow}{else}}
-\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};\ }
-\DoxyCodeLine{00214\ \}}
-\DoxyCodeLine{00215\ }
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ initialize\ -\/\ loop\ over\ all\ elements}}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{j}}\ =\ 0;\ \mbox{\hyperlink{classalgebra_1_1Matrix}{j}}<ncol;\ ++\mbox{\hyperlink{classalgebra_1_1Matrix}{j}})}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ columns\ first,\ rows\ second}}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (std::abs(\mbox{\hyperlink{classalgebra_1_1Matrix}{m}}[\mbox{\hyperlink{classalgebra_1_1Matrix}{j}}][\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}])\ >\ ZERO\_TOL)}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dynamic\_data.insert(\ \{\ \{\mbox{\hyperlink{classalgebra_1_1Matrix}{j}},\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}\},\ \mbox{\hyperlink{classalgebra_1_1Matrix}{m}}[\mbox{\hyperlink{classalgebra_1_1Matrix}{j}}][\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}]\}\ );}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00181\ \ \ \ \ \}}
+\DoxyCodeLine{00182\ \ \ \ \ }
+\DoxyCodeLine{00183\ \ \ \ \ \}\ \textcolor{comment}{//\ switch(ordering)}}
+\DoxyCodeLine{00184\ }
+\DoxyCodeLine{00185\ \}}
+\DoxyCodeLine{00186\ }
+\DoxyCodeLine{00187\ }
+\DoxyCodeLine{00193\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
+\DoxyCodeLine{00194\ \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix<T,\ StorageOrder>::Matrix}}(std::string\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{name}})}
+\DoxyCodeLine{00195\ \{}
+\DoxyCodeLine{00196\ \ \ \ \ \textcolor{comment}{//\ open\ the\ file}}
+\DoxyCodeLine{00197\ \ \ \ \ std::ifstream\ \mbox{\hyperlink{classalgebra_1_1Matrix}{file}}(\mbox{\hyperlink{classalgebra_1_1Matrix}{name}});}
+\DoxyCodeLine{00198\ }
+\DoxyCodeLine{00199\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ file\ is\ opened\ successfully}}
+\DoxyCodeLine{00200\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classalgebra_1_1Matrix}{file}}.is\_open())\ \{}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}Error\ opening\ file!"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00203\ \ \ \ \ \}}
+\DoxyCodeLine{00204\ \ \ \ \ }
+\DoxyCodeLine{00205\ \ \ \ \ \textcolor{comment}{//\ read\ first\ commented\ lines}}
+\DoxyCodeLine{00206\ \ \ \ \ std::string\ \mbox{\hyperlink{classalgebra_1_1Matrix}{line}};}
+\DoxyCodeLine{00207\ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{getline}}(\mbox{\hyperlink{classalgebra_1_1Matrix}{file}},\ \mbox{\hyperlink{classalgebra_1_1Matrix}{line}});}
+\DoxyCodeLine{00208\ \ \ \ \ \textcolor{keywordflow}{while}(\mbox{\hyperlink{classalgebra_1_1Matrix}{line}}[0]\ ==\ \textcolor{charliteral}{'\%'}\ )}
+\DoxyCodeLine{00209\ \ \ \ \ \{}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{getline}}(\mbox{\hyperlink{classalgebra_1_1Matrix}{file}},\ \mbox{\hyperlink{classalgebra_1_1Matrix}{line}});}
+\DoxyCodeLine{00211\ \ \ \ \ \}}
+\DoxyCodeLine{00212\ }
+\DoxyCodeLine{00213\ \ \ \ \ \textcolor{comment}{//\ read\ number\ of\ rows\ and\ columns}}
+\DoxyCodeLine{00214\ \ \ \ \ std::istringstream\ \mbox{\hyperlink{classalgebra_1_1Matrix}{iss}}(\mbox{\hyperlink{classalgebra_1_1Matrix}{line}});}
+\DoxyCodeLine{00215\ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{iss}}\ >>\ nrow\ >>\ ncol;}
+\DoxyCodeLine{00216\ \ \ \ \ std::cout\ <<\ nrow\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ ncol\ <<\ std::endl;}
 \DoxyCodeLine{00217\ }
-\DoxyCodeLine{00223\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
-\DoxyCodeLine{00224\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classalgebra_1_1Matrix_af7ea67609bb49f6162c66939aa1a65e0}{Matrix<T,\ StorageOrder>::compress}}()}
-\DoxyCodeLine{00225\ \{}
-\DoxyCodeLine{00226\ \ \ \ \ \textcolor{keywordflow}{if}\ (compressed)}
-\DoxyCodeLine{00227\ \ \ \ \ \{}
-\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Matrix\ is\ already\ compressed"{}}\ <<\ std::endl;}
-\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{00230\ \ \ \ \ \}}
-\DoxyCodeLine{00231\ }
-\DoxyCodeLine{00232\ \ \ \ \ \textcolor{comment}{//\ compressed\ flag}}
-\DoxyCodeLine{00233\ \ \ \ \ compressed\ =\ \textcolor{keyword}{true};}
-\DoxyCodeLine{00234\ \ \ \ \ \textcolor{comment}{//\ keep\ track\ of\ row\ index\ change\ and\ element}}
-\DoxyCodeLine{00235\ \ \ \ \ std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{temp\_ind}}\ =\ dynamic\_data.cbegin()-\/>first[0];}
-\DoxyCodeLine{00236\ \ \ \ \ \textcolor{comment}{//\ first\ element\ row}}
-\DoxyCodeLine{00237\ \ \ \ \ IA.push\_back(\mbox{\hyperlink{classalgebra_1_1Matrix}{temp\_ind}});}
-\DoxyCodeLine{00238\ }
-\DoxyCodeLine{00239\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}=dynamic\_data.cbegin();\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}!=dynamic\_data.cend();\ ++\mbox{\hyperlink{classalgebra_1_1Matrix}{it}})}
-\DoxyCodeLine{00240\ \ \ \ \ \{}
-\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \textcolor{comment}{//std::cout\ <<\ it-\/>first[0]\ <<\ "{}\ "{}\ <<\ std::next(it)-\/>first[0];}}
-\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \textcolor{comment}{//*\ value}}
-\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ AA.push\_back(\mbox{\hyperlink{classalgebra_1_1Matrix}{it}}-\/>second);}
-\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \textcolor{comment}{//*\ column}}
-\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ JA.push\_back(\mbox{\hyperlink{classalgebra_1_1Matrix}{it}}-\/>first[1]);}
-\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ index\ of\ new\ row}}
-\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classalgebra_1_1Matrix}{it}}-\/>first[0]\ !=\ \mbox{\hyperlink{classalgebra_1_1Matrix}{temp\_ind}})}
-\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{temp\_ind}}\ =\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}-\/>first[0];}
-\DoxyCodeLine{00251\ }
-\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ add\ same\ element\ to\ empty\ rows}}
-\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it\_tmp}}\ =\ std::prev(\mbox{\hyperlink{classalgebra_1_1Matrix}{it}});}
-\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\ std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{k}}=\mbox{\hyperlink{classalgebra_1_1Matrix}{it\_tmp}}-\/>first[0]+1;\ \mbox{\hyperlink{classalgebra_1_1Matrix}{k}}<\mbox{\hyperlink{classalgebra_1_1Matrix}{temp\_ind}};\ ++\mbox{\hyperlink{classalgebra_1_1Matrix}{k}}\ )}
-\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ IA.push\_back(AA.size()-\/1);}
-\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00218\ \ \ \ \ \textcolor{comment}{//\ read\ each\ line\ from\ the\ file}}
+\DoxyCodeLine{00219\ \ \ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{classalgebra_1_1Matrix}{getline}}(\mbox{\hyperlink{classalgebra_1_1Matrix}{file}},\ \mbox{\hyperlink{classalgebra_1_1Matrix}{line}}))}
+\DoxyCodeLine{00220\ \ \ \ \ \{}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ string\ stream\ from\ the\ line}}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ std::istringstream\ \mbox{\hyperlink{classalgebra_1_1Matrix}{iss}}(\mbox{\hyperlink{classalgebra_1_1Matrix}{line}});}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ hold\ data\ for\ each\ line}}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}};}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{j}};}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{num}};}
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ read\ data\ from\ the\ line}}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classalgebra_1_1Matrix}{iss}}\ >>\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}}\ >>\ \mbox{\hyperlink{classalgebra_1_1Matrix}{j}}\ >>\ \mbox{\hyperlink{classalgebra_1_1Matrix}{num}})\ \{}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ store\ value\ if\ above\ tolerance}}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (std::abs(\mbox{\hyperlink{classalgebra_1_1Matrix}{num}})\ >\ ZERO\_TOL)}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dynamic\_data.insert(\ \{\ \{\mbox{\hyperlink{classalgebra_1_1Matrix}{i}},\mbox{\hyperlink{classalgebra_1_1Matrix}{j}}\},\ \mbox{\hyperlink{classalgebra_1_1Matrix}{num}}\}\ );}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}Error\ reading\ line:\ "{}}\ <<\ \mbox{\hyperlink{classalgebra_1_1Matrix}{line}}\ <<\ std::endl;}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00240\ \ \ \ \ \}}
+\DoxyCodeLine{00241\ }
+\DoxyCodeLine{00242\ \ \ \ \ \textcolor{comment}{//\ close\ the\ file}}
+\DoxyCodeLine{00243\ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{file}}.close();}
+\DoxyCodeLine{00244\ \}}
+\DoxyCodeLine{00245\ }
+\DoxyCodeLine{00251\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
+\DoxyCodeLine{00252\ \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix<T,\ StorageOrder>::Matrix}}(\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{m}})\ :}
+\DoxyCodeLine{00253\ \ \ \ \ ordering(\mbox{\hyperlink{classalgebra_1_1Matrix}{m}}.ordering),\ compression(\mbox{\hyperlink{classalgebra_1_1Matrix}{m}}.compression),\ compressed(\mbox{\hyperlink{classalgebra_1_1Matrix}{m}}.compressed),}
+\DoxyCodeLine{00254\ \ \ \ \ dynamic\_data(\mbox{\hyperlink{classalgebra_1_1Matrix}{m}}.dynamic\_data),\ IA(\mbox{\hyperlink{classalgebra_1_1Matrix}{m}}.IA),\ JA(\mbox{\hyperlink{classalgebra_1_1Matrix}{m}}.JA),\ AA(\mbox{\hyperlink{classalgebra_1_1Matrix}{m}}.AA),}
+\DoxyCodeLine{00255\ \ \ \ \ ncol(\mbox{\hyperlink{classalgebra_1_1Matrix}{m}}.ncol),\ nrow(\mbox{\hyperlink{classalgebra_1_1Matrix}{m}}.nrow)}
+\DoxyCodeLine{00256\ \{\}}
+\DoxyCodeLine{00257\ }
 \DoxyCodeLine{00258\ }
-\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//*\ rows}}
-\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{temp\_ind}}\ =\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}-\/>first[0];}
-\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \ \ \ \ IA.push\_back(AA.size()-\/1);}
-\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00263\ \ \ \ \ \}}
-\DoxyCodeLine{00264\ \ \ \ \ IA.push\_back(AA.size()-\/1);}
-\DoxyCodeLine{00265\ \ \ \ \ dynamic\_data.clear();}
-\DoxyCodeLine{00266\ \}}
-\DoxyCodeLine{00267\ }
-\DoxyCodeLine{00268\ }
-\DoxyCodeLine{00270\ }
-\DoxyCodeLine{00276\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
-\DoxyCodeLine{00277\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classalgebra_1_1Matrix_a3aae4eb6570b8f05b6edc23cec2324f3}{Matrix<T,\ StorageOrder>::uncompress}}()}
-\DoxyCodeLine{00278\ \{}
-\DoxyCodeLine{00279\ \ \ \ \ \textcolor{keywordflow}{if}\ (!compressed)}
-\DoxyCodeLine{00280\ \ \ \ \ \{}
-\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Matrix\ is\ already\ uncompressed"{}}\ <<\ std::endl;}
-\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{00283\ \ \ \ \ \}}
+\DoxyCodeLine{00265\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
+\DoxyCodeLine{00266\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classalgebra_1_1Matrix_a27e14f1cd684dbd830e17fd5ee32f655}{Matrix<T,\ StorageOrder>::resize}}(std::size\_t\ \textcolor{keyword}{const}\&\ \mbox{\hyperlink{classalgebra_1_1Matrix}{r}},\ \textcolor{keywordtype}{size\_t}\ \textcolor{keyword}{const}\&\ \mbox{\hyperlink{classalgebra_1_1Matrix}{c}})}
+\DoxyCodeLine{00267\ \{}
+\DoxyCodeLine{00268\ \ \ \ \ \textcolor{keywordflow}{if}\ (compressed)}
+\DoxyCodeLine{00269\ \ \ \ \ \{}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}cannot\ resize\ compressed\ matrix"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00272\ \ \ \ \ \}}
+\DoxyCodeLine{00273\ \ \ \ \ }
+\DoxyCodeLine{00275\ \ \ \ \ \textcolor{keywordflow}{if}\ (\ (\mbox{\hyperlink{classalgebra_1_1Matrix}{r}}<nrow)\ \mbox{\hyperlink{classalgebra_1_1Matrix}{or}}\ (\mbox{\hyperlink{classalgebra_1_1Matrix}{c}}<ncol)\ )}
+\DoxyCodeLine{00276\ \ \ \ \ \{}
+\DoxyCodeLine{00277\ }
+\DoxyCodeLine{00278\ \ \ \ \ \}}
+\DoxyCodeLine{00279\ }
+\DoxyCodeLine{00280\ \ \ \ \ ncol\ =\ \mbox{\hyperlink{classalgebra_1_1Matrix}{r}};}
+\DoxyCodeLine{00281\ \ \ \ \ nrow\ =\ \mbox{\hyperlink{classalgebra_1_1Matrix}{c}};}
+\DoxyCodeLine{00282\ }
+\DoxyCodeLine{00283\ \}}
 \DoxyCodeLine{00284\ }
-\DoxyCodeLine{00285\ \ \ \ \ \textcolor{comment}{//\ compressed\ flag}}
-\DoxyCodeLine{00286\ \ \ \ \ compressed\ =\ \textcolor{keyword}{false};}
-\DoxyCodeLine{00287\ }
-\DoxyCodeLine{00288\ \ \ \ \ \textcolor{comment}{//\ sizes\ of\ arrays}}
-\DoxyCodeLine{00289\ \ \ \ \ std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i\_sz}}\ =\ IA.size();}
-\DoxyCodeLine{00290\ \ \ \ \ std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{j\_sz}}\ =\ JA.size();}
-\DoxyCodeLine{00291\ }
-\DoxyCodeLine{00292\ \ \ \ \ \textcolor{comment}{//\ insert\ elements\ in\ map}}
-\DoxyCodeLine{00293\ \ \ \ \ \textcolor{keywordflow}{for}\ (std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}}=0;\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}}<\mbox{\hyperlink{classalgebra_1_1Matrix}{i\_sz}};\ ++\mbox{\hyperlink{classalgebra_1_1Matrix}{i}})}
-\DoxyCodeLine{00294\ \ \ \ \ \{}
-\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ use\ I\ vector\ to\ loop\ from\ index\ i\ to\ i+1\ in\ vector\ J\ and\ data}}
-\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{j}}=IA[\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}];\ \mbox{\hyperlink{classalgebra_1_1Matrix}{j}}<IA[\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}+1];\ ++\mbox{\hyperlink{classalgebra_1_1Matrix}{j}})}
-\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \{col,\ \ \ \ \ row\},\ data}}
-\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \ \ \ \ dynamic\_data.insert(\ \{\ \{\mbox{\hyperlink{classalgebra_1_1Matrix}{i}},\ JA[\mbox{\hyperlink{classalgebra_1_1Matrix}{j}}]\},\ AA[\mbox{\hyperlink{classalgebra_1_1Matrix}{j}}]\}\ );}
-\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00301\ \ \ \ \ \}}
-\DoxyCodeLine{00302\ }
-\DoxyCodeLine{00303\ \ \ \ \ \textcolor{comment}{//\ insert\ last\ element}}
-\DoxyCodeLine{00304\ \ \ \ \ dynamic\_data.insert(\ \{\ \{nrow-\/1,\ JA[\mbox{\hyperlink{classalgebra_1_1Matrix}{j\_sz}}-\/1]\},\ AA[\mbox{\hyperlink{classalgebra_1_1Matrix}{j\_sz}}-\/1]\}\ );}
-\DoxyCodeLine{00305\ \ \ \ \ AA.clear();}
-\DoxyCodeLine{00306\ \ \ \ \ JA.clear();}
-\DoxyCodeLine{00307\ \ \ \ \ IA.clear();}
-\DoxyCodeLine{00308\ }
-\DoxyCodeLine{00309\ \}}
-\DoxyCodeLine{00310\ }
-\DoxyCodeLine{00311\ }
-\DoxyCodeLine{00313\ }
-\DoxyCodeLine{00319\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
-\DoxyCodeLine{00320\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classalgebra_1_1Matrix_a466a55059e80fa52a4fbd4b22c1985b8}{Matrix<T,\ StorageOrder>::print}}()\textcolor{keyword}{\ const}}
-\DoxyCodeLine{00321\ \textcolor{keyword}{}\{}
-\DoxyCodeLine{00322\ }
-\DoxyCodeLine{00323\ \ \ \ \ \textcolor{comment}{//\ print\ if\ compressed\ format}}
-\DoxyCodeLine{00324\ \ \ \ \ \textcolor{keywordflow}{if}\ (compressed)}
-\DoxyCodeLine{00325\ \ \ \ \ \{}
+\DoxyCodeLine{00291\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
+\DoxyCodeLine{00292\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classalgebra_1_1Matrix_aa62526bccd145f05b6392b63f5f4dce3}{Matrix<T,\ StorageOrder>::is\_compressed}}()\textcolor{keyword}{\ const}}
+\DoxyCodeLine{00293\ \textcolor{keyword}{}\{}
+\DoxyCodeLine{00294\ \ \ \ \ \textcolor{keywordflow}{if}\ (compressed)}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00296\ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};\ }
+\DoxyCodeLine{00298\ \}}
+\DoxyCodeLine{00299\ }
+\DoxyCodeLine{00307\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
+\DoxyCodeLine{00308\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classalgebra_1_1Matrix_a0271f677b1efdb0a70bc00f8697e6b12}{Matrix<T,\ StorageOrder>::compress}}(Compression\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{c}})}
+\DoxyCodeLine{00309\ \{}
+\DoxyCodeLine{00310\ \ \ \ \ \textcolor{keywordflow}{if}\ (compressed)}
+\DoxyCodeLine{00311\ \ \ \ \ \{}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Matrix\ is\ already\ compressed"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00314\ \ \ \ \ \}}
+\DoxyCodeLine{00315\ }
+\DoxyCodeLine{00316\ }
+\DoxyCodeLine{00317\ \ \ \ \ \textcolor{keywordflow}{switch}\ (\mbox{\hyperlink{classalgebra_1_1Matrix}{c}})}
+\DoxyCodeLine{00318\ \ \ \ \ \{}
+\DoxyCodeLine{00319\ \ \ \ \ \textcolor{keywordflow}{case}\ Compression::CSR:}
+\DoxyCodeLine{00320\ \ \ \ \ \{}
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ordering\ !=\ Order::Row\_major)}
+\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00323\ \ \ \ \ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}only\ compress\ to\ CSR\ if\ row-\/major\ ordering"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00324\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00325\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00326\ }
-\DoxyCodeLine{00327\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}print\ compressed"{}}\ <<\ std::endl;}
-\DoxyCodeLine{00328\ }
-\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \textcolor{comment}{//*\ i\ =\ row\ index}}
-\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}}=0;}
+\DoxyCodeLine{00327\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ keep\ track\ of\ row\ index\ change\ and\ element}}
+\DoxyCodeLine{00328\ \ \ \ \ \ \ \ \ std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{temp\_ind}}\ =\ dynamic\_data.cbegin()-\/>first[0];}
+\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ first\ element\ row}}
+\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ IA.push\_back(\mbox{\hyperlink{classalgebra_1_1Matrix}{temp\_ind}});}
 \DoxyCodeLine{00331\ }
-\DoxyCodeLine{00332\ \ \ \ \ \ \ \ \ \textcolor{comment}{//*\ i\_sz\ =\ dimension\ of\ row\ index\ vector}}
-\DoxyCodeLine{00333\ \ \ \ \ \ \ \ \ std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i\_sz}}\ =\ IA.size();}
-\DoxyCodeLine{00334\ }
-\DoxyCodeLine{00335\ \ \ \ \ \ \ \ \ \textcolor{comment}{//*\ j\ index\ along\ element\ vector}}
-\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{j}}=0;\ \mbox{\hyperlink{classalgebra_1_1Matrix}{j}}<JA.size();\ )}
-\DoxyCodeLine{00337\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00338\ }
-\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ if\ index\ of\ element\ vector\ equal\ to\ next\ element,\ then\ new\ rob}}
-\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ index\ of\ element\ vector\ must\ be\ different\ from\ last\ element}}
-\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\ (\mbox{\hyperlink{classalgebra_1_1Matrix}{j}}\ ==\ IA[\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}+1])\ \mbox{\hyperlink{classalgebra_1_1Matrix}{and}}\ (\mbox{\hyperlink{classalgebra_1_1Matrix}{j}}!=IA[\mbox{\hyperlink{classalgebra_1_1Matrix}{i\_sz}}-\/1])\ )\ }
+\DoxyCodeLine{00332\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}=dynamic\_data.cbegin();\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}!=dynamic\_data.cend();\ ++\mbox{\hyperlink{classalgebra_1_1Matrix}{it}})}
+\DoxyCodeLine{00333\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00334\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//std::cout\ <<\ it-\/>first[0]\ <<\ "{}\ "{}\ <<\ std::next(it)-\/>first[0];}}
+\DoxyCodeLine{00335\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//*\ value}}
+\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ \ \ \ \ AA.push\_back(\mbox{\hyperlink{classalgebra_1_1Matrix}{it}}-\/>second);}
+\DoxyCodeLine{00337\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//*\ column}}
+\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ \ \ \ \ JA.push\_back(\mbox{\hyperlink{classalgebra_1_1Matrix}{it}}-\/>first[1]);}
+\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ index\ of\ new\ row}}
+\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{classalgebra_1_1Matrix}{it}}-\/>first[0]\ !=\ \mbox{\hyperlink{classalgebra_1_1Matrix}{temp\_ind}})}
 \DoxyCodeLine{00342\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00343\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ++\mbox{\hyperlink{classalgebra_1_1Matrix}{i}};}
-\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00345\ }
-\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ if\ next\ index\ is\ the\ same,\ then\ it\ is\ an\ empty\ row}}
-\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (IA[\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}+1]\ ==\ IA[\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}])}
-\DoxyCodeLine{00348\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ++\mbox{\hyperlink{classalgebra_1_1Matrix}{i}};}
-\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
-\DoxyCodeLine{00351\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00352\ }
-\DoxyCodeLine{00353\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}}\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ JA[\mbox{\hyperlink{classalgebra_1_1Matrix}{j}}]\ <<\ \textcolor{stringliteral}{"{}:\ "{}}\ <<\ AA[\mbox{\hyperlink{classalgebra_1_1Matrix}{j}}]\ <<\ std::endl;}
-\DoxyCodeLine{00354\ }
-\DoxyCodeLine{00355\ \ \ \ \ \ \ \ \ \ \ \ \ ++\mbox{\hyperlink{classalgebra_1_1Matrix}{j}};}
+\DoxyCodeLine{00343\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{temp\_ind}}\ =\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}-\/>first[0];}
+\DoxyCodeLine{00344\ }
+\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ add\ same\ element\ to\ empty\ rows}}
+\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it\_tmp}}\ =\ std::prev(\mbox{\hyperlink{classalgebra_1_1Matrix}{it}});}
+\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\ std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{k}}=\mbox{\hyperlink{classalgebra_1_1Matrix}{it\_tmp}}-\/>first[0]+1;\ \mbox{\hyperlink{classalgebra_1_1Matrix}{k}}<\mbox{\hyperlink{classalgebra_1_1Matrix}{temp\_ind}};\ ++\mbox{\hyperlink{classalgebra_1_1Matrix}{k}}\ )}
+\DoxyCodeLine{00348\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ IA.push\_back(AA.size()-\/1);}
+\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00351\ }
+\DoxyCodeLine{00352\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//*\ rows}}
+\DoxyCodeLine{00353\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{temp\_ind}}\ =\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}-\/>first[0];}
+\DoxyCodeLine{00354\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ IA.push\_back(AA.size()-\/1);}
+\DoxyCodeLine{00355\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00356\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00357\ }
-\DoxyCodeLine{00358\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
-\DoxyCodeLine{00359\ \ \ \ \ \}}
-\DoxyCodeLine{00360\ \ \ \ \ \textcolor{comment}{//\ print\ if\ not\ compressed}}
-\DoxyCodeLine{00361\ \ \ \ \ \textcolor{keywordflow}{else}}
-\DoxyCodeLine{00362\ \ \ \ \ \{}
-\DoxyCodeLine{00363\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}print\ uncompressed"{}}\ <<\ std::endl;}
-\DoxyCodeLine{00364\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}=dynamic\_data.cbegin();\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}!=dynamic\_data.cend();\ ++\mbox{\hyperlink{classalgebra_1_1Matrix}{it}})}
+\DoxyCodeLine{00357\ \ \ \ \ \ \ \ \ IA.push\_back(AA.size()-\/1);}
+\DoxyCodeLine{00358\ }
+\DoxyCodeLine{00359\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00360\ \ \ \ \ \}}
+\DoxyCodeLine{00361\ }
+\DoxyCodeLine{00362\ \ \ \ \ \textcolor{keywordflow}{case}\ Compression::CSC:}
+\DoxyCodeLine{00363\ \ \ \ \ \{}
+\DoxyCodeLine{00364\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ordering\ !=\ Order::Column\_major)}
 \DoxyCodeLine{00365\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00366\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}-\/>first[0]\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}-\/>first[1]\ <<\ \textcolor{stringliteral}{"{}:\ "{}}\ <<\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}-\/>second\ <<\ std::endl;}
-\DoxyCodeLine{00367\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00368\ \ \ \ \ \}}
+\DoxyCodeLine{00366\ \ \ \ \ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}only\ compress\ to\ CSC\ if\ column-\/major\ ordering"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00367\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00368\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{00369\ }
 \DoxyCodeLine{00370\ }
-\DoxyCodeLine{00371\ \}}
-\DoxyCodeLine{00372\ }
+\DoxyCodeLine{00371\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00372\ \ \ \ \ \}}
 \DoxyCodeLine{00373\ }
-\DoxyCodeLine{00375\ \textcolor{comment}{//\ NOT\ working\ for\ both\ compressed\ and\ uncompressed}}
-\DoxyCodeLine{00384\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
-\DoxyCodeLine{00385\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classalgebra_1_1Matrix_ae268bd872098f155d22f83249a8be0e5}{Matrix<T,\ StorageOrder>::norm}}(Norm\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{n}})\textcolor{keyword}{\ const}}
-\DoxyCodeLine{00386\ \textcolor{keyword}{}\{}
-\DoxyCodeLine{00387\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}}\ =\ 0.;}
-\DoxyCodeLine{00388\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{sum}}\ =\ 0.;}
-\DoxyCodeLine{00389\ \ \ \ \ std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{id\_tmp}}\ =\ dynamic\_data.begin()-\/>first[0];}
-\DoxyCodeLine{00390\ \ \ \ \ std::vector<T>\ \mbox{\hyperlink{classalgebra_1_1Matrix}{sums}}(ncol);}
-\DoxyCodeLine{00391\ }
-\DoxyCodeLine{00392\ }
-\DoxyCodeLine{00393\ \ \ \ \ \textcolor{keywordflow}{switch}\ (\mbox{\hyperlink{classalgebra_1_1Matrix}{n}})\ \{}
-\DoxyCodeLine{00394\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ Norm::One:}
-\DoxyCodeLine{00395\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ max\ of\ sum\ by\ columns}}
+\DoxyCodeLine{00374\ \ \ \ \ \}\ \textcolor{comment}{//\ switch(compression)}}
+\DoxyCodeLine{00375\ }
+\DoxyCodeLine{00376\ \ \ \ \ \textcolor{comment}{//\ compressed\ flag}}
+\DoxyCodeLine{00377\ \ \ \ \ compressed\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00378\ \ \ \ \ compression\ =\ \mbox{\hyperlink{classalgebra_1_1Matrix}{c}};}
+\DoxyCodeLine{00379\ \ \ \ \ \textcolor{comment}{//\ clear\ memory}}
+\DoxyCodeLine{00380\ \ \ \ \ dynamic\_data.clear();}
+\DoxyCodeLine{00381\ \}}
+\DoxyCodeLine{00382\ }
+\DoxyCodeLine{00383\ }
+\DoxyCodeLine{00388\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
+\DoxyCodeLine{00389\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classalgebra_1_1Matrix_a3aae4eb6570b8f05b6edc23cec2324f3}{Matrix<T,\ StorageOrder>::uncompress}}()}
+\DoxyCodeLine{00390\ \{}
+\DoxyCodeLine{00391\ \ \ \ \ \textcolor{keywordflow}{if}\ (!compressed)}
+\DoxyCodeLine{00392\ \ \ \ \ \{}
+\DoxyCodeLine{00393\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Matrix\ is\ already\ uncompressed"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00394\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00395\ \ \ \ \ \}}
 \DoxyCodeLine{00396\ }
-\DoxyCodeLine{00397\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ save\ sum\ of\ each\ row}}
-\DoxyCodeLine{00398\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{auto}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}\ =\ dynamic\_data.cbegin();\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}\ !=\ dynamic\_data.cend();\ ++\mbox{\hyperlink{classalgebra_1_1Matrix}{it}})}
-\DoxyCodeLine{00399\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00400\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{sums}}[\mbox{\hyperlink{classalgebra_1_1Matrix}{it}}-\/>first[1]]\ +=\ std::abs(\mbox{\hyperlink{classalgebra_1_1Matrix}{it}}-\/>second);}
-\DoxyCodeLine{00401\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00402\ }
-\DoxyCodeLine{00403\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ find\ maximum\ among\ all\ elements\ of\ sums}}
-\DoxyCodeLine{00404\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}}\ =\ 0;\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}}\ <\ \mbox{\hyperlink{classalgebra_1_1Matrix}{sums}}.size();\ ++\mbox{\hyperlink{classalgebra_1_1Matrix}{i}})}
-\DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classalgebra_1_1Matrix}{sums}}[\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}]\ >\ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}})}
-\DoxyCodeLine{00407\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00408\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}}\ =\ \mbox{\hyperlink{classalgebra_1_1Matrix}{sums}}[\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}];}
-\DoxyCodeLine{00409\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00410\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00397\ \ \ \ \ \textcolor{keywordflow}{switch}\ (compression)\ }
+\DoxyCodeLine{00398\ \ \ \ \ \{}
+\DoxyCodeLine{00399\ \ \ \ \ \textcolor{keywordflow}{case}\ Compression::CSR:}
+\DoxyCodeLine{00400\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00401\ }
+\DoxyCodeLine{00402\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ordering\ !=\ Order::Row\_major)}
+\DoxyCodeLine{00403\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00404\ \ \ \ \ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}only\ decompress\ from\ CSR\ if\ column-\/major\ ordering"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00407\ }
+\DoxyCodeLine{00408\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ sizes\ of\ arrays}}
+\DoxyCodeLine{00409\ \ \ \ \ \ \ \ \ std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i\_sz}}\ =\ IA.size();}
+\DoxyCodeLine{00410\ \ \ \ \ \ \ \ \ std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{j\_sz}}\ =\ JA.size();}
 \DoxyCodeLine{00411\ }
-\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{00413\ }
-\DoxyCodeLine{00414\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ Norm::Infinity:}
-\DoxyCodeLine{00415\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ max\ of\ sum\ by\ rows}}
-\DoxyCodeLine{00416\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{auto}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}\ =\ dynamic\_data.cbegin();\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}\ !=\ dynamic\_data.cend();\ ++\mbox{\hyperlink{classalgebra_1_1Matrix}{it}})}
+\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ insert\ elements\ in\ map}}
+\DoxyCodeLine{00413\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}}=0;\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}}<\mbox{\hyperlink{classalgebra_1_1Matrix}{i\_sz}};\ ++\mbox{\hyperlink{classalgebra_1_1Matrix}{i}})}
+\DoxyCodeLine{00414\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00415\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ use\ I\ vector\ to\ loop\ from\ index\ i\ to\ i+1\ in\ vector\ J\ and\ data}}
+\DoxyCodeLine{00416\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{j}}=IA[\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}];\ \mbox{\hyperlink{classalgebra_1_1Matrix}{j}}<IA[\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}+1];\ ++\mbox{\hyperlink{classalgebra_1_1Matrix}{j}})}
 \DoxyCodeLine{00417\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00418\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ change\ row\ -\/\ reset\ sum\ -\/\ change\ maximum}}
-\DoxyCodeLine{00419\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classalgebra_1_1Matrix}{it}}-\/>first[0]\ !=\ \mbox{\hyperlink{classalgebra_1_1Matrix}{id\_tmp}})}
-\DoxyCodeLine{00420\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00421\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classalgebra_1_1Matrix}{sum}}\ >\ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}})}
-\DoxyCodeLine{00422\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00423\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}}\ =\ \mbox{\hyperlink{classalgebra_1_1Matrix}{sum}};}
-\DoxyCodeLine{00424\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00425\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{sum}}\ =\ 0.;}
-\DoxyCodeLine{00426\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{id\_tmp}}\ =\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}-\/>first[0];}
-\DoxyCodeLine{00427\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00428\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00429\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ update\ sum}}
-\DoxyCodeLine{00430\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{sum}}\ +=\ std::abs(\mbox{\hyperlink{classalgebra_1_1Matrix}{it}}-\/>second);}
-\DoxyCodeLine{00431\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00432\ }
-\DoxyCodeLine{00433\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ check\ last\ sum\ for\ maximum}}
-\DoxyCodeLine{00434\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classalgebra_1_1Matrix}{sum}}\ >\ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}})}
-\DoxyCodeLine{00435\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00436\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}}\ =\ \mbox{\hyperlink{classalgebra_1_1Matrix}{sum}};}
-\DoxyCodeLine{00437\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00438\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00418\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \{col,\ \ \ \ \ row\},\ data}}
+\DoxyCodeLine{00419\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dynamic\_data.insert(\ \{\ \{\mbox{\hyperlink{classalgebra_1_1Matrix}{i}},\ JA[\mbox{\hyperlink{classalgebra_1_1Matrix}{j}}]\},\ AA[\mbox{\hyperlink{classalgebra_1_1Matrix}{j}}]\}\ );}
+\DoxyCodeLine{00420\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00421\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00422\ }
+\DoxyCodeLine{00423\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ insert\ last\ element}}
+\DoxyCodeLine{00424\ \ \ \ \ \ \ \ \ dynamic\_data.insert(\ \{\ \{nrow-\/1,\ JA[\mbox{\hyperlink{classalgebra_1_1Matrix}{j\_sz}}-\/1]\},\ AA[\mbox{\hyperlink{classalgebra_1_1Matrix}{j\_sz}}-\/1]\}\ );}
+\DoxyCodeLine{00425\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00426\ }
+\DoxyCodeLine{00427\ \ \ \ \ \textcolor{keywordflow}{case}\ Compression::CSC:}
+\DoxyCodeLine{00428\ \ \ \ \ \{}
+\DoxyCodeLine{00429\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ordering\ !=\ Order::Column\_major)}
+\DoxyCodeLine{00430\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00431\ \ \ \ \ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}only\ decompress\ from\ CSC\ if\ column-\/major\ ordering"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00432\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00433\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00434\ }
+\DoxyCodeLine{00435\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00436\ \ \ \ \ \}}
+\DoxyCodeLine{00437\ }
+\DoxyCodeLine{00438\ \ \ \ \ \}\ \textcolor{comment}{//switch(compression)}}
 \DoxyCodeLine{00439\ }
-\DoxyCodeLine{00440\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ Norm::Frobenius:}
-\DoxyCodeLine{00441\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ sum\ of\ all\ elements\ squared}}
-\DoxyCodeLine{00442\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{auto}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}\ =\ dynamic\_data.cbegin();\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}\ !=\ dynamic\_data.cend();\ ++\mbox{\hyperlink{classalgebra_1_1Matrix}{it}})}
-\DoxyCodeLine{00443\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00444\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}}\ +=\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}-\/>second\ *\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}-\/>second;}
-\DoxyCodeLine{00445\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00440\ \ \ \ \ AA.clear();}
+\DoxyCodeLine{00441\ \ \ \ \ JA.clear();}
+\DoxyCodeLine{00442\ \ \ \ \ IA.clear();}
+\DoxyCodeLine{00443\ }
+\DoxyCodeLine{00444\ \}}
+\DoxyCodeLine{00445\ }
 \DoxyCodeLine{00446\ }
-\DoxyCodeLine{00447\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}}\ =\ std::sqrt(\mbox{\hyperlink{classalgebra_1_1Matrix}{res}});}
-\DoxyCodeLine{00448\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{00449\ \ \ \ \ \}}
-\DoxyCodeLine{00450\ }
-\DoxyCodeLine{00451\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}};}
-\DoxyCodeLine{00452\ \}}
-\DoxyCodeLine{00453\ }
-\DoxyCodeLine{00454\ }
-\DoxyCodeLine{00455\ \textcolor{comment}{//\ operator[]\ access\ copy}}
-\DoxyCodeLine{00464\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
-\DoxyCodeLine{00465\ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}\ \mbox{\hyperlink{classalgebra_1_1Matrix_ae48530a12b24fcb375585b3b6c35f0d0}{Matrix<T,\ StorageOrder>::operator[]\ }}(indexes\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{i}})\textcolor{keyword}{\ const}}
-\DoxyCodeLine{00466\ \textcolor{keyword}{}\{}
-\DoxyCodeLine{00467\ \ \ \ \ \textcolor{keywordflow}{if}\ (compressed)}
-\DoxyCodeLine{00468\ \ \ \ \ \{}
-\DoxyCodeLine{00469\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ first\ element\ of\ selected\ row}}
-\DoxyCodeLine{00470\ \ \ \ \ \ \ \ \ std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{elem\_first}}\ =\ IA[\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}}[0]\ ];}
-\DoxyCodeLine{00471\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ AA[\ \mbox{\hyperlink{classalgebra_1_1Matrix}{elem\_first}}\ +\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}}[1]];}
-\DoxyCodeLine{00472\ \ \ \ \ \}}
-\DoxyCodeLine{00473\ }
-\DoxyCodeLine{00474\ \ \ \ \ \textcolor{keywordflow}{if}\ (dynamic\_data.count(\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}))}
-\DoxyCodeLine{00475\ \ \ \ \ \{}
-\DoxyCodeLine{00476\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ dynamic\_data.at(\mbox{\hyperlink{classalgebra_1_1Matrix}{i}});}
-\DoxyCodeLine{00477\ \ \ \ \ \}}
+\DoxyCodeLine{00453\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
+\DoxyCodeLine{00454\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classalgebra_1_1Matrix_a466a55059e80fa52a4fbd4b22c1985b8}{Matrix<T,\ StorageOrder>::print}}()\textcolor{keyword}{\ const}}
+\DoxyCodeLine{00455\ \textcolor{keyword}{}\{}
+\DoxyCodeLine{00456\ \ \ \ \ \textcolor{comment}{//\ print\ if\ not\ compressed}}
+\DoxyCodeLine{00457\ \ \ \ \ \textcolor{keywordflow}{if}\ (!compressed)}
+\DoxyCodeLine{00458\ \ \ \ \ \{}
+\DoxyCodeLine{00459\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}print\ uncompressed"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00460\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}=dynamic\_data.cbegin();\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}!=dynamic\_data.cend();\ ++\mbox{\hyperlink{classalgebra_1_1Matrix}{it}})}
+\DoxyCodeLine{00461\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00462\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}-\/>first[0]\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}-\/>first[1]\ <<\ \textcolor{stringliteral}{"{}:\ "{}}\ <<\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}-\/>second\ <<\ std::endl;}
+\DoxyCodeLine{00463\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00464\ \ \ \ \ \}}
+\DoxyCodeLine{00465\ }
+\DoxyCodeLine{00466\ \ \ \ \ \textcolor{comment}{//\ print\ if\ compressed\ format}}
+\DoxyCodeLine{00467\ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}print\ compressed"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00468\ }
+\DoxyCodeLine{00469\ \ \ \ \ \textcolor{keywordflow}{switch}(compression)}
+\DoxyCodeLine{00470\ \ \ \ \ \{}
+\DoxyCodeLine{00471\ \ \ \ \ \textcolor{keywordflow}{case}\ Compression::CSR:}
+\DoxyCodeLine{00472\ \ \ \ \ \{}
+\DoxyCodeLine{00473\ \ \ \ \ \ \ \ \ \textcolor{comment}{//*\ i\ =\ row\ index}}
+\DoxyCodeLine{00474\ \ \ \ \ \ \ \ \ std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}}=0;}
+\DoxyCodeLine{00475\ }
+\DoxyCodeLine{00476\ \ \ \ \ \ \ \ \ \textcolor{comment}{//*\ i\_sz\ =\ dimension\ of\ row\ index\ vector}}
+\DoxyCodeLine{00477\ \ \ \ \ \ \ \ \ std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i\_sz}}\ =\ IA.size();}
 \DoxyCodeLine{00478\ }
-\DoxyCodeLine{00479\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}[0]>nrow\ \mbox{\hyperlink{classalgebra_1_1Matrix}{or}}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}}[1]>ncol)}
-\DoxyCodeLine{00480\ \ \ \ \ \{}
-\DoxyCodeLine{00481\ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}out\ of\ bound\ index"{}}\ <<\ std::endl;\ }
-\DoxyCodeLine{00482\ \ \ \ \ \}}
-\DoxyCodeLine{00483\ \ \ \ \ }
-\DoxyCodeLine{00484\ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
-\DoxyCodeLine{00485\ }
-\DoxyCodeLine{00486\ \}}
-\DoxyCodeLine{00487\ }
-\DoxyCodeLine{00488\ \textcolor{comment}{//\ operator[]\ access\ assign}}
-\DoxyCodeLine{00497\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
-\DoxyCodeLine{00498\ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}\&\ \mbox{\hyperlink{classalgebra_1_1Matrix_ae48530a12b24fcb375585b3b6c35f0d0}{Matrix<T,\ StorageOrder>::operator[]\ }}(indexes\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{i}})}
-\DoxyCodeLine{00499\ \{}
-\DoxyCodeLine{00500\ \ \ \ \ \textcolor{keywordflow}{if}\ (compressed)}
-\DoxyCodeLine{00501\ \ \ \ \ \{}
-\DoxyCodeLine{00502\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ first\ element\ of\ selected\ row}}
-\DoxyCodeLine{00503\ \ \ \ \ \ \ \ \ std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{elem\_first}}\ =\ IA[\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}}[0]\ ];}
-\DoxyCodeLine{00504\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ AA[\ \mbox{\hyperlink{classalgebra_1_1Matrix}{elem\_first}}\ +\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}}[1]];}
-\DoxyCodeLine{00505\ \ \ \ \ \}}
-\DoxyCodeLine{00506\ }
-\DoxyCodeLine{00507\ \ \ \ \ \textcolor{comment}{//\ if\ (dynamic\_data.count(i))}}
-\DoxyCodeLine{00508\ \ \ \ \ \textcolor{comment}{//\ \{}}
-\DoxyCodeLine{00509\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ return\ dynamic\_data.at(i);}}
-\DoxyCodeLine{00510\ \ \ \ \ \textcolor{comment}{//\ \}}}
+\DoxyCodeLine{00479\ \ \ \ \ \ \ \ \ \textcolor{comment}{//*\ j\ index\ along\ element\ vector}}
+\DoxyCodeLine{00480\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{j}}=0;\ \mbox{\hyperlink{classalgebra_1_1Matrix}{j}}<JA.size();\ )}
+\DoxyCodeLine{00481\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00482\ }
+\DoxyCodeLine{00483\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ if\ index\ of\ element\ vector\ equal\ to\ next\ element,\ then\ new\ rob}}
+\DoxyCodeLine{00484\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ index\ of\ element\ vector\ must\ be\ different\ from\ last\ element}}
+\DoxyCodeLine{00485\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\ (\mbox{\hyperlink{classalgebra_1_1Matrix}{j}}\ ==\ IA[\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}+1])\ \mbox{\hyperlink{classalgebra_1_1Matrix}{and}}\ (\mbox{\hyperlink{classalgebra_1_1Matrix}{j}}!=IA[\mbox{\hyperlink{classalgebra_1_1Matrix}{i\_sz}}-\/1])\ )\ }
+\DoxyCodeLine{00486\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00487\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ++\mbox{\hyperlink{classalgebra_1_1Matrix}{i}};}
+\DoxyCodeLine{00488\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00489\ }
+\DoxyCodeLine{00490\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ if\ next\ index\ is\ the\ same,\ then\ it\ is\ an\ empty\ row}}
+\DoxyCodeLine{00491\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (IA[\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}+1]\ ==\ IA[\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}])}
+\DoxyCodeLine{00492\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00493\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ++\mbox{\hyperlink{classalgebra_1_1Matrix}{i}};}
+\DoxyCodeLine{00494\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{00495\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00496\ }
+\DoxyCodeLine{00497\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}}\ <<\ \textcolor{stringliteral}{"{}\ "{}}\ <<\ JA[\mbox{\hyperlink{classalgebra_1_1Matrix}{j}}]\ <<\ \textcolor{stringliteral}{"{}:\ "{}}\ <<\ AA[\mbox{\hyperlink{classalgebra_1_1Matrix}{j}}]\ <<\ std::endl;}
+\DoxyCodeLine{00498\ }
+\DoxyCodeLine{00499\ \ \ \ \ \ \ \ \ \ \ \ \ ++\mbox{\hyperlink{classalgebra_1_1Matrix}{j}};}
+\DoxyCodeLine{00500\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00501\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00502\ \ \ \ \ \}}
+\DoxyCodeLine{00503\ \ \ \ \ \textcolor{keywordflow}{case}\ Compression::CSR:}
+\DoxyCodeLine{00504\ \ \ \ \ \{}
+\DoxyCodeLine{00505\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00506\ \ \ \ \ \}}
+\DoxyCodeLine{00507\ }
+\DoxyCodeLine{00508\ \ \ \ \ \}\ \textcolor{comment}{//switch(ordering)}}
+\DoxyCodeLine{00509\ }
+\DoxyCodeLine{00510\ }
 \DoxyCodeLine{00511\ }
-\DoxyCodeLine{00512\ \ \ \ \ \textcolor{comment}{//\ create\ new\ element}}
-\DoxyCodeLine{00513\ \ \ \ \ \textcolor{comment}{//\ returns\ 0\ if\ value\ is\ not\ assigned\ in\ usage}}
-\DoxyCodeLine{00514\ \ \ \ \ \textcolor{keywordflow}{return}\ dynamic\_data[\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}];}
-\DoxyCodeLine{00515\ \}}
-\DoxyCodeLine{00516\ }
-\DoxyCodeLine{00517\ }
-\DoxyCodeLine{00518\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
-\DoxyCodeLine{00519\ std::vector<T>\ operator*(\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix<T,StorageOrder>}}\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{m}},\ std::vector<T>\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{v}}\ )}
-\DoxyCodeLine{00520\ \{}
-\DoxyCodeLine{00521\ }
-\DoxyCodeLine{00522\ \ \ \ \ std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{v\_sz}}\ =\ \mbox{\hyperlink{classalgebra_1_1Matrix}{v}}.size();}
-\DoxyCodeLine{00523\ \ \ \ \ \textcolor{keywordflow}{if}\ (\ \mbox{\hyperlink{classalgebra_1_1Matrix}{m}}.nrow\ !=\ \mbox{\hyperlink{classalgebra_1_1Matrix}{v\_sz}}\ )}
-\DoxyCodeLine{00524\ \ \ \ \ \{}
-\DoxyCodeLine{00525\ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}sizes\ are\ not\ compatible\ for\ multiplication:\ ("{}}\ }
-\DoxyCodeLine{00526\ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \mbox{\hyperlink{classalgebra_1_1Matrix}{m}}.nrow\ <<\ \textcolor{stringliteral}{"{},\ "{}}\ <<\ \mbox{\hyperlink{classalgebra_1_1Matrix}{m}}.ncol\ <<\ \textcolor{stringliteral}{"{})\ *\ ("{}}\ <<\ \mbox{\hyperlink{classalgebra_1_1Matrix}{v}}.size()\ <<\ \textcolor{stringliteral}{"{},\ 1)"{}}}
-\DoxyCodeLine{00527\ \ \ \ \ \ \ \ \ \ \ \ \ <<\ std::endl;}
-\DoxyCodeLine{00528\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00529\ \ \ \ \ \ \ \ \ std::vector<T>\ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}};}
-\DoxyCodeLine{00530\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}};}
-\DoxyCodeLine{00531\ \ \ \ \ \}}
-\DoxyCodeLine{00532\ }
-\DoxyCodeLine{00533\ \ \ \ \ std::vector<T>\ res(m.nrow);}
-\DoxyCodeLine{00534\ }
-\DoxyCodeLine{00535\ }
-\DoxyCodeLine{00536\ \ \ \ \ \textcolor{comment}{//*\ compressed\ format}}
-\DoxyCodeLine{00537\ \ \ \ \ \textcolor{keywordflow}{if}\ (m.compressed)}
-\DoxyCodeLine{00538\ \ \ \ \ \{}
-\DoxyCodeLine{00539\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ sizes\ of\ arrays}}
-\DoxyCodeLine{00540\ \ \ \ \ \ \ \ \ std::size\_t\ i\_sz\ =\ m.IA.size();}
-\DoxyCodeLine{00541\ \ \ \ \ \ \ \ \ std::size\_t\ j\_sz\ =\ m.JA.size();}
-\DoxyCodeLine{00542\ }
-\DoxyCodeLine{00543\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ insert\ elements\ in\ map}}
-\DoxyCodeLine{00544\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (std::size\_t\ i=0;\ i<i\_sz;\ ++i)}
-\DoxyCodeLine{00545\ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00546\ \ \ \ \ \ \ \ \ \ \ \ \ std::size\_t\ k\ =\ m.IA[i];}
-\DoxyCodeLine{00547\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ use\ I\ vector\ to\ loop\ from\ index\ i\ to\ i+1\ in\ vector\ J\ and\ data}}
-\DoxyCodeLine{00548\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (std::size\_t\ j=0;\ k+j<m.IA[i+1];\ ++j)}
-\DoxyCodeLine{00549\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
-\DoxyCodeLine{00550\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \{col,\ row\}}}
-\DoxyCodeLine{00551\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ res[i]\ +=\ m.AA[k+j]\ *\ v[j];}
-\DoxyCodeLine{00552\ }
-\DoxyCodeLine{00553\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//std::cout\ <<\ i\ <<\ "{},\ "{}\ <<\ j}}
-\DoxyCodeLine{00554\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ <<\ m.AA[k+j]\ <<\ "{}\ "{}\ <<\ v[j]\ <<\ std::endl;}}
-\DoxyCodeLine{00555\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00556\ }
-\DoxyCodeLine{00557\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{00558\ \ \ \ \ \ \ \ \ res[\ res.size()-\/1\ ]\ +=\ m.AA[j\_sz-\/1]\ *\ v[v\_sz-\/1];}
-\DoxyCodeLine{00559\ \ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00560\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ res;}
-\DoxyCodeLine{00561\ \ \ \ \ \}}
-\DoxyCodeLine{00562\ }
-\DoxyCodeLine{00563\ \ \ \ \ \textcolor{comment}{//*\ uncompressed\ format}}
-\DoxyCodeLine{00564\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ it=m.dynamic\_data.cbegin();\ it!=m.dynamic\_data.cend();\ ++it)}
-\DoxyCodeLine{00565\ \ \ \ \ \{}
-\DoxyCodeLine{00566\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ row\ index}}
-\DoxyCodeLine{00567\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ i\ =\ it-\/>first[0];}
-\DoxyCodeLine{00568\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ column\ index}}
-\DoxyCodeLine{00569\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ j\ =\ it-\/>first[1];}
-\DoxyCodeLine{00570\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ matrix\ value}}
-\DoxyCodeLine{00571\ \ \ \ \ \ \ \ \ T\ val\_ij\ =\ it-\/>second;}
-\DoxyCodeLine{00572\ }
-\DoxyCodeLine{00573\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ partial\ multiplication}}
-\DoxyCodeLine{00574\ \ \ \ \ \ \ \ \ res[i]\ +=\ val\_ij\ *\ v[j];}
-\DoxyCodeLine{00575\ \ \ \ \ \}}
-\DoxyCodeLine{00576\ }
-\DoxyCodeLine{00577\ \ \ \ \ \textcolor{keywordflow}{return}\ res;}
-\DoxyCodeLine{00578\ \}}
-\DoxyCodeLine{00579\ }
-\DoxyCodeLine{00581\ }
-\DoxyCodeLine{00590\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
-\DoxyCodeLine{00591\ \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix<T,StorageOrder>}}\ operator*(\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix<T,StorageOrder>}}\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{m1}},\ \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix<T,StorageOrder>}}\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{m2}}\ )}
-\DoxyCodeLine{00592\ \{}
-\DoxyCodeLine{00593\ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix<T,StorageOrder>}}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}};}
-\DoxyCodeLine{00594\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}};}
-\DoxyCodeLine{00595\ \}}
-\DoxyCodeLine{00596\ }
-\DoxyCodeLine{00597\ \}\ \textcolor{comment}{//\ namespace\ algebra}}
-\DoxyCodeLine{00598\ }
-\DoxyCodeLine{00599\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00512\ \}}
+\DoxyCodeLine{00513\ }
+\DoxyCodeLine{00514\ }
+\DoxyCodeLine{00520\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
+\DoxyCodeLine{00521\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classalgebra_1_1Matrix_adade59d6b88ecf597eea9474ce3e9d72}{Matrix<T,\ StorageOrder>::norm\_one}}()\textcolor{keyword}{\ const}}
+\DoxyCodeLine{00522\ \textcolor{keyword}{}\{}
+\DoxyCodeLine{00523\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}}=0.0;}
+\DoxyCodeLine{00524\ \ \ \ \ std::vector<T>\ \mbox{\hyperlink{classalgebra_1_1Matrix}{sums}}(ncol);}
+\DoxyCodeLine{00525\ \ \ \ \ \textcolor{comment}{//\ max\ of\ sum\ by\ columns}}
+\DoxyCodeLine{00526\ }
+\DoxyCodeLine{00527\ }
+\DoxyCodeLine{00528\ \ \ \ \ \textcolor{keywordflow}{if}\ (!compressed)}
+\DoxyCodeLine{00529\ \ \ \ \ \{}
+\DoxyCodeLine{00530\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}COO\ norm-\/1"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00531\ }
+\DoxyCodeLine{00532\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ save\ sum\ of\ each\ row}}
+\DoxyCodeLine{00533\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{auto}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}\ =\ dynamic\_data.cbegin();\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}\ !=\ dynamic\_data.cend();\ ++\mbox{\hyperlink{classalgebra_1_1Matrix}{it}})}
+\DoxyCodeLine{00534\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00535\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{sums}}[\mbox{\hyperlink{classalgebra_1_1Matrix}{it}}-\/>first[1]]\ +=\ std::abs(\mbox{\hyperlink{classalgebra_1_1Matrix}{it}}-\/>second);}
+\DoxyCodeLine{00536\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00537\ }
+\DoxyCodeLine{00538\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ find\ maximum\ among\ all\ elements\ of\ sums}}
+\DoxyCodeLine{00539\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}}\ =\ 0;\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}}\ <\ \mbox{\hyperlink{classalgebra_1_1Matrix}{sums}}.size();\ ++\mbox{\hyperlink{classalgebra_1_1Matrix}{i}})}
+\DoxyCodeLine{00540\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00541\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classalgebra_1_1Matrix}{sums}}[\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}]\ >\ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}})}
+\DoxyCodeLine{00542\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00543\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}}\ =\ \mbox{\hyperlink{classalgebra_1_1Matrix}{sums}}[\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}];}
+\DoxyCodeLine{00544\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00545\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00546\ \ \ \ \ \}}
+\DoxyCodeLine{00547\ }
+\DoxyCodeLine{00548\ }
+\DoxyCodeLine{00549\ \ \ \ \ \textcolor{keywordflow}{switch}\ (compression)}
+\DoxyCodeLine{00550\ \ \ \ \ \{}
+\DoxyCodeLine{00551\ \ \ \ \ \textcolor{keywordflow}{case}\ Compression::CSR:}
+\DoxyCodeLine{00552\ \ \ \ \ \{}
+\DoxyCodeLine{00553\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}CSR\ norm-\/1"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00554\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00555\ \ \ \ \ \}}
+\DoxyCodeLine{00556\ \ \ \ \ \textcolor{keywordflow}{case}\ Compression::CSC:}
+\DoxyCodeLine{00557\ \ \ \ \ \{}
+\DoxyCodeLine{00558\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}CSC\ norm-\/1"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00559\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00560\ \ \ \ \ \}}
+\DoxyCodeLine{00561\ }
+\DoxyCodeLine{00562\ \ \ \ \ \}\ \textcolor{comment}{//switch(compression)}}
+\DoxyCodeLine{00563\ }
+\DoxyCodeLine{00564\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}};}
+\DoxyCodeLine{00565\ \}}
+\DoxyCodeLine{00566\ }
+\DoxyCodeLine{00567\ }
+\DoxyCodeLine{00573\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
+\DoxyCodeLine{00574\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classalgebra_1_1Matrix_accca731f4e5eae3144fc60211f102ab2}{Matrix<T,\ StorageOrder>::norm\_infty}}()\textcolor{keyword}{\ const}}
+\DoxyCodeLine{00575\ \textcolor{keyword}{}\{}
+\DoxyCodeLine{00576\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}}=0.0;}
+\DoxyCodeLine{00577\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{sum}}=0.0;}
+\DoxyCodeLine{00578\ \ \ \ \ std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{id\_tmp}}\ =\ dynamic\_data.begin()-\/>first[0];}
+\DoxyCodeLine{00579\ \ \ \ \ \textcolor{comment}{//\ max\ of\ sum\ by\ rows}}
+\DoxyCodeLine{00580\ }
+\DoxyCodeLine{00581\ \ \ \ \ \textcolor{keywordflow}{if}\ (!compressed)}
+\DoxyCodeLine{00582\ \ \ \ \ \{}
+\DoxyCodeLine{00583\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}COO\ infinity\ norm"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00584\ }
+\DoxyCodeLine{00585\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{auto}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}\ =\ dynamic\_data.cbegin();\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}\ !=\ dynamic\_data.cend();\ ++\mbox{\hyperlink{classalgebra_1_1Matrix}{it}})}
+\DoxyCodeLine{00586\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00587\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ change\ row\ -\/\ reset\ sum\ -\/\ change\ maximum}}
+\DoxyCodeLine{00588\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classalgebra_1_1Matrix}{it}}-\/>first[0]\ !=\ \mbox{\hyperlink{classalgebra_1_1Matrix}{id\_tmp}})}
+\DoxyCodeLine{00589\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00590\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classalgebra_1_1Matrix}{sum}}\ >\ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}})}
+\DoxyCodeLine{00591\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00592\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}}\ =\ \mbox{\hyperlink{classalgebra_1_1Matrix}{sum}};}
+\DoxyCodeLine{00593\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00594\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{sum}}\ =\ 0.;}
+\DoxyCodeLine{00595\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{id\_tmp}}\ =\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}-\/>first[0];}
+\DoxyCodeLine{00596\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00597\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00598\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ update\ sum}}
+\DoxyCodeLine{00599\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{sum}}\ +=\ std::abs(\mbox{\hyperlink{classalgebra_1_1Matrix}{it}}-\/>second);}
+\DoxyCodeLine{00600\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00601\ }
+\DoxyCodeLine{00602\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ check\ last\ sum\ for\ maximum}}
+\DoxyCodeLine{00603\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classalgebra_1_1Matrix}{sum}}\ >\ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}})}
+\DoxyCodeLine{00604\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00605\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}}\ =\ \mbox{\hyperlink{classalgebra_1_1Matrix}{sum}};}
+\DoxyCodeLine{00606\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00607\ \ \ \ \ \}}
+\DoxyCodeLine{00608\ }
+\DoxyCodeLine{00609\ }
+\DoxyCodeLine{00610\ \ \ \ \ \textcolor{keywordflow}{switch}(compression)}
+\DoxyCodeLine{00611\ \ \ \ \ \{}
+\DoxyCodeLine{00612\ \ \ \ \ \textcolor{keywordflow}{case}\ Compression::CSR:}
+\DoxyCodeLine{00613\ \ \ \ \ \{}
+\DoxyCodeLine{00614\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}CSR\ infinity\ norm"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00615\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00616\ \ \ \ \ \}}
+\DoxyCodeLine{00617\ \ \ \ \ \textcolor{keywordflow}{case}\ Compression::CSC:}
+\DoxyCodeLine{00618\ \ \ \ \ \{}
+\DoxyCodeLine{00619\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}CSC\ infinity\ norm"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00620\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00621\ \ \ \ \ \}}
+\DoxyCodeLine{00622\ }
+\DoxyCodeLine{00623\ \ \ \ \ \}\ \textcolor{comment}{//switch(compression)}}
+\DoxyCodeLine{00624\ }
+\DoxyCodeLine{00625\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}};}
+\DoxyCodeLine{00626\ \}}
+\DoxyCodeLine{00627\ }
+\DoxyCodeLine{00628\ }
+\DoxyCodeLine{00634\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
+\DoxyCodeLine{00635\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classalgebra_1_1Matrix_abba5ddc347c63a859f15b16f4420bc21}{Matrix<T,\ StorageOrder>::norm\_frob}}()\textcolor{keyword}{\ const}}
+\DoxyCodeLine{00636\ \textcolor{keyword}{}\{}
+\DoxyCodeLine{00637\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}}=0.0;}
+\DoxyCodeLine{00638\ }
+\DoxyCodeLine{00639\ \ \ \ \ \textcolor{keywordflow}{if}\ (!compressed)}
+\DoxyCodeLine{00640\ \ \ \ \ \{}
+\DoxyCodeLine{00641\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}COO\ Frobenius\ norm"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00642\ }
+\DoxyCodeLine{00643\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ sum\ of\ all\ elements\ squared}}
+\DoxyCodeLine{00644\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{auto}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}\ =\ dynamic\_data.cbegin();\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}\ !=\ dynamic\_data.cend();\ ++\mbox{\hyperlink{classalgebra_1_1Matrix}{it}})}
+\DoxyCodeLine{00645\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00646\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}}\ +=\ std::abs(\mbox{\hyperlink{classalgebra_1_1Matrix}{it}}-\/>second)\ *\ std::abs(\mbox{\hyperlink{classalgebra_1_1Matrix}{it}}-\/>second);}
+\DoxyCodeLine{00647\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00648\ }
+\DoxyCodeLine{00649\ \ \ \ \ \}}
+\DoxyCodeLine{00650\ \ \ \ \ \textcolor{keywordflow}{switch}\ (ordering)\ \{}
+\DoxyCodeLine{00651\ \ \ \ \ }
+\DoxyCodeLine{00652\ \ \ \ \ \textcolor{keywordflow}{case}\ Compression::CSR:}
+\DoxyCodeLine{00653\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}CSR\ Frobenius\ norm"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00654\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00655\ \ \ \ \ \textcolor{keywordflow}{case}\ Compression::CSC:}
+\DoxyCodeLine{00656\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}CSC\ Frobenius\ norm"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00657\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00658\ }
+\DoxyCodeLine{00659\ \ \ \ \ \}\ \textcolor{comment}{//\ switch(ordering)}}
+\DoxyCodeLine{00660\ }
+\DoxyCodeLine{00661\ \ \ \ \ \textcolor{keywordflow}{return}\ std::sqrt(\mbox{\hyperlink{classalgebra_1_1Matrix}{res}});}
+\DoxyCodeLine{00662\ \}}
+\DoxyCodeLine{00663\ }
+\DoxyCodeLine{00664\ }
+\DoxyCodeLine{00666\ }
+\DoxyCodeLine{00676\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
+\DoxyCodeLine{00677\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classalgebra_1_1Matrix_ae268bd872098f155d22f83249a8be0e5}{Matrix<T,\ StorageOrder>::norm}}(Norm\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{n}})\textcolor{keyword}{\ const}}
+\DoxyCodeLine{00678\ \textcolor{keyword}{}\{}
+\DoxyCodeLine{00679\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}}\ =\ 0.;}
+\DoxyCodeLine{00680\ }
+\DoxyCodeLine{00681\ \ \ \ \ \textcolor{keywordflow}{switch}\ (\mbox{\hyperlink{classalgebra_1_1Matrix}{n}})}
+\DoxyCodeLine{00682\ \ \ \ \ \{}
+\DoxyCodeLine{00683\ \ \ \ \ \textcolor{keywordflow}{case}\ Norm::One:}
+\DoxyCodeLine{00684\ \ \ \ \ \{}
+\DoxyCodeLine{00685\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classalgebra_1_1Matrix_adade59d6b88ecf597eea9474ce3e9d72}{norm\_one}}();}
+\DoxyCodeLine{00686\ \ \ \ \ \}}
+\DoxyCodeLine{00687\ \ \ \ \ \textcolor{keywordflow}{case}\ Norm::Infinity:}
+\DoxyCodeLine{00688\ \ \ \ \ \{}
+\DoxyCodeLine{00689\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classalgebra_1_1Matrix_accca731f4e5eae3144fc60211f102ab2}{norm\_infty}}();}
+\DoxyCodeLine{00690\ \ \ \ \ \}}
+\DoxyCodeLine{00691\ \ \ \ \ \textcolor{keywordflow}{case}\ Norm::Frobenius:}
+\DoxyCodeLine{00692\ \ \ \ \ \{}
+\DoxyCodeLine{00693\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classalgebra_1_1Matrix_abba5ddc347c63a859f15b16f4420bc21}{norm\_frob}}();}
+\DoxyCodeLine{00694\ \ \ \ \ \}}
+\DoxyCodeLine{00695\ }
+\DoxyCodeLine{00696\ \ \ \ \ \}\ \textcolor{comment}{//\ switch(n)}}
+\DoxyCodeLine{00697\ }
+\DoxyCodeLine{00698\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}};}
+\DoxyCodeLine{00699\ \}}
+\DoxyCodeLine{00700\ }
+\DoxyCodeLine{00701\ }
+\DoxyCodeLine{00702\ \textcolor{comment}{//\ operator[]\ access\ copy}}
+\DoxyCodeLine{00709\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
+\DoxyCodeLine{00710\ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}\ \mbox{\hyperlink{classalgebra_1_1Matrix_ae48530a12b24fcb375585b3b6c35f0d0}{Matrix<T,\ StorageOrder>::operator[]\ }}(indexes\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{i}})\textcolor{keyword}{\ const}}
+\DoxyCodeLine{00711\ \textcolor{keyword}{}\{}
+\DoxyCodeLine{00712\ \ \ \ \ \textcolor{keywordflow}{if}\ (!compressed)}
+\DoxyCodeLine{00713\ \ \ \ \ \{}
+\DoxyCodeLine{00714\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}COO\ subscript\ copy"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00715\ }
+\DoxyCodeLine{00716\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ check\ if\ present}}
+\DoxyCodeLine{00717\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (dynamic\_data.count(\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}))}
+\DoxyCodeLine{00718\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00719\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ dynamic\_data.at(\mbox{\hyperlink{classalgebra_1_1Matrix}{i}});}
+\DoxyCodeLine{00720\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00721\ }
+\DoxyCodeLine{00722\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ if\ out\ of\ bounds\ error}}
+\DoxyCodeLine{00723\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}[0]>nrow\ \mbox{\hyperlink{classalgebra_1_1Matrix}{or}}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}}[1]>ncol)}
+\DoxyCodeLine{00724\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00725\ \ \ \ \ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}out\ of\ bound\ index"{}}\ <<\ std::endl;\ }
+\DoxyCodeLine{00726\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00727\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00728\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00729\ \ \ \ \ \}}
+\DoxyCodeLine{00730\ }
+\DoxyCodeLine{00731\ }
+\DoxyCodeLine{00732\ \ \ \ \ \textcolor{keywordflow}{switch}\ (compression)}
+\DoxyCodeLine{00733\ \ \ \ \ \{}
+\DoxyCodeLine{00734\ \ \ \ \ \textcolor{keywordflow}{case}\ Compression::CSR:}
+\DoxyCodeLine{00735\ \ \ \ \ \{}
+\DoxyCodeLine{00736\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}CSR\ subscript\ copy"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00737\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00738\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ first\ element\ of\ selected\ row}}
+\DoxyCodeLine{00739\ \ \ \ \ \ \ \ \ std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{elem\_first}}\ =\ IA[\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}}[0]\ ];}
+\DoxyCodeLine{00740\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ AA[\ \mbox{\hyperlink{classalgebra_1_1Matrix}{elem\_first}}\ +\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}}[1]];}
+\DoxyCodeLine{00741\ \ \ \ \ \}}
+\DoxyCodeLine{00742\ \ \ \ \ \textcolor{keywordflow}{case}\ Compression::CSC:}
+\DoxyCodeLine{00743\ \ \ \ \ \{}
+\DoxyCodeLine{00744\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}CSC\ subscript\ copy"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00745\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00746\ \ \ \ \ \}}
+\DoxyCodeLine{00747\ }
+\DoxyCodeLine{00748\ \ \ \ \ \}\ \textcolor{comment}{//switch(compression)}}
+\DoxyCodeLine{00749\ }
+\DoxyCodeLine{00750\ \}}
+\DoxyCodeLine{00751\ }
+\DoxyCodeLine{00752\ \textcolor{comment}{//\ operator[]\ access\ assign}}
+\DoxyCodeLine{00759\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
+\DoxyCodeLine{00760\ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}\&\ \mbox{\hyperlink{classalgebra_1_1Matrix_ae48530a12b24fcb375585b3b6c35f0d0}{Matrix<T,\ StorageOrder>::operator[]\ }}(indexes\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{i}})}
+\DoxyCodeLine{00761\ \{}
+\DoxyCodeLine{00762\ }
+\DoxyCodeLine{00763\ \ \ \ \ \textcolor{keywordflow}{if}\ (!compression)}
+\DoxyCodeLine{00764\ \ \ \ \ \{}
+\DoxyCodeLine{00765\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}COO\ subscript\ reference"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00766\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ cannot\ tell\ if\ access\ for\ assignment\ or\ copy\ for\ non-\/const\ Matrix}}
+\DoxyCodeLine{00767\ }
+\DoxyCodeLine{00768\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ if\ out\ of\ bounds\ error}}
+\DoxyCodeLine{00769\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}[0]>nrow\ \mbox{\hyperlink{classalgebra_1_1Matrix}{or}}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}}[1]>ncol)}
+\DoxyCodeLine{00770\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00771\ \ \ \ \ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}out\ of\ bound\ index\ -\/\ assigning\ out\ of\ bounds"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00772\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00773\ }
+\DoxyCodeLine{00774\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ add\ new\ element\ if\ not\ present}}
+\DoxyCodeLine{00775\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ dynamic\_data[\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}];}
+\DoxyCodeLine{00776\ \ \ \ \ \}}
+\DoxyCodeLine{00777\ }
+\DoxyCodeLine{00778\ }
+\DoxyCodeLine{00779\ \ \ \ \ \textcolor{keywordflow}{switch}\ (ordering)}
+\DoxyCodeLine{00780\ \ \ \ \ \{}
+\DoxyCodeLine{00781\ \ \ \ \ }
+\DoxyCodeLine{00782\ \ \ \ \ \textcolor{keywordflow}{case}\ Compression::CSR:}
+\DoxyCodeLine{00783\ \ \ \ \ \{}
+\DoxyCodeLine{00784\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}CSR\ subscript\ reference"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00785\ }
+\DoxyCodeLine{00786\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ first\ element\ of\ selected\ row}}
+\DoxyCodeLine{00787\ \ \ \ \ \ \ \ \ std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{elem\_first}}\ =\ IA[\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}}[0]\ ];}
+\DoxyCodeLine{00788\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ AA[\ \mbox{\hyperlink{classalgebra_1_1Matrix}{elem\_first}}\ +\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}}[1]];}
+\DoxyCodeLine{00789\ \ \ \ \ \}}
+\DoxyCodeLine{00790\ \ \ \ \ \textcolor{keywordflow}{case}\ Compression::CSC:}
+\DoxyCodeLine{00791\ \ \ \ \ \{}
+\DoxyCodeLine{00792\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}CSC\ subscript\ reference"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00793\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00794\ \ \ \ \ \}}
+\DoxyCodeLine{00795\ }
+\DoxyCodeLine{00796\ \ \ \ \ \}\ \textcolor{comment}{//\ switch(ordering)}}
+\DoxyCodeLine{00797\ }
+\DoxyCodeLine{00798\ \}}
+\DoxyCodeLine{00799\ }
+\DoxyCodeLine{00807\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
+\DoxyCodeLine{00808\ std::vector<T>\ operator*(\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix<T,StorageOrder>}}\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{m}},\ std::vector<T>\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{v}}\ )}
+\DoxyCodeLine{00809\ \{}
+\DoxyCodeLine{00810\ }
+\DoxyCodeLine{00811\ \ \ \ \ std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{v\_sz}}\ =\ \mbox{\hyperlink{classalgebra_1_1Matrix}{v}}.size();}
+\DoxyCodeLine{00812\ \ \ \ \ \textcolor{keywordflow}{if}\ (\ \mbox{\hyperlink{classalgebra_1_1Matrix}{m}}.nrow\ !=\ \mbox{\hyperlink{classalgebra_1_1Matrix}{v\_sz}}\ )}
+\DoxyCodeLine{00813\ \ \ \ \ \{}
+\DoxyCodeLine{00814\ \ \ \ \ \ \ \ \ std::cerr\ <<\ \textcolor{stringliteral}{"{}sizes\ are\ not\ compatible\ for\ multiplication:\ ("{}}\ }
+\DoxyCodeLine{00815\ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \mbox{\hyperlink{classalgebra_1_1Matrix}{m}}.nrow\ <<\ \textcolor{stringliteral}{"{},\ "{}}\ <<\ \mbox{\hyperlink{classalgebra_1_1Matrix}{m}}.ncol\ <<\ \textcolor{stringliteral}{"{})\ *\ ("{}}\ <<\ \mbox{\hyperlink{classalgebra_1_1Matrix}{v}}.size()\ <<\ \textcolor{stringliteral}{"{},\ 1)"{}}}
+\DoxyCodeLine{00816\ \ \ \ \ \ \ \ \ \ \ \ \ <<\ std::endl;}
+\DoxyCodeLine{00817\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00818\ \ \ \ \ \ \ \ \ std::vector<T>\ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}};}
+\DoxyCodeLine{00819\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}};}
+\DoxyCodeLine{00820\ \ \ \ \ \}}
+\DoxyCodeLine{00821\ }
+\DoxyCodeLine{00822\ \ \ \ \ std::vector<T>\ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}}(\mbox{\hyperlink{classalgebra_1_1Matrix}{m}}.nrow);}
+\DoxyCodeLine{00823\ }
+\DoxyCodeLine{00824\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classalgebra_1_1Matrix}{m}}.compressed)}
+\DoxyCodeLine{00825\ \ \ \ \ \{}
+\DoxyCodeLine{00826\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}COO\ matrix-\/vector\ multiplication"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00827\ }
+\DoxyCodeLine{00828\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}=\mbox{\hyperlink{classalgebra_1_1Matrix}{m}}.dynamic\_data.cbegin();\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}!=\mbox{\hyperlink{classalgebra_1_1Matrix}{m}}.dynamic\_data.cend();\ ++\mbox{\hyperlink{classalgebra_1_1Matrix}{it}})}
+\DoxyCodeLine{00829\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00830\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ row\ index}}
+\DoxyCodeLine{00831\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}}\ =\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}-\/>first[0];}
+\DoxyCodeLine{00832\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ column\ index}}
+\DoxyCodeLine{00833\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{j}}\ =\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}-\/>first[1];}
+\DoxyCodeLine{00834\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ matrix\ value}}
+\DoxyCodeLine{00835\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{val\_ij}}\ =\ \mbox{\hyperlink{classalgebra_1_1Matrix}{it}}-\/>second;}
+\DoxyCodeLine{00836\ }
+\DoxyCodeLine{00837\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ partial\ multiplication}}
+\DoxyCodeLine{00838\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}}[\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}]\ +=\ \mbox{\hyperlink{classalgebra_1_1Matrix}{val\_ij}}\ *\ \mbox{\hyperlink{classalgebra_1_1Matrix}{v}}[\mbox{\hyperlink{classalgebra_1_1Matrix}{j}}];}
+\DoxyCodeLine{00839\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00840\ \ \ \ \ \}}
+\DoxyCodeLine{00841\ }
+\DoxyCodeLine{00842\ \ \ \ \ \textcolor{keywordflow}{switch}\ (\mbox{\hyperlink{classalgebra_1_1Matrix}{m}}.compression)\ \{}
+\DoxyCodeLine{00843\ \ \ \ \ }
+\DoxyCodeLine{00844\ }
+\DoxyCodeLine{00845\ \ \ \ \ \textcolor{keywordflow}{case}\ Compression::CSR:}
+\DoxyCodeLine{00846\ \ \ \ \ \{}
+\DoxyCodeLine{00847\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}CSR\ matrix-\/vector\ multiplication"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00848\ }
+\DoxyCodeLine{00849\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ sizes\ of\ arrays}}
+\DoxyCodeLine{00850\ \ \ \ \ \ \ \ \ std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i\_sz}}\ =\ \mbox{\hyperlink{classalgebra_1_1Matrix}{m}}.IA.size();}
+\DoxyCodeLine{00851\ \ \ \ \ \ \ \ \ std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{j\_sz}}\ =\ \mbox{\hyperlink{classalgebra_1_1Matrix}{m}}.JA.size();}
+\DoxyCodeLine{00852\ }
+\DoxyCodeLine{00853\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ insert\ elements\ in\ map}}
+\DoxyCodeLine{00854\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}}=0;\ \mbox{\hyperlink{classalgebra_1_1Matrix}{i}}<\mbox{\hyperlink{classalgebra_1_1Matrix}{i\_sz}};\ ++\mbox{\hyperlink{classalgebra_1_1Matrix}{i}})}
+\DoxyCodeLine{00855\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00856\ \ \ \ \ \ \ \ \ \ \ \ \ std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{k}}\ =\ \mbox{\hyperlink{classalgebra_1_1Matrix}{m}}.IA[\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}];}
+\DoxyCodeLine{00857\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ use\ I\ vector\ to\ loop\ from\ index\ i\ to\ i+1\ in\ vector\ J\ and\ data}}
+\DoxyCodeLine{00858\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (std::size\_t\ \mbox{\hyperlink{classalgebra_1_1Matrix}{j}}=0;\ \mbox{\hyperlink{classalgebra_1_1Matrix}{k}}+\mbox{\hyperlink{classalgebra_1_1Matrix}{j}}<\mbox{\hyperlink{classalgebra_1_1Matrix}{m}}.IA[\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}+1];\ ++\mbox{\hyperlink{classalgebra_1_1Matrix}{j}})}
+\DoxyCodeLine{00859\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00860\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \{col,\ row\}}}
+\DoxyCodeLine{00861\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}}[\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}]\ +=\ \mbox{\hyperlink{classalgebra_1_1Matrix}{m}}.AA[\mbox{\hyperlink{classalgebra_1_1Matrix}{k}}+\mbox{\hyperlink{classalgebra_1_1Matrix}{j}}]\ *\ \mbox{\hyperlink{classalgebra_1_1Matrix}{v}}[\mbox{\hyperlink{classalgebra_1_1Matrix}{j}}];}
+\DoxyCodeLine{00862\ }
+\DoxyCodeLine{00863\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//std::cout\ <<\ i\ <<\ "{},\ "{}\ <<\ j}}
+\DoxyCodeLine{00864\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ <<\ m.AA[k+j]\ <<\ "{}\ "{}\ <<\ v[j]\ <<\ std::endl;}}
+\DoxyCodeLine{00865\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00866\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00867\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}}[\ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}}.size()-\/1\ ]\ +=\ \mbox{\hyperlink{classalgebra_1_1Matrix}{m}}.AA[\mbox{\hyperlink{classalgebra_1_1Matrix}{j\_sz}}-\/1]\ *\ \mbox{\hyperlink{classalgebra_1_1Matrix}{v}}[\mbox{\hyperlink{classalgebra_1_1Matrix}{v\_sz}}-\/1];}
+\DoxyCodeLine{00868\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00869\ \ \ \ \ \}}
+\DoxyCodeLine{00870\ \ \ \ \ \textcolor{keywordflow}{case}\ Compression::CSC:}
+\DoxyCodeLine{00871\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}CSC\ matrix-\/vector\ multiplication"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00872\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00873\ \ \ \ \ \}}
+\DoxyCodeLine{00874\ }
+\DoxyCodeLine{00875\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}};}
+\DoxyCodeLine{00876\ \}}
+\DoxyCodeLine{00877\ }
+\DoxyCodeLine{00878\ }
+\DoxyCodeLine{00887\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T,\ \textcolor{keyword}{typename}\ StorageOrder>}
+\DoxyCodeLine{00888\ \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix<T,StorageOrder>}}\ operator*(\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix<T,StorageOrder>}}\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{m1}},\ \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix<T,StorageOrder>}}\ \textcolor{keyword}{const}\ \&\mbox{\hyperlink{classalgebra_1_1Matrix}{m2}}\ )}
+\DoxyCodeLine{00889\ \{}
+\DoxyCodeLine{00890\ \ \ \ \ \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix<T,StorageOrder>}}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}};}
+\DoxyCodeLine{00891\ }
+\DoxyCodeLine{00893\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{classalgebra_1_1Matrix}{m1}}.ordering\ ==\ \mbox{\hyperlink{classalgebra_1_1Matrix}{m2}}.ordering)}
+\DoxyCodeLine{00894\ \ \ \ \ \{}
+\DoxyCodeLine{00895\ }
+\DoxyCodeLine{00896\ \ \ \ \ \}}
+\DoxyCodeLine{00897\ }
+\DoxyCodeLine{00898\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{classalgebra_1_1Matrix}{m1}}.compressed)}
+\DoxyCodeLine{00899\ \ \ \ \ \{}
+\DoxyCodeLine{00900\ }
+\DoxyCodeLine{00901\ \ \ \ \ \}}
+\DoxyCodeLine{00902\ }
+\DoxyCodeLine{00903\ \ \ \ \ \textcolor{keywordflow}{switch}\ (\mbox{\hyperlink{classalgebra_1_1Matrix}{m1}}.compression)}
+\DoxyCodeLine{00904\ \ \ \ \ \{}
+\DoxyCodeLine{00905\ \ \ \ \ \textcolor{keywordflow}{case}\ Compression::CSR:}
+\DoxyCodeLine{00906\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}CSR\ matrix-\/matrix\ multiplication"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00907\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00908\ \ \ \ \ \textcolor{keywordflow}{case}\ Compression::CSC:}
+\DoxyCodeLine{00909\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}CSC\ matrix-\/matrix\ multiplication"{}}\ <<\ std::endl;}
+\DoxyCodeLine{00910\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00911\ \ \ \ \ \}}
+\DoxyCodeLine{00912\ }
+\DoxyCodeLine{00913\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classalgebra_1_1Matrix}{res}};}
+\DoxyCodeLine{00914\ \}}
+\DoxyCodeLine{00915\ }
+\DoxyCodeLine{00916\ \}\ \textcolor{comment}{//\ namespace\ algebra}}
+\DoxyCodeLine{00917\ }
+\DoxyCodeLine{00918\ \textcolor{preprocessor}{\#endif}}
 
 \end{DoxyCode}

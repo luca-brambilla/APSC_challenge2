@@ -36,7 +36,7 @@ int main()
                                                                         {0,0,0, 0},
                                                                         {9, 10, 11, 12}} };
 
-        algebra::Matrix<double, algebra::Order> M1(data2, algebra::Order::COO); 
+        algebra::Matrix<double, algebra::Order> M1(data2, algebra::Order::Row_major); 
         std::cout << "*** OUTPUT UNCOMPRESSED ***" << std::endl;
         M1.print();
     }
@@ -58,7 +58,7 @@ int main()
 
         algebra::Matrix<double, algebra::Order> M1(data3); 
         std::cout << "*** COMPRESS ***" << std::endl;
-        M1.compress(algebra::Order::CSR);
+        M1.compress(algebra::Compression::CSR);
 
         std::cout << "*** OUTPUT COMPRESSED ***" << std::endl;
         M1.print();
@@ -69,7 +69,7 @@ int main()
     {
         algebra::Matrix<double, algebra::Order> M_uncomp(data);
         std::cout << "*** COMPRESS ***" << std::endl;
-        M_uncomp.compress(algebra::Order::CSR);
+        M_uncomp.compress(algebra::Compression::CSR);
 
         std::cout << "*** OUTPUT COMPRESSED ***" << std::endl;
         M_uncomp.print();
@@ -122,7 +122,7 @@ int main()
     {
         algebra::Matrix<double, algebra::Order> M_mult(data);
         M_mult.print();
-        M_mult.compress(algebra::Order::CSR);
+        M_mult.compress(algebra::Compression::CSR);
         std::vector<double> v( {1, 1, 1, 1} );
         //std::vector<double> v_res;
         
