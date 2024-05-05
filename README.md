@@ -1,6 +1,10 @@
-# APSC_challenge2
+# Description
+
+Luca Brambilla: luca13.brambilla@mail.polimi.it
 
 919812 - 10510718
+
+# Sparse matrix
 
 Implementation of the sparse Matrix
 
@@ -12,8 +16,8 @@ Representations:
 
 - CSC: compressed sparse column
 
-Documentation available at:
-https://luca-brambilla.github.io/APSC_challenge2/
+Documentation for the template class `Matrix` available 
+[here](https://luca-brambilla.github.io/APSC_challenge2/classalgebra_1_1Matrix.html)
 
 CHECKLIST:
 

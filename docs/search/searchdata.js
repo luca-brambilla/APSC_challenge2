@@ -1,27 +1,30 @@
 var indexSectionsWithContent =
 {
-  0: "acimnopru",
+  0: "cdimnoprsu",
   1: "m",
-  2: "cimnopru",
-  3: "o",
-  4: "a"
+  2: "m",
+  3: "cimnopru",
+  4: "o",
+  5: "d"
 };
 
 var indexSectionNames =
 {
   0: "all",
   1: "classes",
-  2: "functions",
-  3: "related",
-  4: "pages"
+  2: "files",
+  3: "functions",
+  4: "related",
+  5: "pages"
 };
 
 var indexSectionLabels =
 {
   0: "All",
   1: "Data Structures",
-  2: "Functions",
-  3: "Friends",
-  4: "Pages"
+  2: "Files",
+  3: "Functions",
+  4: "Friends",
+  5: "Pages"
 };
 

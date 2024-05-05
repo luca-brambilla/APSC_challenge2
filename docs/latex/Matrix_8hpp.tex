@@ -1,0 +1,103 @@
+\doxysection{Matrix.\+hpp File Reference}
+\hypertarget{Matrix_8hpp}{}\label{Matrix_8hpp}\index{Matrix.hpp@{Matrix.hpp}}
+{\ttfamily \#include $<$cstddef$>$}\newline
+{\ttfamily \#include $<$cstdio$>$}\newline
+{\ttfamily \#include $<$map$>$}\newline
+{\ttfamily \#include $<$array$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$cmath$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$fstream$>$}\newline
+{\ttfamily \#include $<$sstream$>$}\newline
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classalgebra_1_1Matrix}{algebra\+::\+Matrix$<$ T, Storage\+Order $>$}}
+\begin{DoxyCompactList}\small\item\em Template class for sparse matrices. Template parameters are the data type and internal ordering (column major or column major). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{Matrix_8hpp_a7072f22e6b12b2a75ddd0a762a2196c8}\label{Matrix_8hpp_a7072f22e6b12b2a75ddd0a762a2196c8} 
+enum {\bfseries Order} \{ {\bfseries Column\+\_\+major}
+, {\bfseries Row\+\_\+major}
+ \}
+\item 
+\Hypertarget{Matrix_8hpp_a67b8431f9217a8c697b8ac46b1613b2b}\label{Matrix_8hpp_a67b8431f9217a8c697b8ac46b1613b2b} 
+enum {\bfseries Norm} \{ {\bfseries One}
+, {\bfseries Infinity}
+, {\bfseries Frobenius}
+ \}
+\item 
+\Hypertarget{Matrix_8hpp_a13667716dd7d18aff841207714f35fea}\label{Matrix_8hpp_a13667716dd7d18aff841207714f35fea} 
+enum {\bfseries Compression} \{ {\bfseries CSR}
+, {\bfseries CSC}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$\mbox{\hyperlink{classalgebra_1_1Matrix}{typename}} \mbox{\hyperlink{classalgebra_1_1Matrix}{T}} , \mbox{\hyperlink{classalgebra_1_1Matrix}{typename}} \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$ }\\std\+::vector$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}} $>$ \mbox{\hyperlink{Matrix_8hpp_a2eec345dfd139eb4984b9a1063b317ce}{algebra\+::operator\texorpdfstring{$\ast$}{*}}} (\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$ \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{m}}, std\+::vector$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}} $>$ \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{v}})
+\begin{DoxyCompactList}\small\item\em Matrix-\/vector multiplication. \end{DoxyCompactList}\item 
+{\footnotesize template$<$\mbox{\hyperlink{classalgebra_1_1Matrix}{typename}} \mbox{\hyperlink{classalgebra_1_1Matrix}{T}} , \mbox{\hyperlink{classalgebra_1_1Matrix}{typename}} \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$ }\\\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$ \mbox{\hyperlink{Matrix_8hpp_ab2c45eccbb56faaed26253f9769b7807}{algebra\+::operator\texorpdfstring{$\ast$}{*}}} (\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$ \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{m1}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$ \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{m2}})
+\begin{DoxyCompactList}\small\item\em Matrix-\/\+Matrix multiplication. Only works if objects have the same ordering and the same compression. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{Matrix_8hpp_a172eecf40ec99935e0dfc140a959cb9e}\label{Matrix_8hpp_a172eecf40ec99935e0dfc140a959cb9e} 
+\mbox{\hyperlink{classalgebra_1_1Matrix}{constexpr}} \mbox{\hyperlink{classalgebra_1_1Matrix}{double}} {\bfseries algebra\+::\+ZERO\+\_\+\+TOL} = 1\mbox{\hyperlink{classalgebra_1_1Matrix}{e}}-\/8
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyAuthor}{Author}
+Luca Brambilla \href{mailto:luca13.brambilla@mail.polimi.it}{\texttt{ luca13.\+brambilla@mail.\+polimi.\+it}} 
+\end{DoxyAuthor}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{Matrix_8hpp_a2eec345dfd139eb4984b9a1063b317ce}\label{Matrix_8hpp_a2eec345dfd139eb4984b9a1063b317ce} 
+\index{Matrix.hpp@{Matrix.hpp}!operator\texorpdfstring{$\ast$}{*}@{operator\texorpdfstring{$\ast$}{*}}}
+\index{operator\texorpdfstring{$\ast$}{*}@{operator\texorpdfstring{$\ast$}{*}}!Matrix.hpp@{Matrix.hpp}}
+\doxysubsubsection{\texorpdfstring{operator\texorpdfstring{$\ast$}{*}()}{operator*()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T , typename Storage\+Order $>$ \\
+std\+::vector$<$ T $>$ \mbox{\hyperlink{classalgebra_1_1Matrix}{algebra\+::operator}}\texorpdfstring{$\ast$}{*} (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$ \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&}]{m,  }\item[{std\+::vector$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}} $>$ \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&}]{v }\end{DoxyParamCaption})}
+
+
+
+Matrix-\/vector multiplication. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em m} & Matrix object \\
+\hline
+{\em v} & Standard vector \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+std\+::vector$<$\+T$>$ 
+\end{DoxyReturn}
+\Hypertarget{Matrix_8hpp_ab2c45eccbb56faaed26253f9769b7807}\label{Matrix_8hpp_ab2c45eccbb56faaed26253f9769b7807} 
+\index{Matrix.hpp@{Matrix.hpp}!operator\texorpdfstring{$\ast$}{*}@{operator\texorpdfstring{$\ast$}{*}}}
+\index{operator\texorpdfstring{$\ast$}{*}@{operator\texorpdfstring{$\ast$}{*}}!Matrix.hpp@{Matrix.hpp}}
+\doxysubsubsection{\texorpdfstring{operator\texorpdfstring{$\ast$}{*}()}{operator*()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T , typename Storage\+Order $>$ \\
+Matrix$<$ T, Storage\+Order $>$ \mbox{\hyperlink{classalgebra_1_1Matrix}{algebra\+::operator}}\texorpdfstring{$\ast$}{*} (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$ \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&}]{m1,  }\item[{\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$ \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&}]{m2 }\end{DoxyParamCaption})}
+
+
+
+Matrix-\/\+Matrix multiplication. Only works if objects have the same ordering and the same compression. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em m1} & First matrix object \\
+\hline
+{\em m2} & Second matrix object \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Matrix$<$\+T,\+Storage\+Order$>$ 
+\end{DoxyReturn}
+check all different orderings if equal for m1 and m2
+
+check all different orderings if equal for m1 and m2

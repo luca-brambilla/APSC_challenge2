@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * @author Luca Brambilla <luca13.brambilla@mail.polimi.it>
+ */
+
 #include <cstddef>
 #include <cstdio>
 #include <map>
@@ -38,7 +44,18 @@ std::vector<T> operator*( Matrix<T, StorageOrder> const &m, std::vector<T> const
 template<typename T, typename StorageOrder>
 Matrix<T,StorageOrder> operator*( Matrix<T,StorageOrder> const &m1, Matrix<T,StorageOrder> const &m2);
 
-// Matrix class template
+/**
+ * @brief Template class for sparse matrices. Template parameters are the data type 
+ * and internal ordering (column major or column major).
+ * 
+ * It is possible to pass from an uncompressed state (coordinate representation) to
+ * a compressed state (compressed sparse row or compressed sparse column representation).
+ *
+ * Methods are available to compute the matrix norm and matrix-vector product. 
+ * 
+ * @tparam T                Data type
+ * @tparam StorageOrder     Enumerator for storage ordering: column major or row major
+ */
 template <typename T, typename StorageOrder>
 class Matrix
 {

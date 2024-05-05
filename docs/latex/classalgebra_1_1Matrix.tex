@@ -1,5 +1,27 @@
 \doxysection{algebra\+::Matrix\texorpdfstring{$<$}{<} T, Storage\+Order \texorpdfstring{$>$}{>} Class Template Reference}
 \hypertarget{classalgebra_1_1Matrix}{}\label{classalgebra_1_1Matrix}\index{algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename T, typename Storage\+Order$>$\newline
+class algebra\+::\+Matrix$<$ T, Storage\+Order $>$}
+Template class for sparse matrices. Template parameters are the data type and internal ordering (column major or column major). 
+
+It is possible to pass from an uncompressed state (coordinate representation) to a compressed state (compressed sparse row or compressed sparse column representation).
+
+Methods are available to compute the matrix norm and matrix-\/vector product.
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Data type \\
+\hline
+{\em Storage\+Order} & Enumerator for storage ordering\+: column major or row major \\
+\hline
+\end{DoxyTemplParams}
+
+
+{\ttfamily \#include $<$Matrix.\+hpp$>$}
+
 \doxysubsubsection*{Public Types}
 \begin{DoxyCompactItemize}
 \item 
@@ -352,4 +374,4 @@ check all different orderings if equal for m1 and m2
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
-Matrix.\+hpp\end{DoxyCompactItemize}
+\mbox{\hyperlink{Matrix_8hpp}{Matrix.\+hpp}}\end{DoxyCompactItemize}
