@@ -7,17 +7,17 @@
 
 int main()
 {
-    algebra::Matrix<double, algebra::Order>::uncompressed data{ {{1,2,3, 4}, 
+    algebra::Matrix<double, algebra::Order>::fullmatrix data{ {{1,2,3, 4}, 
                                                                     {5,6,7, 8},
                                                                     {0,0,0, 0},
                                                                     {9, 10, 11, 12}} };
 
-    //! read and print from full
+    //! test fullmatrix
     if (false)
     {
         std::cout << "*** GENERIC MATRIX ***" << std::endl;
         
-        algebra::Matrix<double, algebra::Order>::uncompressed data{ {{1,2,3}, {4,5,6}, {7,8,9}} };
+        algebra::Matrix<double, algebra::Order>::fullmatrix data0{ {{1,2,3}, {4,5,6}, {7,8,9}} };
         for (size_t i=0; i<3; i++)
         {
             for (size_t j=0; j<data[i].size(); j++)
@@ -26,39 +26,43 @@ int main()
                 std::cout << data[i][j] << std::endl;
             }
         }
+    }
 
+    //! read fullmatrix and print
+    if (false)
+    {
         std::cout << "*** READ INPUT SPARSE ***" << std::endl;
-        algebra::Matrix<double, algebra::Order>::uncompressed data2{ {{1,2,3, 4}, 
+        algebra::Matrix<double, algebra::Order>::fullmatrix data_full{ {{1,2,3, 4}, 
                                                                         {5,6,7, 8},
                                                                         {0,0,0, 0},
                                                                         {9, 10, 11, 12}} };
 
-        algebra::Matrix<double, algebra::Order> M1(data2, algebra::Order::Row_major); 
+        algebra::Matrix<double, algebra::Order> M_full(data_full, algebra::Order::Row_major); 
         std::cout << "*** OUTPUT UNCOMPRESSED ***" << std::endl;
-        M1.print();
+        M_full.print();
     }
 
     //! read and print from file
     if (false)
     {
-        algebra::Matrix<double, algebra::Order> M4("data/zenios.mtx");
-        M4.print();
+        algebra::Matrix<double, algebra::Order> M_file("data/zenios.mtx");
+        M_file.print();
     }
 
     //! compress()
     if (false)
     {
-        algebra::Matrix<double, algebra::Order>::uncompressed data3{ {{1,2,3, 4}, 
+        algebra::Matrix<double, algebra::Order>::fullmatrix data_compress{ {{1,2,3, 4}, 
                                                                         {5,6,7, 8},
                                                                         {0,0,0, 0},
                                                                         {9, 10, 11, 12}} };
 
-        algebra::Matrix<double, algebra::Order> M1(data3); 
+        algebra::Matrix<double, algebra::Order> M_compress(data_compress); 
         std::cout << "*** COMPRESS ***" << std::endl;
-        M1.compress(algebra::Compression::CSR);
+        M_compress.compress(algebra::Compression::CSR);
 
         std::cout << "*** OUTPUT COMPRESSED ***" << std::endl;
-        M1.print();
+        M_compress.print();
     }
 
     //! uncomrpess()
@@ -80,11 +84,11 @@ int main()
     //! norm()
     if (false)
     {
-        algebra::Matrix<double, algebra::Order>::uncompressed data5{ {{1,2,3, 4}, 
+        algebra::Matrix<double, algebra::Order>::fullmatrix data_norm{ {{1,2,3, 4}, 
                                                                         {5,6,7, 8},
                                                                         {0,0,0, 0},
                                                                         {9, 10, 11, 12}} };
-        algebra::Matrix<double, algebra::Order> M_norm(data5);
+        algebra::Matrix<double, algebra::Order> M_norm(data_norm);
         std::cout << "Norm-1: " << M_norm.norm(algebra::Norm::One) << std::endl;
         std::cout << "Infinity: " << M_norm.norm(algebra::Norm::Infinity) << std::endl;
         std::cout << "Frobenius: " << M_norm.norm(algebra::Norm::Frobenius) << std::endl;
@@ -95,7 +99,7 @@ int main()
     {
         std::complex<double> a(1.0, 0.0);
         std::complex<double> b(0.0, 1.0);
-        algebra::Matrix<std::complex<double>, algebra::Order>::uncompressed data_complex{ {{a,0,0}, 
+        algebra::Matrix<std::complex<double>, algebra::Order>::fullmatrix data_complex{ {{a,0,0}, 
                                                                         {0,b,0},
                                                                         {0,0,a+b} } };
         algebra::Matrix<std::complex<double>, algebra::Order> M_norm_complex(data_complex);
@@ -107,28 +111,28 @@ int main()
     //! subscript operator[]
     if (false)
     {
-        algebra::Matrix<double, algebra::Order>::uncompressed data6{ {{1.,0,0, 0}, 
+        algebra::Matrix<double, algebra::Order>::fullmatrix data_sub{ {{1.,0,0, 0}, 
                                                                         {0,0.,0, 0},
                                                                         {0,2.,3., 0},
                                                                         {4., 0, 0, 5.}} };
 
-        algebra::Matrix<double, algebra::Order> M3(data6);
-        M3.print();
+        algebra::Matrix<double, algebra::Order> M_sub(data_sub);
+        M_sub.print();
         //std::cout << "assign new value" << std::endl;
-        M3[ {1,2} ] = 15;
-        M3[ {6,4} ] = 36;
-        std::cout << M3[ {1,2} ] << std::endl;
-        std::cout << M3[ {3,4} ] << std::endl;
-        M3.print();
+        M_sub[ {1,2} ] = 15;
+        M_sub[ {6,4} ] = 36;
+        std::cout << M_sub[ {1,2} ] << std::endl;
+        std::cout << M_sub[ {3,4} ] << std::endl;
+        M_sub.print();
 
         std::cout << "const matrix" << std::endl;
-        const algebra::Matrix<double, algebra::Order> Mc(data6);
-        auto p = Mc[ {6,4} ];
+        const algebra::Matrix<double, algebra::Order> M_const(data_sub);
+        auto p = M_const[ {6,4} ];
         std::cout << p << std::endl; 
-        Mc.print();
+        M_const.print();
     }
 
-    //! matrix mult
+    //! vector-matrix product
     if(false)
     {
         algebra::Matrix<double, algebra::Order> M_mult(data);

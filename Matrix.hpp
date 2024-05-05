@@ -61,8 +61,11 @@ template <typename T, typename StorageOrder>
 class Matrix
 {
 public:
+    /// type used for indices to insert in the map for uncompressed data
     typedef std::array<std::size_t,2> indexes;
-    typedef std::vector<std::vector<T>> uncompressed;
+    /// type used for reading from a full matrix
+    typedef std::vector<std::vector<T>> fullmatrix;
+    // type uncompressed data in coordinate representation
     typedef std::map<indexes,T> coo_matrix;
 
 public:
@@ -71,11 +74,10 @@ public:
 
     Matrix(std::size_t const& r, size_t const& c);
 
-    Matrix(uncompressed const &m, Order const &o=Row_major);
+    Matrix(fullmatrix const &m, Order const &o=Row_major);
     
     Matrix(Matrix const &m);
     
-    //Matrix(std::string const &name);
     Matrix(std::string const &name, Order const &o=Row_major);
 
     // getters
@@ -112,7 +114,7 @@ private:
     /// Compression format
     Compression compression = Compression::CSR;
 
-    /// C
+    /// Compressed state
     bool compressed = false;
 
     /// Uncompressed coordinate data representation
@@ -151,7 +153,7 @@ Matrix<T, StorageOrder>::Matrix(std::size_t const& r, size_t const& c) :
  * @param o         ordering
  */
 template<typename T, typename StorageOrder>
-Matrix<T, StorageOrder>::Matrix(const std::vector<std::vector<T>> &m,
+Matrix<T, StorageOrder>::Matrix(const fullmatrix &m,
                                 Order const &o)
 {
 
@@ -213,7 +215,7 @@ Matrix<T, StorageOrder>::Matrix(const std::vector<std::vector<T>> &m,
 
 
 /**
- * @brief Construct a new Matrix object reading from a file in matrix market format
+ * @brief Construct a new Matrix object reading from a file in matrix market format.
  *
  * Assume reading only real matrices (not complex).
  *
@@ -320,7 +322,7 @@ Matrix<T, StorageOrder>::Matrix(Matrix const &m) :
 
 
 /**
- * @brief Reshape the matrix passing the new number of rows and columns
+ * @brief Reshape the matrix passing the new number of rows and columns.
  * 
  * @param r         new number of rows
  * @param c         new number of columns
@@ -346,7 +348,7 @@ void Matrix<T, StorageOrder>::resize(std::size_t const& r, size_t const& c)
 }
 
 /**
- * @brief Checks if the matrix is compressed and returns true if compressed, false 
+ * @brief Check if the matrix is compressed and returns true if compressed, false 
  * otherwise.
  * 
  * @return bool
@@ -431,6 +433,36 @@ void Matrix<T, StorageOrder>::compress(Compression const &c)
             return;
         }
 
+        // keep track of row index change and element
+        std::size_t temp_ind = dynamic_data.cbegin()->first[1];
+        // first element row
+        JA.push_back(temp_ind);
+
+        for (auto it=dynamic_data.cbegin(); it!=dynamic_data.cend(); ++it)
+        {
+            //* value
+            AA.push_back(it->second);
+            //* column
+            IA.push_back(it->first[0]);
+            
+            // index of new row
+            if(it->first[1] != temp_ind)
+            {
+                temp_ind = it->first[1];
+
+                // add same element to empty rows
+                auto it_tmp = std::prev(it);
+                for( std::size_t k=it_tmp->first[1]+1; k<temp_ind; ++k )
+                {
+                    JA.push_back(AA.size()-1);
+                }
+
+                //* rows
+                temp_ind = it->first[1];
+                JA.push_back(AA.size()-1);
+            }
+        }
+        JA.push_back(AA.size()-1);
 
         break;
     }
@@ -461,8 +493,7 @@ void Matrix<T, StorageOrder>::uncompress()
     switch (compression) 
     {
     case Compression::CSR:
-        {
-
+    {
         if (ordering != Order::Row_major)
         {
             std::cerr << "only decompress from CSR if column-major ordering" << std::endl;
@@ -486,7 +517,7 @@ void Matrix<T, StorageOrder>::uncompress()
 
         // insert last element
         dynamic_data.insert( { {nrow-1, JA[j_sz-1]}, AA[j_sz-1]} );
-        }
+    }
 
     case Compression::CSC:
     {
@@ -496,6 +527,24 @@ void Matrix<T, StorageOrder>::uncompress()
             return;
         }
 
+        // sizes of arrays
+        std::size_t i_sz = IA.size();
+        std::size_t j_sz = JA.size();
+
+        // insert elements in map
+        for (std::size_t j=0; j<j_sz; ++j)
+        {
+            // use I vector to loop from index i to i+1 in vector J and data
+            for (std::size_t i=IA[j]; i<IA[j+1]; ++i)
+            {
+                // {col,     row}, data
+                dynamic_data.insert( { {j, JA[i]}, AA[i]} );
+            }
+        }
+
+        // insert last element
+        dynamic_data.insert( { {nrow-1, JA[i_sz-1]}, AA[i_sz-1]} );
+        
         break;
     }
 
@@ -545,7 +594,7 @@ void Matrix<T, StorageOrder>::print() const
         for(std::size_t j=0; j<JA.size(); )
         {
 
-            // if index of element vector equal to next element, then new rob
+            // if index of element vector equal to next element, then new row
             // index of element vector must be different from last element
             if ( (j == IA[i+1]) and (j!=IA[i_sz-1]) ) 
             {
@@ -567,6 +616,35 @@ void Matrix<T, StorageOrder>::print() const
     }
     case Compression::CSC:
     {
+        //* j = column index
+        std::size_t j=0;
+
+        //* j_sz = dimension of column index vector
+        std::size_t j_sz = JA.size();
+
+        //* i index along element vector
+        for(std::size_t i=0; i<JA.size(); )
+        {
+
+            // if index of element vector equal to next element, then new column
+            // index of element vector must be different from last element
+            if ( (i == JA[j+1]) and (i!=IA[j_sz-1]) ) 
+            {
+                ++j;
+            }
+
+            // if next index is the same, then it is an empty row
+            if (IA[j+1] == IA[j])
+            {
+                ++j;
+                continue;
+            }
+
+            std::cout << j << "\t " << IA[i] << ": \t" << AA[i] << std::endl;
+
+            ++i;
+        }
+
         return;
     }
 
@@ -592,7 +670,7 @@ double Matrix<T, StorageOrder>::norm_one() const
 
     if (!compressed)
     {
-        std::cout << "COO norm-1" << std::endl;
+        //std::cout << "COO norm-1" << std::endl;
 
         // save sum of each row
         for(auto it = dynamic_data.cbegin(); it != dynamic_data.cend(); ++it)
@@ -645,7 +723,7 @@ double Matrix<T, StorageOrder>::norm_infty() const
 
     if (!compressed)
     {
-        std::cout << "COO infinity norm" << std::endl;
+        //std::cout << "COO infinity norm" << std::endl;
 
         for(auto it = dynamic_data.cbegin(); it != dynamic_data.cend(); ++it)
         {
@@ -703,23 +781,36 @@ double Matrix<T, StorageOrder>::norm_frob() const
 
     if (!compressed)
     {
-        std::cout << "COO Frobenius norm" << std::endl;
+        //std::cout << "COO Frobenius norm" << std::endl;
 
         // sum of all elements squared
         for(auto it = dynamic_data.cbegin(); it != dynamic_data.cend(); ++it)
         {
             res += std::abs(it->second) * std::abs(it->second);
         }
-
+        return std::sqrt(res);
     }
+
     switch (ordering) {
     
     case Compression::CSR:
+    {
         std::cout << "CSR Frobenius norm" << std::endl;
+        for(auto it = AA.cbegin(); it != AA.cend(); ++it)
+        {
+            res += std::abs(*it) * std::abs(*it);
+        }
         break;
+    }
     case Compression::CSC:
+    {
         std::cout << "CSC Frobenius norm" << std::endl;
+        for(auto it = AA.cbegin(); it != AA.cend(); ++it)
+        {
+            res += std::abs(*it) * std::abs(*it);
+        }
         break;
+    }
 
     } // switch(ordering)
 
@@ -727,7 +818,6 @@ double Matrix<T, StorageOrder>::norm_frob() const
 }
 
 
-//! NOT working for both compressed and uncompressed
 /**
  * @brief Given an enumerator, return the desired matrix norm.
  * Possible norms are:
