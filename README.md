@@ -50,25 +50,3 @@ If the variable `ZERO_TOL` is not redefined, the default value in the header sou
 # Testing
 
 In the `main.cpp` file is possible to test different sections of the cody by changing the values from `false` to `true` in the `if` statements.
-
-# CHECKLIST
-
-- [ ] README
-- [ ] comments
-- [x] dynamic constructor
-- [x] constructor taking dimensions
-- [x] resize uncompressed
-- [x] `compress()`
-- [x] `uncompress()`
-- [x] `is_compressed()`
-- [x] call `operator[]`
-- [x] friend matrix-vector `operator*`
-- [ ] extension to matrix-vector product with `Matrix` of just one column
-- [ ] matrix-matrix `operator*`
-- [x] `norm()`
-- [x] extension of `norm()` working with complex
-- [x] reader of matrix market format
-- [x] test code with `Chrono` utility
-- [ ] working for both compressed and uncompressed
-- [x] everything working for CSR
-- [ ] everything working for CSC
