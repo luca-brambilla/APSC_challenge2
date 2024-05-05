@@ -13,7 +13,7 @@ int main()
                                                                     {9, 10, 11, 12}} };
 
     //! test fullmatrix
-    if (false)
+    if (true)
     {
         std::cout << "*** GENERIC MATRIX ***" << std::endl;
         
@@ -29,7 +29,7 @@ int main()
     }
 
     //! read fullmatrix and print
-    if (false)
+    if (true)
     {
         std::cout << "*** READ INPUT SPARSE ***" << std::endl;
         algebra::Matrix<double, algebra::Order>::fullmatrix data_full{ {{1,2,3, 4}, 
@@ -43,14 +43,14 @@ int main()
     }
 
     //! read and print from file
-    if (false)
+    if (true)
     {
         algebra::Matrix<double, algebra::Order> M_file("data/zenios.mtx");
         M_file.print();
     }
 
     //! compress()
-    if (false)
+    if (true)
     {
         algebra::Matrix<double, algebra::Order>::fullmatrix data_compress{ {{1,2,3, 4}, 
                                                                         {5,6,7, 8},
@@ -66,7 +66,7 @@ int main()
     }
 
     //! uncomrpess()
-    if (false)
+    if (true)
     {
         algebra::Matrix<double, algebra::Order> M_uncomp(data);
         std::cout << "*** COMPRESS ***" << std::endl;
@@ -82,7 +82,7 @@ int main()
     }
 
     //! norm()
-    if (false)
+    if (true)
     {
         algebra::Matrix<double, algebra::Order>::fullmatrix data_norm{ {{1,2,3, 4}, 
                                                                         {5,6,7, 8},
@@ -95,7 +95,7 @@ int main()
     }
 
     //! norm() with complex
-    if (false)
+    if (true)
     {
         std::complex<double> a(1.0, 0.0);
         std::complex<double> b(0.0, 1.0);
@@ -109,7 +109,7 @@ int main()
     }
 
     //! subscript operator[]
-    if (false)
+    if (true)
     {
         algebra::Matrix<double, algebra::Order>::fullmatrix data_sub{ {{1.,0,0, 0}, 
                                                                         {0,0.,0, 0},
@@ -133,7 +133,7 @@ int main()
     }
 
     //! vector-matrix product
-    if(false)
+    if(true)
     {
         algebra::Matrix<double, algebra::Order> M_mult(data);
         M_mult.print();
@@ -151,7 +151,7 @@ int main()
     }
 
     //! test chrono
-    if (false)
+    if (true)
     {
         algebra::Matrix<double, algebra::Order> M_chrono("data/lnsp_131.mtx");
         //M_chrono.print();

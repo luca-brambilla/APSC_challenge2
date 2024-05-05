@@ -336,10 +336,33 @@ void Matrix<T, StorageOrder>::resize(std::size_t const& r, size_t const& c)
         return;
     }
     
-    //! delete elements if reshape with smaller size
+    // if resize smaller, remove elements
     if ( (r<nrow) or (c<ncol) )
     {
-
+        switch (ordering) {
+        case Order::Row_major:
+        {
+            for (auto it=dynamic_data.begin(); it!=dynamic_data.end(); ++it )
+            {
+                if (it->first[0]<r or it->first[1]<c)
+                {
+                    dynamic_data.erase(it);
+                }
+            }
+            
+        }
+        case Order::Column_major:
+        {
+            for (auto it=dynamic_data.begin(); it!=dynamic_data.end(); ++it )
+            {
+                if (it->first[0]<c or it->first[1]<r)
+                {
+                    dynamic_data.erase(it);
+                }
+            }
+            
+        }
+        } // switch(ordering)
     }
 
     ncol = r;
@@ -569,7 +592,7 @@ void Matrix<T, StorageOrder>::print() const
     // print if not compressed
     if (!compressed)
     {
-        std::cout << "print uncompressed" << std::endl;
+        // std::cout << "print uncompressed" << std::endl;
         for (auto it=dynamic_data.cbegin(); it!=dynamic_data.cend(); ++it)
         {
             std::cout << it->first[0] << "\t " << it->first[1] << ": \t" << it->second << std::endl;
@@ -578,7 +601,7 @@ void Matrix<T, StorageOrder>::print() const
     }
 
     // print if compressed format
-    std::cout << "print compressed" << std::endl;
+    // std::cout << "print compressed" << std::endl;
 
     switch(compression)
     {
@@ -693,12 +716,12 @@ double Matrix<T, StorageOrder>::norm_one() const
     {
     case Compression::CSR:
     {
-        std::cout << "CSR norm-1" << std::endl;
+        // std::cout << "CSR norm-1" << std::endl;
         break;
     }
     case Compression::CSC:
     {
-        std::cout << "CSC norm-1" << std::endl;
+        // std::cout << "CSC norm-1" << std::endl;
         break;
     }
 
@@ -754,12 +777,12 @@ double Matrix<T, StorageOrder>::norm_infty() const
     {
     case Compression::CSR:
     {
-        std::cout << "CSR infinity norm" << std::endl;
+        // std::cout << "CSR infinity norm" << std::endl;
         break;
     }
     case Compression::CSC:
     {
-        std::cout << "CSC infinity norm" << std::endl;
+        // std::cout << "CSC infinity norm" << std::endl;
         break;
     }
 
@@ -795,7 +818,7 @@ double Matrix<T, StorageOrder>::norm_frob() const
     
     case Compression::CSR:
     {
-        std::cout << "CSR Frobenius norm" << std::endl;
+        // std::cout << "CSR Frobenius norm" << std::endl;
         for(auto it = AA.cbegin(); it != AA.cend(); ++it)
         {
             res += std::abs(*it) * std::abs(*it);
@@ -804,7 +827,7 @@ double Matrix<T, StorageOrder>::norm_frob() const
     }
     case Compression::CSC:
     {
-        std::cout << "CSC Frobenius norm" << std::endl;
+        // std::cout << "CSC Frobenius norm" << std::endl;
         for(auto it = AA.cbegin(); it != AA.cend(); ++it)
         {
             res += std::abs(*it) * std::abs(*it);
@@ -856,31 +879,32 @@ double Matrix<T, StorageOrder>::norm(Norm const &n) const
 
 // operator[] access copy
 /**
- * @brief Const version of subscript operator. If a
+ * @brief Const version of subscript operator.
  * 
  * @param i 
  * @return T 
  */
 template<typename T, typename StorageOrder>
-T Matrix<T, StorageOrder>::operator[] (indexes const &i) const
+T Matrix<T, StorageOrder>::operator[] (indexes const &ind) const
 {
+    T res = 0;
     if (!compressed)
     {
-        std::cout << "COO subscript copy" << std::endl;
+        // std::cout << "COO subscript copy" << std::endl;
 
         // check if present
-        if (dynamic_data.count(i))
+        if (dynamic_data.count(ind))
         {
-            return dynamic_data.at(i);
+            return dynamic_data.at(ind);
         }
 
         // if out of bounds error
-        if (i[0]>nrow or i[1]>ncol)
+        if (ind[0]>nrow or ind[1]>ncol)
         {
             std::cerr << "out of bound index" << std::endl; 
         }
         
-        return 0;
+        return res;
     }
 
 
@@ -888,20 +912,26 @@ T Matrix<T, StorageOrder>::operator[] (indexes const &i) const
     {
     case Compression::CSR:
     {
-        std::cout << "CSR subscript copy" << std::endl;
+        //std::cout << "CSR subscript copy" << std::endl;
         
         // first element of selected row
-        std::size_t elem_first = IA[ i[0] ];
-        return AA[ elem_first + i[1]];
+        std::size_t elem_first = IA[ ind[0] ];
+        res = AA[ elem_first + ind[1]];
+        break;
     }
     case Compression::CSC:
     {
-        std::cout << "CSC subscript copy" << std::endl;
+        // std::cout << "CSC subscript copy" << std::endl;
+
+        // first element of selected row
+        std::size_t elem_first = JA[ ind[0] ];
+        res = AA[ elem_first + ind[1]];
         break;
     }
 
     } //switch(compression)
 
+    return res;
 }
 
 
@@ -912,22 +942,22 @@ T Matrix<T, StorageOrder>::operator[] (indexes const &i) const
  * @return T& 
  */
 template<typename T, typename StorageOrder>
-T& Matrix<T, StorageOrder>::operator[] (indexes const &i)
+T& Matrix<T, StorageOrder>::operator[] (indexes const &ind)
 {
 
     if (!compression)
     {
-        std::cout << "COO subscript reference" << std::endl;
+        // std::cout << "COO subscript reference" << std::endl;
         // cannot tell if access for assignment or copy for non-const Matrix
 
         // if out of bounds error
-        if (i[0]>nrow or i[1]>ncol)
+        if (ind[0]>nrow or ind[1]>ncol)
         {
             std::cerr << "out of bound index - assigning out of bounds" << std::endl;
         }
 
         // add new element if not present
-        return dynamic_data[i];
+        return dynamic_data[ind];
     }
 
 
@@ -936,15 +966,19 @@ T& Matrix<T, StorageOrder>::operator[] (indexes const &i)
     
     case Compression::CSR:
     {
-        std::cout << "CSR subscript reference" << std::endl;
+        //std::cout << "CSR subscript reference" << std::endl;
 
         // first element of selected row
-        std::size_t elem_first = IA[ i[0] ];
-        return AA[ elem_first + i[1]];
+        std::size_t elem_first = IA[ ind[0] ];
+        return AA[ elem_first + ind[1]];
     }
     case Compression::CSC:
     {
-        std::cout << "CSC subscript reference" << std::endl;
+        //std::cout << "CSC subscript reference" << std::endl;
+
+        // first element of selected column
+        std::size_t elem_first = JA[ ind[0] ];
+        return AA[ elem_first + ind[1]];
         break;
     }
 
@@ -978,7 +1012,7 @@ std::vector<T> operator*(Matrix<T,StorageOrder> const &m, std::vector<T> const &
 
     if (!m.compressed)
     {
-        std::cout << "COO matrix-vector multiplication" << std::endl;
+        // std::cout << "COO matrix-vector multiplication" << std::endl;
 
         for (auto it=m.dynamic_data.cbegin(); it!=m.dynamic_data.cend(); ++it)
         {
@@ -999,7 +1033,7 @@ std::vector<T> operator*(Matrix<T,StorageOrder> const &m, std::vector<T> const &
 
     case Compression::CSR:
     {
-        std::cout << "CSR matrix-vector multiplication" << std::endl;
+        // std::cout << "CSR matrix-vector multiplication" << std::endl;
 
         // sizes of arrays
         std::size_t i_sz = m.IA.size();
@@ -1024,14 +1058,14 @@ std::vector<T> operator*(Matrix<T,StorageOrder> const &m, std::vector<T> const &
         break;
     }
     case Compression::CSC:
-        std::cout << "CSC matrix-vector multiplication" << std::endl;
+        // std::cout << "CSC matrix-vector multiplication" << std::endl;
         break;
     }
 
     return res;
 }
 
-
+//! NOT IMPLEMENTED
 /**
  * @brief Matrix-Matrix multiplication. Only works if objects have the same ordering
  * and the same compression.
@@ -1045,7 +1079,7 @@ Matrix<T,StorageOrder> operator*(Matrix<T,StorageOrder> const &m1, Matrix<T,Stor
 {
     Matrix<T,StorageOrder> res;
 
-    //! check all different orderings if equal for m1 and m2
+    // check all different orderings if equal for m1 and m2
     if (m1.ordering == m2.ordering)
     {
 
@@ -1059,10 +1093,10 @@ Matrix<T,StorageOrder> operator*(Matrix<T,StorageOrder> const &m1, Matrix<T,Stor
     switch (m1.compression)
     {
     case Compression::CSR:
-        std::cout << "CSR matrix-matrix multiplication" << std::endl;
+        // std::cout << "CSR matrix-matrix multiplication" << std::endl;
         break;
     case Compression::CSC:
-        std::cout << "CSC matrix-matrix multiplication" << std::endl;
+        // std::cout << "CSC matrix-matrix multiplication" << std::endl;
         break;
     }
 

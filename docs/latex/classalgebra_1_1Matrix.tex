@@ -71,7 +71,7 @@ std\+::size\+\_\+t {\bfseries nrows} ()
 \mbox{\hyperlink{classalgebra_1_1Matrix}{double}} \mbox{\hyperlink{classalgebra_1_1Matrix_ae268bd872098f155d22f83249a8be0e5}{norm}} (\mbox{\hyperlink{Matrix_8hpp_a67b8431f9217a8c697b8ac46b1613b2b}{Norm}} \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{n}}) \mbox{\hyperlink{classalgebra_1_1Matrix}{const}}
 \begin{DoxyCompactList}\small\item\em Given an enumerator, return the desired matrix norm. Possible norms are\+: \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classalgebra_1_1Matrix}{T}} \mbox{\hyperlink{classalgebra_1_1Matrix_ae48530a12b24fcb375585b3b6c35f0d0}{operator\mbox{[}$\,$\mbox{]}}} (\mbox{\hyperlink{classalgebra_1_1Matrix_a3f889801f0cee79f7337ffd367b510b7}{indexes}} \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}) \mbox{\hyperlink{classalgebra_1_1Matrix}{const}}
-\begin{DoxyCompactList}\small\item\em Const version of subscript operator. If a. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Const version of subscript operator. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classalgebra_1_1Matrix}{T}} \& \mbox{\hyperlink{classalgebra_1_1Matrix_a3591ea84cc03b3491ba08a6068f2977b}{operator\mbox{[}$\,$\mbox{]}}} (\mbox{\hyperlink{classalgebra_1_1Matrix_a3f889801f0cee79f7337ffd367b510b7}{indexes}} \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{i}})
 \begin{DoxyCompactList}\small\item\em Subscript operator for access assign. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Friends}
@@ -80,7 +80,7 @@ std\+::size\+\_\+t {\bfseries nrows} ()
 std\+::vector$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}} $>$ \mbox{\hyperlink{classalgebra_1_1Matrix_ae2c2db81235ce59435caafce5395d18b}{operator\texorpdfstring{$\ast$}{*}}} (\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$ \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{m}}, std\+::vector$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}} $>$ \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{v}})
 \begin{DoxyCompactList}\small\item\em Matrix-\/vector multiplication. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$ \mbox{\hyperlink{classalgebra_1_1Matrix_ae73c1040b2445e12f59c856819686ac2}{operator\texorpdfstring{$\ast$}{*}}} (\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}}$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$ \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{m1}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}} \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{m2}})
-\begin{DoxyCompactList}\small\item\em Matrix-\/\+Matrix multiplication. Only works if objects have the same ordering and the same compression. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em NOT IMPLEMENTED. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Constructor \& Destructor Documentation}
@@ -263,7 +263,7 @@ double
 \index{operator\mbox{[}\mbox{]}@{operator[]}!algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}}
 \doxysubsubsection{\texorpdfstring{operator[]()}{operator[]()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{classalgebra_1_1Matrix}{typename}} \mbox{\hyperlink{classalgebra_1_1Matrix}{T}} , \mbox{\hyperlink{classalgebra_1_1Matrix}{typename}} \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$ \\
-\mbox{\hyperlink{classalgebra_1_1Matrix}{T}} \& \mbox{\hyperlink{classalgebra_1_1Matrix}{algebra\+::\+Matrix}}$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$\+::operator\mbox{[}$\,$\mbox{]} (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classalgebra_1_1Matrix_a3f889801f0cee79f7337ffd367b510b7}{indexes}} \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&}]{i }\end{DoxyParamCaption})}
+\mbox{\hyperlink{classalgebra_1_1Matrix}{T}} \& \mbox{\hyperlink{classalgebra_1_1Matrix}{algebra\+::\+Matrix}}$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$\+::operator\mbox{[}$\,$\mbox{]} (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classalgebra_1_1Matrix_a3f889801f0cee79f7337ffd367b510b7}{indexes}} \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&}]{ind }\end{DoxyParamCaption})}
 
 
 
@@ -282,11 +282,11 @@ T\&
 \index{operator\mbox{[}\mbox{]}@{operator[]}!algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}}
 \doxysubsubsection{\texorpdfstring{operator[]()}{operator[]()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{classalgebra_1_1Matrix}{typename}} \mbox{\hyperlink{classalgebra_1_1Matrix}{T}} , \mbox{\hyperlink{classalgebra_1_1Matrix}{typename}} \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$ \\
-\mbox{\hyperlink{classalgebra_1_1Matrix}{T}} \mbox{\hyperlink{classalgebra_1_1Matrix}{algebra\+::\+Matrix}}$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$\+::operator\mbox{[}$\,$\mbox{]} (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classalgebra_1_1Matrix_a3f889801f0cee79f7337ffd367b510b7}{indexes}} \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&}]{i }\end{DoxyParamCaption}) const}
+\mbox{\hyperlink{classalgebra_1_1Matrix}{T}} \mbox{\hyperlink{classalgebra_1_1Matrix}{algebra\+::\+Matrix}}$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$\+::operator\mbox{[}$\,$\mbox{]} (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classalgebra_1_1Matrix_a3f889801f0cee79f7337ffd367b510b7}{indexes}} \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&}]{ind }\end{DoxyParamCaption}) const}
 
 
 
-Const version of subscript operator. If a. 
+Const version of subscript operator. 
 
 
 \begin{DoxyParams}{Parameters}
@@ -334,7 +334,7 @@ Reshape the matrix passing the new number of rows and columns.
 {\em c} & new number of columns \\
 \hline
 \end{DoxyParams}
-delete elements if reshape with smaller size
+
 
 \doxysubsection{Friends And Related Symbol Documentation}
 \Hypertarget{classalgebra_1_1Matrix_ae2c2db81235ce59435caafce5395d18b}\label{classalgebra_1_1Matrix_ae2c2db81235ce59435caafce5395d18b} 
@@ -367,7 +367,9 @@ std\+::vector$<$\+T$>$
 
 
 
-Matrix-\/\+Matrix multiplication. Only works if objects have the same ordering and the same compression. 
+NOT IMPLEMENTED. 
+
+Matrix-\/\+Matrix multiplication. Only works if objects have the same ordering and the same compression.
 
 
 \begin{DoxyParams}{Parameters}
@@ -379,7 +381,7 @@ Matrix-\/\+Matrix multiplication. Only works if objects have the same ordering a
 \begin{DoxyReturn}{Returns}
 Matrix$<$\+T,\+Storage\+Order$>$ 
 \end{DoxyReturn}
-check all different orderings if equal for m1 and m2
+
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
