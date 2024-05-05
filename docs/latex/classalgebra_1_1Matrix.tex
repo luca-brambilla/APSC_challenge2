@@ -50,13 +50,13 @@ std\+::size\+\_\+t {\bfseries ncols} ()
 \item 
 \Hypertarget{classalgebra_1_1Matrix_a95c1cb370edc577eae98d482e7e4feaa}\label{classalgebra_1_1Matrix_a95c1cb370edc577eae98d482e7e4feaa} 
 std\+::size\+\_\+t {\bfseries nrows} ()
-\item 
+\begin{DoxyCompactList}\small\item\em Get number of columns. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classalgebra_1_1Matrix}{void}} \mbox{\hyperlink{classalgebra_1_1Matrix_a27e14f1cd684dbd830e17fd5ee32f655}{resize}} (std\+::size\+\_\+t \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{r}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{size\+\_\+t}} \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{c}})
-\begin{DoxyCompactList}\small\item\em Reshape the matrix passing the new number of rows and columns. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Get number of rows. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classalgebra_1_1Matrix}{void}} \mbox{\hyperlink{classalgebra_1_1Matrix_a466a55059e80fa52a4fbd4b22c1985b8}{print}} () \mbox{\hyperlink{classalgebra_1_1Matrix}{const}}
 \begin{DoxyCompactList}\small\item\em Print in coordinate representation. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classalgebra_1_1Matrix}{void}} \mbox{\hyperlink{classalgebra_1_1Matrix_a0271f677b1efdb0a70bc00f8697e6b12}{compress}} (\mbox{\hyperlink{Matrix_8hpp_a13667716dd7d18aff841207714f35fea}{Compression}} \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{c}})
-\begin{DoxyCompactList}\small\item\em Pass from a coordinate representation to a compressed representation. Possible representations are\+: \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Pass from a coordinate representation to a compressed representation. \end{DoxyCompactList}\item 
 \Hypertarget{classalgebra_1_1Matrix_a3aae4eb6570b8f05b6edc23cec2324f3}\label{classalgebra_1_1Matrix_a3aae4eb6570b8f05b6edc23cec2324f3} 
 \mbox{\hyperlink{classalgebra_1_1Matrix}{void}} {\bfseries uncompress} ()
 \begin{DoxyCompactList}\small\item\em Pass from a compressed representation to the coordinate representation. \end{DoxyCompactList}\item 
@@ -73,7 +73,7 @@ std\+::size\+\_\+t {\bfseries nrows} ()
 \mbox{\hyperlink{classalgebra_1_1Matrix}{T}} \mbox{\hyperlink{classalgebra_1_1Matrix_ae48530a12b24fcb375585b3b6c35f0d0}{operator\mbox{[}$\,$\mbox{]}}} (indexes \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{i}}) \mbox{\hyperlink{classalgebra_1_1Matrix}{const}}
 \begin{DoxyCompactList}\small\item\em Const version of subscript operator. If a. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classalgebra_1_1Matrix}{T}} \& \mbox{\hyperlink{classalgebra_1_1Matrix_a3591ea84cc03b3491ba08a6068f2977b}{operator\mbox{[}$\,$\mbox{]}}} (indexes \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{i}})
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Subscript operator for access assign. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Friends}
 \begin{DoxyCompactItemize}
 \item 
@@ -170,9 +170,9 @@ Assume reading in coordinate representation with row-\/major ordering.
 
 
 
-Pass from a coordinate representation to a compressed representation. Possible representations are\+: 
+Pass from a coordinate representation to a compressed representation. 
 
-
+Possible representations are\+:
 \begin{DoxyItemize}
 \item Compressed Sparse Row (CSR)
 \item Compressed Sparse Column (CSC) 
@@ -210,7 +210,7 @@ Given an enumerator, return the desired matrix norm. Possible norms are\+:
 
 
 \begin{DoxyParams}{Parameters}
-{\em n} & enum \\
+{\em n} & Enumerator indicating the desired norm \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
@@ -266,8 +266,12 @@ double
 \mbox{\hyperlink{classalgebra_1_1Matrix}{T}} \& \mbox{\hyperlink{classalgebra_1_1Matrix}{algebra\+::\+Matrix}}$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$\+::operator\mbox{[}$\,$\mbox{]} (\begin{DoxyParamCaption}\item[{indexes \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&}]{i }\end{DoxyParamCaption})}
 
 
+
+Subscript operator for access assign. 
+
+
 \begin{DoxyParams}{Parameters}
-{\em i} & \\
+{\em i} & Indices as a std\+::array$<$std\+::size\+\_\+t$>$ \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
@@ -319,7 +323,9 @@ Print in coordinate representation.
 
 
 
-Reshape the matrix passing the new number of rows and columns. 
+Get number of rows. 
+
+Reshape the matrix passing the new number of rows and columns.
 
 
 \begin{DoxyParams}{Parameters}

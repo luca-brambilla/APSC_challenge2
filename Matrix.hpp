@@ -79,8 +79,8 @@ public:
     Matrix(std::string const &name, Order const &o=Row_major);
 
     // getters
-    std::size_t ncols() { return ncol; };
-    std::size_t nrows() { return nrow; };
+    std::size_t ncols() { return ncol; }; ///< Get number of columns
+    std::size_t nrows() { return nrow; }; ///< Get number of rows
 
     // utilities
     void resize(std::size_t const& r, size_t const& c);
@@ -362,6 +362,7 @@ bool Matrix<T, StorageOrder>::is_compressed() const
 
 /**
  * @brief Pass from a coordinate representation to a compressed representation.
+ *
  * Possible representations are:
  * - Compressed Sparse Row (CSR)
  * - Compressed Sparse Column (CSC) 
@@ -734,7 +735,7 @@ double Matrix<T, StorageOrder>::norm_frob() const
  * - Infinity norm
  * - Frobenius norm
  * 
- * @param n             enum
+ * @param n             Enumerator indicating the desired norm
  * @return double 
  */
 template<typename T, typename StorageOrder>
@@ -813,11 +814,11 @@ T Matrix<T, StorageOrder>::operator[] (indexes const &i) const
 
 }
 
-// operator[] access assign
+
 /**
- * @brief 
+ * @brief Subscript operator for access assign
  * 
- * @param i 
+ * @param i         Indices as a std::array<std::size_t>
  * @return T& 
  */
 template<typename T, typename StorageOrder>
@@ -945,8 +946,8 @@ std::vector<T> operator*(Matrix<T,StorageOrder> const &m, std::vector<T> const &
  * @brief Matrix-Matrix multiplication. Only works if objects have the same ordering
  * and the same compression.
  * 
- * @param m1            First matrix object
- * @param m2            Second matrix object
+ * @param m1            First Matrix object
+ * @param m2            Second Matrix object
  * @return Matrix<T,StorageOrder> 
  */
 template<typename T, typename StorageOrder>
