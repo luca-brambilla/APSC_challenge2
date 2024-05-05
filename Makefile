@@ -1,8 +1,6 @@
 # Luca Brambilla
 # 10510718 - 919812
 
-PACS_ROOT		?= /home/luca/Documents/pacs-examples/Examples
-
 CXX      ?= g++
 CXXFLAGS ?= -std=c++20
 CPPFLAGS ?= -O3 -Wall -I. -Wno-conversion-null -Wno-deprecated-declarations
@@ -20,11 +18,7 @@ HEADERS=$(wildcard *.hpp)
 exe_sources=$(filter main%.cpp,$(SRCS))
 EXEC=$(exe_sources:.cpp=)
 
-# CPPFLAGS += -D ZERO_TOL=1e-4
-
-# CPPFLAGS += -I./include -I$(mkBoostInc)
-# LDFLAGS  += -L$(mkBoostLib)
-# LDLIBS	 += -l boost_iostreams -l boost_system -l boost_filesystem
+# CPPFLAGS += -D ZERO_TOL=1e-8
 
 all: clean $(EXEC)
 

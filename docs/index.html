@@ -87,22 +87,37 @@ Sparse matrix</h1>
 <li>CSC: compressed sparse column</li>
 </ul>
 <p>Documentation for the template class <code>Matrix</code> available <a href="https://luca-brambilla.github.io/APSC_challenge2/classalgebra_1_1Matrix.html">here</a></p>
-<p>CHECKLIST:</p>
+<h1><a class="anchor" id="autotoc_md2"></a>
+Installation</h1>
+<p>Download the repository using an SSH key:</p>
+<div class="fragment"><div class="line">git clone git@github.com:luca-brambilla/APSC_challenge2.git</div>
+</div><!-- fragment --><p>run the code using:</p>
+<div class="fragment"><div class="line">make</div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md3"></a>
+Additional instructions</h1>
+<p>If you want to read a full matrix you can set a threshold for considering a number as zero, thus not adding it as an element of the matrix.</p>
+<p>To do so you can edit the <code>Makefile</code> adding a new flag to the compiler: </p><div class="fragment"><div class="line">CPPFLAGS += -D ZERO_TOL=1e-8</div>
+</div><!-- fragment --><p>If the variable <code>ZERO_TOL</code> is not redefined, the default value is <code>1e-06</code>.</p>
+<h1><a class="anchor" id="autotoc_md4"></a>
+Testing</h1>
+<p>In the <code>main.cpp</code> file is possible to test different sections of the cody by changing the values from <code>false</code> to <code>true</code> in the <code>if</code> statements.</p>
+<h1><a class="anchor" id="autotoc_md5"></a>
+CHECKLIST</h1>
 <ul>
 <li>[ ] README</li>
 <li>[ ] comments</li>
-<li>[ ] dynamic constructor</li>
-<li>[ ] constructor taking dimensions</li>
-<li>[ ] resize uncompressed</li>
+<li>[x] dynamic constructor</li>
+<li>[x] constructor taking dimensions</li>
+<li>[x] resize uncompressed</li>
 <li>[x] <code>compress()</code></li>
 <li>[x] <code>uncompress()</code></li>
-<li>[ ] <code>is_compressed()</code></li>
-<li>[ ] call <code>operator[]</code></li>
-<li>[ ] friend matrix-vector <code>operator*</code></li>
+<li>[x] <code>is_compressed()</code></li>
+<li>[x] call <code>operator[]</code></li>
+<li>[x] friend matrix-vector <code>operator*</code></li>
 <li>[ ] extension to matrix-vector product with <code>Matrix</code> of just one column</li>
 <li>[ ] matrix-matrix <code>operator*</code></li>
 <li>[x] <code>norm()</code></li>
-<li>[ ] extension of <code>norm()</code> working with complex</li>
+<li>[x] extension of <code>norm()</code> working with complex</li>
 <li>[x] reader of matrix market format</li>
 <li>[ ] test code with <code>Chrono</code> utility</li>
 <li>[ ] working for both compressed and uncompressed</li>

@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['matrix_0',['Matrix',['../classalgebra_1_1Matrix.html',1,'algebra::Matrix&lt; T, StorageOrder &gt;'],['../classalgebra_1_1Matrix.html#a06ec7d62f2e769bc346233b4cad03dc6',1,'algebra::Matrix::Matrix(std::size_t const &amp;r, size_t const &amp;c)'],['../classalgebra_1_1Matrix.html#a73d4f1f57164c536a08818388dfbe4c9',1,'algebra::Matrix::Matrix(uncompressed const &amp;m, Order const &amp;o=Row_major)'],['../classalgebra_1_1Matrix.html#a5c0fb9102868e59e2f4aa969bf0d4903',1,'algebra::Matrix::Matrix(Matrix const &amp;m)'],['../classalgebra_1_1Matrix.html#a131a3c48afe5f2b64898c6e4b1d076ea',1,'algebra::Matrix::Matrix(std::string const &amp;name)'],['../index.html#autotoc_md1',1,'Sparse matrix']]],
-  ['matrix_2ehpp_1',['Matrix.hpp',['../Matrix_8hpp.html',1,'']]]
+  ['installation_0',['Installation',['../index.html#autotoc_md2',1,'']]],
+  ['instructions_1',['Additional instructions',['../index.html#autotoc_md3',1,'']]],
+  ['is_5fcompressed_2',['is_compressed',['../classalgebra_1_1Matrix.html#aa62526bccd145f05b6392b63f5f4dce3',1,'algebra::Matrix']]]
 ];

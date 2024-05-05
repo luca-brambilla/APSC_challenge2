@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['operator_2a_0',['operator*',['../classalgebra_1_1Matrix.html#ae2c2db81235ce59435caafce5395d18b',1,'algebra::Matrix::operator*'],['../classalgebra_1_1Matrix.html#ae73c1040b2445e12f59c856819686ac2',1,'algebra::Matrix::operator*'],['../Matrix_8hpp.html#a2eec345dfd139eb4984b9a1063b317ce',1,'algebra::operator*(Matrix&lt; T, StorageOrder &gt; const &amp;m, std::vector&lt; T &gt; const &amp;v)'],['../Matrix_8hpp.html#ab2c45eccbb56faaed26253f9769b7807',1,'algebra::operator*(Matrix&lt; T, StorageOrder &gt; const &amp;m1, Matrix&lt; T, StorageOrder &gt; const &amp;m2)']]],
-  ['operator_5b_5d_1',['operator[]',['../classalgebra_1_1Matrix.html#ae48530a12b24fcb375585b3b6c35f0d0',1,'algebra::Matrix::operator[](indexes const &amp;i) const'],['../classalgebra_1_1Matrix.html#a3591ea84cc03b3491ba08a6068f2977b',1,'algebra::Matrix::operator[](indexes const &amp;i)']]]
+  ['norm_0',['norm',['../classalgebra_1_1Matrix.html#ae268bd872098f155d22f83249a8be0e5',1,'algebra::Matrix']]],
+  ['norm_5ffrob_1',['norm_frob',['../classalgebra_1_1Matrix.html#abba5ddc347c63a859f15b16f4420bc21',1,'algebra::Matrix']]],
+  ['norm_5finfty_2',['norm_infty',['../classalgebra_1_1Matrix.html#accca731f4e5eae3144fc60211f102ab2',1,'algebra::Matrix']]],
+  ['norm_5fone_3',['norm_one',['../classalgebra_1_1Matrix.html#adade59d6b88ecf597eea9474ce3e9d72',1,'algebra::Matrix']]]
 ];

@@ -121,11 +121,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5c0fb9102868e59e2f4aa969bf0d4903" id="r_a5c0fb9102868e59e2f4aa969bf0d4903"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5c0fb9102868e59e2f4aa969bf0d4903">Matrix</a> (<a class="el" href="classalgebra_1_1Matrix.html">Matrix</a> <a class="el" href="classalgebra_1_1Matrix.html">const</a> &amp;<a class="el" href="classalgebra_1_1Matrix.html">m</a>)</td></tr>
 <tr class="memdesc:a5c0fb9102868e59e2f4aa969bf0d4903"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classalgebra_1_1Matrix.html" title="Template class for sparse matrices. Template parameters are the data type and internal ordering (colu...">Matrix</a> object starting from an existing <a class="el" href="classalgebra_1_1Matrix.html" title="Template class for sparse matrices. Template parameters are the data type and internal ordering (colu...">Matrix</a>.  <br /></td></tr>
 <tr class="separator:a5c0fb9102868e59e2f4aa969bf0d4903"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a131a3c48afe5f2b64898c6e4b1d076ea" id="r_a131a3c48afe5f2b64898c6e4b1d076ea"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a131a3c48afe5f2b64898c6e4b1d076ea">Matrix</a> (std::string <a class="el" href="classalgebra_1_1Matrix.html">const</a> &amp;<a class="el" href="classalgebra_1_1Matrix.html">name</a>)</td></tr>
-<tr class="memdesc:a131a3c48afe5f2b64898c6e4b1d076ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classalgebra_1_1Matrix.html" title="Template class for sparse matrices. Template parameters are the data type and internal ordering (colu...">Matrix</a> object reading from a file.  <br /></td></tr>
-<tr class="separator:a131a3c48afe5f2b64898c6e4b1d076ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa786efe7c1bb5d293dee759cdccd259a" id="r_aa786efe7c1bb5d293dee759cdccd259a"><td class="memItemLeft" align="right" valign="top"><a id="aa786efe7c1bb5d293dee759cdccd259a" name="aa786efe7c1bb5d293dee759cdccd259a"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Matrix</b> (std::string <a class="el" href="classalgebra_1_1Matrix.html">const</a> &amp;<a class="el" href="classalgebra_1_1Matrix.html">name</a>, Order <a class="el" href="classalgebra_1_1Matrix.html">const</a> &amp;<a class="el" href="classalgebra_1_1Matrix.html">o</a>=Row_major)</td></tr>
+<tr class="memitem:aa786efe7c1bb5d293dee759cdccd259a" id="r_aa786efe7c1bb5d293dee759cdccd259a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa786efe7c1bb5d293dee759cdccd259a">Matrix</a> (std::string <a class="el" href="classalgebra_1_1Matrix.html">const</a> &amp;<a class="el" href="classalgebra_1_1Matrix.html">name</a>, Order <a class="el" href="classalgebra_1_1Matrix.html">const</a> &amp;<a class="el" href="classalgebra_1_1Matrix.html">o</a>=Row_major)</td></tr>
+<tr class="memdesc:aa786efe7c1bb5d293dee759cdccd259a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classalgebra_1_1Matrix.html" title="Template class for sparse matrices. Template parameters are the data type and internal ordering (colu...">Matrix</a> object reading from a file in matrix market format.  <br /></td></tr>
 <tr class="separator:aa786efe7c1bb5d293dee759cdccd259a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae94115ac04c303df67fcf386dd044729" id="r_ae94115ac04c303df67fcf386dd044729"><td class="memItemLeft" align="right" valign="top"><a id="ae94115ac04c303df67fcf386dd044729" name="ae94115ac04c303df67fcf386dd044729"></a>
 std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>ncols</b> ()</td></tr>
@@ -268,8 +265,8 @@ template&lt;<a class="el" href="classalgebra_1_1Matrix.html">typename</a> <a cla
 
 </div>
 </div>
-<a id="a131a3c48afe5f2b64898c6e4b1d076ea" name="a131a3c48afe5f2b64898c6e4b1d076ea"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a131a3c48afe5f2b64898c6e4b1d076ea">&#9670;&#160;</a></span>Matrix() <span class="overload">[4/4]</span></h2>
+<a id="aa786efe7c1bb5d293dee759cdccd259a" name="aa786efe7c1bb5d293dee759cdccd259a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa786efe7c1bb5d293dee759cdccd259a">&#9670;&#160;</a></span>Matrix() <span class="overload">[4/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -279,16 +276,23 @@ template&lt;<a class="el" href="classalgebra_1_1Matrix.html">typename</a> <a cla
         <tr>
           <td class="memname"><a class="el" href="classalgebra_1_1Matrix.html">algebra::Matrix</a>&lt; <a class="el" href="classalgebra_1_1Matrix.html">T</a>, <a class="el" href="classalgebra_1_1Matrix.html">StorageOrder</a> &gt;::Matrix </td>
           <td>(</td>
-          <td class="paramtype">std::string <a class="el" href="classalgebra_1_1Matrix.html">const</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>name</em></span></td><td>)</td>
+          <td class="paramtype">std::string <a class="el" href="classalgebra_1_1Matrix.html">const</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>name</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">Order <a class="el" href="classalgebra_1_1Matrix.html">const</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>o</em><span class="paramdefsep"> = </span><span class="paramdefval">Row_major</span></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Construct a new <a class="el" href="classalgebra_1_1Matrix.html" title="Template class for sparse matrices. Template parameters are the data type and internal ordering (colu...">Matrix</a> object reading from a file. </p>
+<p>Construct a new <a class="el" href="classalgebra_1_1Matrix.html" title="Template class for sparse matrices. Template parameters are the data type and internal ordering (colu...">Matrix</a> object reading from a file in matrix market format. </p>
+<p>Assume reading only real matrices (not complex).</p>
+<p>Assume reading in coordinate representation with row-major ordering.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>String containing the path to the file to read. </td></tr>
+    <tr><td class="paramname">o</td><td>Desired ordering in which to store the data. </td></tr>
   </table>
   </dd>
 </dl>

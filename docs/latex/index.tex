@@ -16,26 +16,51 @@ Representations\+:
 \item CSC\+: compressed sparse column
 \end{DoxyItemize}
 
-Documentation for the template class {\ttfamily Matrix} available \href{https://luca-brambilla.github.io/APSC_challenge2/classalgebra_1_1Matrix.html}{\texttt{ here}}
+Documentation for the template class {\ttfamily Matrix} available \href{https://luca-brambilla.github.io/APSC_challenge2/classalgebra_1_1Matrix.html}{\texttt{ here}}\hypertarget{index_autotoc_md2}{}\doxysection{\texorpdfstring{Installation}{Installation}}\label{index_autotoc_md2}
+Download the repository using an SSH key\+:
 
-CHECKLIST\+:
 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{git\ clone\ git@github.com:luca-\/brambilla/APSC\_challenge2.git}
+
+\end{DoxyCode}
+
+
+run the code using\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{make}
+
+\end{DoxyCode}
+\hypertarget{index_autotoc_md3}{}\doxysection{\texorpdfstring{Additional instructions}{Additional instructions}}\label{index_autotoc_md3}
+If you want to read a full matrix you can set a threshold for considering a number as zero, thus not adding it as an element of the matrix.
+
+To do so you can edit the {\ttfamily Makefile} adding a new flag to the compiler\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{CPPFLAGS\ +=\ -\/D\ ZERO\_TOL=1e-\/8}
+
+\end{DoxyCode}
+
+
+If the variable {\ttfamily ZERO\+\_\+\+TOL} is not redefined, the default value is {\ttfamily 1e-\/06}.\hypertarget{index_autotoc_md4}{}\doxysection{\texorpdfstring{Testing}{Testing}}\label{index_autotoc_md4}
+In the {\ttfamily main.\+cpp} file is possible to test different sections of the cody by changing the values from {\ttfamily false} to {\ttfamily true} in the {\ttfamily if} statements.\hypertarget{index_autotoc_md5}{}\doxysection{\texorpdfstring{CHECKLIST}{CHECKLIST}}\label{index_autotoc_md5}
 
 \begin{DoxyItemize}
 \item \mbox{[} \mbox{]} README
 \item \mbox{[} \mbox{]} comments
-\item \mbox{[} \mbox{]} dynamic constructor
-\item \mbox{[} \mbox{]} constructor taking dimensions
-\item \mbox{[} \mbox{]} resize uncompressed
+\item \mbox{[}x\mbox{]} dynamic constructor
+\item \mbox{[}x\mbox{]} constructor taking dimensions
+\item \mbox{[}x\mbox{]} resize uncompressed
 \item \mbox{[}x\mbox{]} {\ttfamily compress()}
 \item \mbox{[}x\mbox{]} {\ttfamily uncompress()}
-\item \mbox{[} \mbox{]} {\ttfamily is\+\_\+compressed()}
-\item \mbox{[} \mbox{]} call {\ttfamily operator\mbox{[}\mbox{]}}
-\item \mbox{[} \mbox{]} friend matrix-\/vector {\ttfamily operator\texorpdfstring{$\ast$}{*}}
+\item \mbox{[}x\mbox{]} {\ttfamily is\+\_\+compressed()}
+\item \mbox{[}x\mbox{]} call {\ttfamily operator\mbox{[}\mbox{]}}
+\item \mbox{[}x\mbox{]} friend matrix-\/vector {\ttfamily operator\texorpdfstring{$\ast$}{*}}
 \item \mbox{[} \mbox{]} extension to matrix-\/vector product with {\ttfamily Matrix} of just one column
 \item \mbox{[} \mbox{]} matrix-\/matrix {\ttfamily operator\texorpdfstring{$\ast$}{*}}
 \item \mbox{[}x\mbox{]} {\ttfamily norm()}
-\item \mbox{[} \mbox{]} extension of {\ttfamily norm()} working with complex
+\item \mbox{[}x\mbox{]} extension of {\ttfamily norm()} working with complex
 \item \mbox{[}x\mbox{]} reader of matrix market format
 \item \mbox{[} \mbox{]} test code with {\ttfamily Chrono} utility
 \item \mbox{[} \mbox{]} working for both compressed and uncompressed

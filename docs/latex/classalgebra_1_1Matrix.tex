@@ -43,11 +43,8 @@ Methods are available to compute the matrix norm and matrix-\/vector product.
 \begin{DoxyCompactList}\small\item\em Construct a new \doxylink{classalgebra_1_1Matrix}{Matrix} starting from a full matrix (vector of vector representation) with a given ordering (default is row-\/major). \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classalgebra_1_1Matrix_a5c0fb9102868e59e2f4aa969bf0d4903}{Matrix}} (\mbox{\hyperlink{classalgebra_1_1Matrix}{Matrix}} \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{m}})
 \begin{DoxyCompactList}\small\item\em Construct a new \doxylink{classalgebra_1_1Matrix}{Matrix} object starting from an existing \doxylink{classalgebra_1_1Matrix}{Matrix}. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classalgebra_1_1Matrix_a131a3c48afe5f2b64898c6e4b1d076ea}{Matrix}} (std\+::string \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{name}})
-\begin{DoxyCompactList}\small\item\em Construct a new \doxylink{classalgebra_1_1Matrix}{Matrix} object reading from a file. \end{DoxyCompactList}\item 
-\Hypertarget{classalgebra_1_1Matrix_aa786efe7c1bb5d293dee759cdccd259a}\label{classalgebra_1_1Matrix_aa786efe7c1bb5d293dee759cdccd259a} 
-{\bfseries Matrix} (std\+::string \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{name}}, Order \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{o}}=Row\+\_\+major)
-\item 
+\mbox{\hyperlink{classalgebra_1_1Matrix_aa786efe7c1bb5d293dee759cdccd259a}{Matrix}} (std\+::string \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{name}}, Order \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{o}}=Row\+\_\+major)
+\begin{DoxyCompactList}\small\item\em Construct a new \doxylink{classalgebra_1_1Matrix}{Matrix} object reading from a file in matrix market format. \end{DoxyCompactList}\item 
 \Hypertarget{classalgebra_1_1Matrix_ae94115ac04c303df67fcf386dd044729}\label{classalgebra_1_1Matrix_ae94115ac04c303df67fcf386dd044729} 
 std\+::size\+\_\+t {\bfseries ncols} ()
 \item 
@@ -139,20 +136,26 @@ Construct a new \doxylink{classalgebra_1_1Matrix}{Matrix} object starting from a
 {\em m} & \doxylink{classalgebra_1_1Matrix}{Matrix} object \\
 \hline
 \end{DoxyParams}
-\Hypertarget{classalgebra_1_1Matrix_a131a3c48afe5f2b64898c6e4b1d076ea}\label{classalgebra_1_1Matrix_a131a3c48afe5f2b64898c6e4b1d076ea} 
+\Hypertarget{classalgebra_1_1Matrix_aa786efe7c1bb5d293dee759cdccd259a}\label{classalgebra_1_1Matrix_aa786efe7c1bb5d293dee759cdccd259a} 
 \index{algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}!Matrix@{Matrix}}
 \index{Matrix@{Matrix}!algebra::Matrix$<$ T, StorageOrder $>$@{algebra::Matrix$<$ T, StorageOrder $>$}}
 \doxysubsubsection{\texorpdfstring{Matrix()}{Matrix()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
 {\footnotesize\ttfamily template$<$\mbox{\hyperlink{classalgebra_1_1Matrix}{typename}} \mbox{\hyperlink{classalgebra_1_1Matrix}{T}} , \mbox{\hyperlink{classalgebra_1_1Matrix}{typename}} \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$ \\
-\mbox{\hyperlink{classalgebra_1_1Matrix}{algebra\+::\+Matrix}}$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$\+::\+Matrix (\begin{DoxyParamCaption}\item[{std\+::string \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&}]{name }\end{DoxyParamCaption})}
+\mbox{\hyperlink{classalgebra_1_1Matrix}{algebra\+::\+Matrix}}$<$ \mbox{\hyperlink{classalgebra_1_1Matrix}{T}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{Storage\+Order}} $>$\+::\+Matrix (\begin{DoxyParamCaption}\item[{std\+::string \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&}]{name,  }\item[{Order \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&}]{o = {\ttfamily Row\+\_\+major} }\end{DoxyParamCaption})}
 
 
 
-Construct a new \doxylink{classalgebra_1_1Matrix}{Matrix} object reading from a file. 
+Construct a new \doxylink{classalgebra_1_1Matrix}{Matrix} object reading from a file in matrix market format. 
+
+Assume reading only real matrices (not complex).
+
+Assume reading in coordinate representation with row-\/major ordering.
 
 
 \begin{DoxyParams}{Parameters}
 {\em name} & String containing the path to the file to read. \\
+\hline
+{\em o} & Desired ordering in which to store the data. \\
 \hline
 \end{DoxyParams}
 
