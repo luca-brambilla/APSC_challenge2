@@ -97,7 +97,7 @@ Installation</h1>
 Additional instructions</h1>
 <p>If you want to read a full matrix you can set a threshold for considering a number as zero, thus not adding it as an element of the matrix.</p>
 <p>To do so you can edit the <code>Makefile</code> adding a new flag to the compiler: </p><div class="fragment"><div class="line">CPPFLAGS += -D ZERO_TOL=1e-8</div>
-</div><!-- fragment --><p>If the variable <code>ZERO_TOL</code> is not redefined, the default value is <code>1e-06</code>.</p>
+</div><!-- fragment --><p>If the variable <code>ZERO_TOL</code> is not redefined, the default value in the header source code is <code>1e-08</code>.</p>
 <h1><a class="anchor" id="autotoc_md4"></a>
 Testing</h1>
 <p>In the <code>main.cpp</code> file is possible to test different sections of the cody by changing the values from <code>false</code> to <code>true</code> in the <code>if</code> statements.</p>
@@ -119,9 +119,9 @@ CHECKLIST</h1>
 <li>[x] <code>norm()</code></li>
 <li>[x] extension of <code>norm()</code> working with complex</li>
 <li>[x] reader of matrix market format</li>
-<li>[ ] test code with <code>Chrono</code> utility</li>
+<li>[x] test code with <code>Chrono</code> utility</li>
 <li>[ ] working for both compressed and uncompressed</li>
-<li>[ ] everything working for CSR</li>
+<li>[x] everything working for CSR</li>
 <li>[ ] everything working for CSC </li>
 </ul>
 </div></div><!-- PageDoc -->

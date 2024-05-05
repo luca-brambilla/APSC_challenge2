@@ -27,11 +27,11 @@ namespace algebra{
 constexpr double ZERO_TOL = 1e-8;
 #endif
 
-// enumerator for storage order
-
-// Coordinates, Compressed Sparse Row, Compressed Sparse Column, Modified Sparse Row, Modified Sparse Column
+/// Enumerator for storage order
 enum Order {Column_major, Row_major};
+/// Enumerator for the norm computation
 enum Norm {One, Infinity, Frobenius};
+/// Enumerator for compression (Compressed Sparse Row, Compressed Sparse Column)
 enum Compression {CSR, CSC};
 
 // forward declaration matrix class
@@ -107,18 +107,27 @@ public:
 
     
 private:
-    Order ordering = Order::Column_major;
+    /// Storage ordering
+    Order ordering = Order::Row_major;
+    /// Compression format
     Compression compression = Compression::CSR;
 
+    /// C
     bool compressed = false;
 
+    /// Uncompressed coordinate data representation
     coo_matrix dynamic_data;
 
+    /// Vector containing row indices for compressed representation
     std::vector<size_t> IA;
+    /// Vector containing column indices for compressed representation
     std::vector<size_t> JA;
+    /// Vector containing values for compressed representation
     std::vector<T> AA;
 
+    /// number of matrix columns
     std::size_t ncol = 0;
+    /// number of matrix rows
     std::size_t nrow = 0;
 };
 
@@ -237,8 +246,9 @@ Matrix<T, StorageOrder>::Matrix(std::string const &name, Order const &o)
 
     // read number of rows and columns
     std::istringstream iss(line);
-    iss >> nrow >> ncol;
-    // std::cout << nrow << " " << ncol << std::endl;
+    std::size_t ndata=0;
+    iss >> nrow >> ncol >> ndata;
+    //std::cout << nrow << " " << ncol << " " << ndata << std::endl;
 
     // hold data for each line
     std::size_t i;  // row index
@@ -259,8 +269,8 @@ Matrix<T, StorageOrder>::Matrix(std::string const &name, Order const &o)
                 // store value if above tolerance
                 if (std::abs(num) > ZERO_TOL)
                 {
-                    // row-column index
-                    dynamic_data.insert( { {i,j}, num} );
+                    // row-column index, indices start from 0
+                    dynamic_data.insert( { {i-1,j-1}, num} );
                 }
             }
             else {
@@ -281,8 +291,8 @@ Matrix<T, StorageOrder>::Matrix(std::string const &name, Order const &o)
                 // store value if above tolerance
                 if (std::abs(num) > ZERO_TOL)
                 {
-                    // column-row index
-                    dynamic_data.insert( { {j,i}, num} );
+                    // column-row index, indices start from 0
+                    dynamic_data.insert( { {j-1,i-1}, num} );
                 }
             }
             else {
@@ -548,7 +558,7 @@ void Matrix<T, StorageOrder>::print() const
                 continue;
             }
 
-            std::cout << i << " " << JA[j] << ": " << AA[j] << std::endl;
+            std::cout << i << "\t " << JA[j] << ": \t" << AA[j] << std::endl;
 
             ++j;
         }
@@ -863,7 +873,7 @@ std::vector<T> operator*(Matrix<T,StorageOrder> const &m, std::vector<T> const &
 {
 
     std::size_t v_sz = v.size();
-    if ( m.nrow != v_sz )
+    if ( m.ncol != v_sz )
     {
         std::cerr << "sizes are not compatible for multiplication: (" 
             << m.nrow << ", " << m.ncol << ") * (" << v.size() << ", 1)"
@@ -891,10 +901,10 @@ std::vector<T> operator*(Matrix<T,StorageOrder> const &m, std::vector<T> const &
             // partial multiplication
             res[i] += val_ij * v[j];
         }
+        return res;
     }
 
     switch (m.compression) {
-    
 
     case Compression::CSR:
     {
@@ -903,21 +913,22 @@ std::vector<T> operator*(Matrix<T,StorageOrder> const &m, std::vector<T> const &
         // sizes of arrays
         std::size_t i_sz = m.IA.size();
         std::size_t j_sz = m.JA.size();
-
-        // insert elements in map
-        for (std::size_t i=0; i<i_sz; ++i)
+        
+        // i index of vector IA, loop over IA
+        for (std::size_t i=0; i<i_sz-1; ++i)
         {
             std::size_t k = m.IA[i];
-            // use I vector to loop from index i to i+1 in vector J and data
+            // loop from index i to i+1 of IA in vector JA and AA
             for (std::size_t j=0; k+j<m.IA[i+1]; ++j)
             {
                 // {col, row}
                 res[i] += m.AA[k+j] * v[j];
 
-                //std::cout << i << ", " << j
+                // std::cout << i << ", " << j
                 //        << m.AA[k+j] << " " << v[j] << std::endl;
             }
         }
+        // last sum on last element
         res[ res.size()-1 ] += m.AA[j_sz-1] * v[v_sz-1];
         break;
     }

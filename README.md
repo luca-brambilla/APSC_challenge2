@@ -43,7 +43,7 @@ To do so you can edit the `Makefile` adding a new flag to the compiler:
 CPPFLAGS += -D ZERO_TOL=1e-8
 ```
 
-If the variable `ZERO_TOL` is not redefined, the default value is `1e-06`.
+If the variable `ZERO_TOL` is not redefined, the default value in the header source code is `1e-08`.
 
 # Testing
 
@@ -66,7 +66,7 @@ In the `main.cpp` file is possible to test different sections of the cody by cha
 - [x] `norm()`
 - [x] extension of `norm()` working with complex
 - [x] reader of matrix market format
-- [ ] test code with `Chrono` utility
+- [x] test code with `Chrono` utility
 - [ ] working for both compressed and uncompressed
-- [ ] everything working for CSR
+- [x] everything working for CSR
 - [ ] everything working for CSC

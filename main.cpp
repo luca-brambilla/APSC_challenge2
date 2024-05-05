@@ -7,10 +7,6 @@
 
 int main()
 {
-    // start clock
-    auto start = std::chrono::high_resolution_clock::now();
-
-
     algebra::Matrix<double, algebra::Order>::uncompressed data{ {{1,2,3, 4}, 
                                                                     {5,6,7, 8},
                                                                     {0,0,0, 0},
@@ -95,7 +91,7 @@ int main()
     }
 
     //! norm() with complex
-    if (true)
+    if (false)
     {
         std::complex<double> a(1.0, 0.0);
         std::complex<double> b(0.0, 1.0);
@@ -138,6 +134,7 @@ int main()
         algebra::Matrix<double, algebra::Order> M_mult(data);
         M_mult.print();
         M_mult.compress(algebra::Compression::CSR);
+        M_mult.print();
         std::vector<double> v( {1, 1, 1, 1} );
         //std::vector<double> v_res;
         
@@ -149,10 +146,35 @@ int main()
             std::cout << *(it) << std::endl;
     }
 
-    // end clock
-    auto end = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-    std::cout << "Time taken: " << duration.count() << " microseconds" << std::endl;
+    //! test chrono
+    if (false)
+    {
+        algebra::Matrix<double, algebra::Order> M_chrono("data/lnsp_131.mtx");
+        //M_chrono.print();
+        std::vector<double> v_chrono(M_chrono.ncols(), 1.);
 
+        // start clock
+        auto start = std::chrono::high_resolution_clock::now();
+        // matrix-vector multiplication
+        std::vector<double> res_chrono = M_chrono * v_chrono;
+        // end clock
+        auto end = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+        std::cout << "Time taken: " << duration.count() << " microseconds" << std::endl;
+
+        // compression
+        M_chrono.compress(algebra::Compression::CSR);
+        //M_chrono.print();
+
+        // start clock
+        start = std::chrono::high_resolution_clock::now();
+        //matrix-vector multiplication
+        res_chrono = M_chrono * v_chrono;
+        // end clock
+        end = std::chrono::high_resolution_clock::now();
+        duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+        std::cout << "Time taken: " << duration.count() << " microseconds" << std::endl;
+
+    }
     return 0;
 }
