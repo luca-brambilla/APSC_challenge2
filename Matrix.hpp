@@ -81,10 +81,12 @@ public:
     Matrix(std::string const &name, Order const &o=Row_major);
 
     // getters
+    
     /**
      * @brief Get number of columns
      */
     std::size_t ncols() { return ncol; };
+
     /**
      * @brief Get number of rows
      */
