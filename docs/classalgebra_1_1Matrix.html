@@ -102,12 +102,14 @@ class algebra::Matrix&lt; T, StorageOrder &gt;</div><p>Template class for sparse
 Public Types</h2></td></tr>
 <tr class="memitem:a3f889801f0cee79f7337ffd367b510b7" id="r_a3f889801f0cee79f7337ffd367b510b7"><td class="memItemLeft" align="right" valign="top"><a id="a3f889801f0cee79f7337ffd367b510b7" name="a3f889801f0cee79f7337ffd367b510b7"></a>
 <a class="el" href="classalgebra_1_1Matrix.html">typedef</a> std::array&lt; std::size_t, 2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>indexes</b></td></tr>
+<tr class="memdesc:a3f889801f0cee79f7337ffd367b510b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">type used for indices to insert in the map for uncompressed data <br /></td></tr>
 <tr class="separator:a3f889801f0cee79f7337ffd367b510b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3013923b044f96d79f0df82b7fe86a9e" id="r_a3013923b044f96d79f0df82b7fe86a9e"><td class="memItemLeft" align="right" valign="top"><a id="a3013923b044f96d79f0df82b7fe86a9e" name="a3013923b044f96d79f0df82b7fe86a9e"></a>
-<a class="el" href="classalgebra_1_1Matrix.html">typedef</a> std::vector&lt; std::vector&lt; <a class="el" href="classalgebra_1_1Matrix.html">T</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>uncompressed</b></td></tr>
-<tr class="separator:a3013923b044f96d79f0df82b7fe86a9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a545d6aeb00fe763564d5b562920c19f1" id="r_a545d6aeb00fe763564d5b562920c19f1"><td class="memItemLeft" align="right" valign="top"><a id="a545d6aeb00fe763564d5b562920c19f1" name="a545d6aeb00fe763564d5b562920c19f1"></a>
+<a class="el" href="classalgebra_1_1Matrix.html">typedef</a> std::vector&lt; std::vector&lt; <a class="el" href="classalgebra_1_1Matrix.html">T</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>fullmatrix</b></td></tr>
+<tr class="memdesc:a545d6aeb00fe763564d5b562920c19f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">type used for reading from a full matrix <br /></td></tr>
+<tr class="separator:a545d6aeb00fe763564d5b562920c19f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a330433fa7834185fe03f2e5073014361" id="r_a330433fa7834185fe03f2e5073014361"><td class="memItemLeft" align="right" valign="top"><a id="a330433fa7834185fe03f2e5073014361" name="a330433fa7834185fe03f2e5073014361"></a>
-<a class="el" href="classalgebra_1_1Matrix.html">typedef</a> std::map&lt; indexes, <a class="el" href="classalgebra_1_1Matrix.html">T</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>coo_matrix</b></td></tr>
+<a class="el" href="classalgebra_1_1Matrix.html">typedef</a> std::map&lt; <a class="el" href="#a3f889801f0cee79f7337ffd367b510b7">indexes</a>, <a class="el" href="classalgebra_1_1Matrix.html">T</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>coo_matrix</b></td></tr>
 <tr class="separator:a330433fa7834185fe03f2e5073014361"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -115,9 +117,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a06ec7d62f2e769bc346233b4cad03dc6" id="r_a06ec7d62f2e769bc346233b4cad03dc6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a06ec7d62f2e769bc346233b4cad03dc6">Matrix</a> (std::size_t <a class="el" href="classalgebra_1_1Matrix.html">const</a> &amp;<a class="el" href="classalgebra_1_1Matrix.html">r</a>, <a class="el" href="classalgebra_1_1Matrix.html">size_t</a> <a class="el" href="classalgebra_1_1Matrix.html">const</a> &amp;<a class="el" href="classalgebra_1_1Matrix.html">c</a>)</td></tr>
 <tr class="memdesc:a06ec7d62f2e769bc346233b4cad03dc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new empty <a class="el" href="classalgebra_1_1Matrix.html" title="Template class for sparse matrices. Template parameters are the data type and internal ordering (colu...">Matrix</a> object assigning the shape.  <br /></td></tr>
 <tr class="separator:a06ec7d62f2e769bc346233b4cad03dc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a73d4f1f57164c536a08818388dfbe4c9" id="r_a73d4f1f57164c536a08818388dfbe4c9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a73d4f1f57164c536a08818388dfbe4c9">Matrix</a> (uncompressed <a class="el" href="classalgebra_1_1Matrix.html">const</a> &amp;<a class="el" href="classalgebra_1_1Matrix.html">m</a>, <a class="el" href="Matrix_8hpp.html#a7072f22e6b12b2a75ddd0a762a2196c8">Order</a> <a class="el" href="classalgebra_1_1Matrix.html">const</a> &amp;<a class="el" href="classalgebra_1_1Matrix.html">o</a>=Row_major)</td></tr>
-<tr class="memdesc:a73d4f1f57164c536a08818388dfbe4c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classalgebra_1_1Matrix.html" title="Template class for sparse matrices. Template parameters are the data type and internal ordering (colu...">Matrix</a> starting from a full matrix (vector of vector representation) with a given ordering (default is row-major).  <br /></td></tr>
-<tr class="separator:a73d4f1f57164c536a08818388dfbe4c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5915d08da2f550781dbf4d4ffbda7354" id="r_a5915d08da2f550781dbf4d4ffbda7354"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5915d08da2f550781dbf4d4ffbda7354">Matrix</a> (<a class="el" href="#a545d6aeb00fe763564d5b562920c19f1">fullmatrix</a> <a class="el" href="classalgebra_1_1Matrix.html">const</a> &amp;<a class="el" href="classalgebra_1_1Matrix.html">m</a>, <a class="el" href="Matrix_8hpp.html#a7072f22e6b12b2a75ddd0a762a2196c8">Order</a> <a class="el" href="classalgebra_1_1Matrix.html">const</a> &amp;<a class="el" href="classalgebra_1_1Matrix.html">o</a>=Row_major)</td></tr>
+<tr class="memdesc:a5915d08da2f550781dbf4d4ffbda7354"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classalgebra_1_1Matrix.html" title="Template class for sparse matrices. Template parameters are the data type and internal ordering (colu...">Matrix</a> starting from a full matrix (vector of vector representation) with a given ordering (default is row-major).  <br /></td></tr>
+<tr class="separator:a5915d08da2f550781dbf4d4ffbda7354"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c0fb9102868e59e2f4aa969bf0d4903" id="r_a5c0fb9102868e59e2f4aa969bf0d4903"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5c0fb9102868e59e2f4aa969bf0d4903">Matrix</a> (<a class="el" href="classalgebra_1_1Matrix.html">Matrix</a> <a class="el" href="classalgebra_1_1Matrix.html">const</a> &amp;<a class="el" href="classalgebra_1_1Matrix.html">m</a>)</td></tr>
 <tr class="memdesc:a5c0fb9102868e59e2f4aa969bf0d4903"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classalgebra_1_1Matrix.html" title="Template class for sparse matrices. Template parameters are the data type and internal ordering (colu...">Matrix</a> object starting from an existing <a class="el" href="classalgebra_1_1Matrix.html" title="Template class for sparse matrices. Template parameters are the data type and internal ordering (colu...">Matrix</a>.  <br /></td></tr>
 <tr class="separator:a5c0fb9102868e59e2f4aa969bf0d4903"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -145,7 +147,7 @@ std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>nrows</b> ()</
 <tr class="memdesc:a3aae4eb6570b8f05b6edc23cec2324f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pass from a compressed representation to the coordinate representation. <br /></td></tr>
 <tr class="separator:a3aae4eb6570b8f05b6edc23cec2324f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa62526bccd145f05b6392b63f5f4dce3" id="r_aa62526bccd145f05b6392b63f5f4dce3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classalgebra_1_1Matrix.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa62526bccd145f05b6392b63f5f4dce3">is_compressed</a> () <a class="el" href="classalgebra_1_1Matrix.html">const</a></td></tr>
-<tr class="memdesc:aa62526bccd145f05b6392b63f5f4dce3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the matrix is compressed and returns true if compressed, false otherwise.  <br /></td></tr>
+<tr class="memdesc:aa62526bccd145f05b6392b63f5f4dce3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the matrix is compressed and returns true if compressed, false otherwise.  <br /></td></tr>
 <tr class="separator:aa62526bccd145f05b6392b63f5f4dce3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adade59d6b88ecf597eea9474ce3e9d72" id="r_adade59d6b88ecf597eea9474ce3e9d72"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classalgebra_1_1Matrix.html">double</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adade59d6b88ecf597eea9474ce3e9d72">norm_one</a> () <a class="el" href="classalgebra_1_1Matrix.html">const</a></td></tr>
 <tr class="memdesc:adade59d6b88ecf597eea9474ce3e9d72"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the 1-norm of the matrix.  <br /></td></tr>
@@ -157,12 +159,12 @@ std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>nrows</b> ()</
 <tr class="memdesc:abba5ddc347c63a859f15b16f4420bc21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the Frobenius norm of the matrix.  <br /></td></tr>
 <tr class="separator:abba5ddc347c63a859f15b16f4420bc21"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae268bd872098f155d22f83249a8be0e5" id="r_ae268bd872098f155d22f83249a8be0e5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classalgebra_1_1Matrix.html">double</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae268bd872098f155d22f83249a8be0e5">norm</a> (<a class="el" href="Matrix_8hpp.html#a67b8431f9217a8c697b8ac46b1613b2b">Norm</a> <a class="el" href="classalgebra_1_1Matrix.html">const</a> &amp;<a class="el" href="classalgebra_1_1Matrix.html">n</a>) <a class="el" href="classalgebra_1_1Matrix.html">const</a></td></tr>
-<tr class="memdesc:ae268bd872098f155d22f83249a8be0e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">NOT working for both compressed and uncompressed.  <br /></td></tr>
+<tr class="memdesc:ae268bd872098f155d22f83249a8be0e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given an enumerator, return the desired matrix norm. Possible norms are:  <br /></td></tr>
 <tr class="separator:ae268bd872098f155d22f83249a8be0e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae48530a12b24fcb375585b3b6c35f0d0" id="r_ae48530a12b24fcb375585b3b6c35f0d0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classalgebra_1_1Matrix.html">T</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae48530a12b24fcb375585b3b6c35f0d0">operator[]</a> (indexes <a class="el" href="classalgebra_1_1Matrix.html">const</a> &amp;<a class="el" href="classalgebra_1_1Matrix.html">i</a>) <a class="el" href="classalgebra_1_1Matrix.html">const</a></td></tr>
+<tr class="memitem:ae48530a12b24fcb375585b3b6c35f0d0" id="r_ae48530a12b24fcb375585b3b6c35f0d0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classalgebra_1_1Matrix.html">T</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae48530a12b24fcb375585b3b6c35f0d0">operator[]</a> (<a class="el" href="#a3f889801f0cee79f7337ffd367b510b7">indexes</a> <a class="el" href="classalgebra_1_1Matrix.html">const</a> &amp;<a class="el" href="classalgebra_1_1Matrix.html">i</a>) <a class="el" href="classalgebra_1_1Matrix.html">const</a></td></tr>
 <tr class="memdesc:ae48530a12b24fcb375585b3b6c35f0d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Const version of subscript operator. If a.  <br /></td></tr>
 <tr class="separator:ae48530a12b24fcb375585b3b6c35f0d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3591ea84cc03b3491ba08a6068f2977b" id="r_a3591ea84cc03b3491ba08a6068f2977b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classalgebra_1_1Matrix.html">T</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3591ea84cc03b3491ba08a6068f2977b">operator[]</a> (indexes <a class="el" href="classalgebra_1_1Matrix.html">const</a> &amp;<a class="el" href="classalgebra_1_1Matrix.html">i</a>)</td></tr>
+<tr class="memitem:a3591ea84cc03b3491ba08a6068f2977b" id="r_a3591ea84cc03b3491ba08a6068f2977b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classalgebra_1_1Matrix.html">T</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3591ea84cc03b3491ba08a6068f2977b">operator[]</a> (<a class="el" href="#a3f889801f0cee79f7337ffd367b510b7">indexes</a> <a class="el" href="classalgebra_1_1Matrix.html">const</a> &amp;<a class="el" href="classalgebra_1_1Matrix.html">i</a>)</td></tr>
 <tr class="memdesc:a3591ea84cc03b3491ba08a6068f2977b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subscript operator for access assign.  <br /></td></tr>
 <tr class="separator:a3591ea84cc03b3491ba08a6068f2977b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -208,8 +210,8 @@ template&lt;<a class="el" href="classalgebra_1_1Matrix.html">typename</a> <a cla
 
 </div>
 </div>
-<a id="a73d4f1f57164c536a08818388dfbe4c9" name="a73d4f1f57164c536a08818388dfbe4c9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a73d4f1f57164c536a08818388dfbe4c9">&#9670;&#160;</a></span>Matrix() <span class="overload">[2/4]</span></h2>
+<a id="a5915d08da2f550781dbf4d4ffbda7354" name="a5915d08da2f550781dbf4d4ffbda7354"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5915d08da2f550781dbf4d4ffbda7354">&#9670;&#160;</a></span>Matrix() <span class="overload">[2/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -219,7 +221,7 @@ template&lt;<a class="el" href="classalgebra_1_1Matrix.html">typename</a> <a cla
         <tr>
           <td class="memname"><a class="el" href="classalgebra_1_1Matrix.html">algebra::Matrix</a>&lt; <a class="el" href="classalgebra_1_1Matrix.html">T</a>, <a class="el" href="classalgebra_1_1Matrix.html">StorageOrder</a> &gt;::Matrix </td>
           <td>(</td>
-          <td class="paramtype">uncompressed <a class="el" href="classalgebra_1_1Matrix.html">const</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>m</em>, </span></td>
+          <td class="paramtype"><a class="el" href="#a545d6aeb00fe763564d5b562920c19f1">fullmatrix</a> <a class="el" href="classalgebra_1_1Matrix.html">const</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>m</em>, </span></td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -344,7 +346,7 @@ template&lt;<a class="el" href="classalgebra_1_1Matrix.html">typename</a> <a cla
       </table>
 </div><div class="memdoc">
 
-<p>Checks if the matrix is compressed and returns true if compressed, false otherwise. </p>
+<p>Check if the matrix is compressed and returns true if compressed, false otherwise. </p>
 <dl class="section return"><dt>Returns</dt><dd>bool </dd></dl>
 
 </div>
@@ -366,8 +368,8 @@ template&lt;<a class="el" href="classalgebra_1_1Matrix.html">typename</a> <a cla
       </table>
 </div><div class="memdoc">
 
-<p>NOT working for both compressed and uncompressed. </p>
-<p>Given an enumerator, return the desired matrix norm. Possible norms are:</p><ul>
+<p>Given an enumerator, return the desired matrix norm. Possible norms are: </p>
+<ul>
 <li>1-norm</li>
 <li>Infinity norm</li>
 <li>Frobenius norm</li>
@@ -459,7 +461,7 @@ template&lt;<a class="el" href="classalgebra_1_1Matrix.html">typename</a> <a cla
         <tr>
           <td class="memname"><a class="el" href="classalgebra_1_1Matrix.html">T</a> &amp; <a class="el" href="classalgebra_1_1Matrix.html">algebra::Matrix</a>&lt; <a class="el" href="classalgebra_1_1Matrix.html">T</a>, <a class="el" href="classalgebra_1_1Matrix.html">StorageOrder</a> &gt;::operator[] </td>
           <td>(</td>
-          <td class="paramtype">indexes <a class="el" href="classalgebra_1_1Matrix.html">const</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>i</em></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="#a3f889801f0cee79f7337ffd367b510b7">indexes</a> <a class="el" href="classalgebra_1_1Matrix.html">const</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>i</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -487,7 +489,7 @@ template&lt;<a class="el" href="classalgebra_1_1Matrix.html">typename</a> <a cla
         <tr>
           <td class="memname"><a class="el" href="classalgebra_1_1Matrix.html">T</a> <a class="el" href="classalgebra_1_1Matrix.html">algebra::Matrix</a>&lt; <a class="el" href="classalgebra_1_1Matrix.html">T</a>, <a class="el" href="classalgebra_1_1Matrix.html">StorageOrder</a> &gt;::operator[] </td>
           <td>(</td>
-          <td class="paramtype">indexes <a class="el" href="classalgebra_1_1Matrix.html">const</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>i</em></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="#a3f889801f0cee79f7337ffd367b510b7">indexes</a> <a class="el" href="classalgebra_1_1Matrix.html">const</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>i</em></span></td><td>)</td>
           <td> const</td>
         </tr>
       </table>

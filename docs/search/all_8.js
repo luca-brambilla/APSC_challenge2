@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['resize_0',['resize',['../classalgebra_1_1Matrix.html#a27e14f1cd684dbd830e17fd5ee32f655',1,'algebra::Matrix']]]
+  ['print_0',['print',['../classalgebra_1_1Matrix.html#a466a55059e80fa52a4fbd4b22c1985b8',1,'algebra::Matrix']]]
 ];
