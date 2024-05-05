@@ -4,6 +4,8 @@ Luca Brambilla: luca13.brambilla@mail.polimi.it
 
 919812 - 10510718
 
+Challenge source code available [here](https://github.com/luca-brambilla/APSC_challenge2)
+
 # Sparse matrix
 
 Implementation of the sparse Matrix
