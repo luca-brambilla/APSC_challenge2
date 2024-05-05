@@ -47,12 +47,12 @@ Methods are available to compute the matrix norm and matrix-\/vector product.
 \begin{DoxyCompactList}\small\item\em Construct a new \doxylink{classalgebra_1_1Matrix}{Matrix} object reading from a file in matrix market format. \end{DoxyCompactList}\item 
 \Hypertarget{classalgebra_1_1Matrix_ae94115ac04c303df67fcf386dd044729}\label{classalgebra_1_1Matrix_ae94115ac04c303df67fcf386dd044729} 
 std\+::size\+\_\+t {\bfseries ncols} ()
-\item 
+\begin{DoxyCompactList}\small\item\em Get number of columns. \end{DoxyCompactList}\item 
 \Hypertarget{classalgebra_1_1Matrix_a95c1cb370edc577eae98d482e7e4feaa}\label{classalgebra_1_1Matrix_a95c1cb370edc577eae98d482e7e4feaa} 
 std\+::size\+\_\+t {\bfseries nrows} ()
-\begin{DoxyCompactList}\small\item\em Get number of columns. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classalgebra_1_1Matrix}{void}} \mbox{\hyperlink{classalgebra_1_1Matrix_a27e14f1cd684dbd830e17fd5ee32f655}{resize}} (std\+::size\+\_\+t \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{r}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{size\+\_\+t}} \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{c}})
 \begin{DoxyCompactList}\small\item\em Get number of rows. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classalgebra_1_1Matrix}{void}} \mbox{\hyperlink{classalgebra_1_1Matrix_a27e14f1cd684dbd830e17fd5ee32f655}{resize}} (std\+::size\+\_\+t \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{r}}, \mbox{\hyperlink{classalgebra_1_1Matrix}{size\+\_\+t}} \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{c}})
+\begin{DoxyCompactList}\small\item\em Reshape the matrix passing the new number of rows and columns. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classalgebra_1_1Matrix}{void}} \mbox{\hyperlink{classalgebra_1_1Matrix_a466a55059e80fa52a4fbd4b22c1985b8}{print}} () \mbox{\hyperlink{classalgebra_1_1Matrix}{const}}
 \begin{DoxyCompactList}\small\item\em Print in coordinate representation. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classalgebra_1_1Matrix}{void}} \mbox{\hyperlink{classalgebra_1_1Matrix_a0271f677b1efdb0a70bc00f8697e6b12}{compress}} (\mbox{\hyperlink{Matrix_8hpp_a13667716dd7d18aff841207714f35fea}{Compression}} \mbox{\hyperlink{classalgebra_1_1Matrix}{const}} \&\mbox{\hyperlink{classalgebra_1_1Matrix}{c}})
@@ -323,9 +323,7 @@ Print in coordinate representation.
 
 
 
-Get number of rows. 
-
-Reshape the matrix passing the new number of rows and columns.
+Reshape the matrix passing the new number of rows and columns. 
 
 
 \begin{DoxyParams}{Parameters}

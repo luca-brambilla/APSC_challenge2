@@ -81,8 +81,14 @@ public:
     Matrix(std::string const &name, Order const &o=Row_major);
 
     // getters
-    std::size_t ncols() { return ncol; }; ///< Get number of columns
-    std::size_t nrows() { return nrow; }; ///< Get number of rows
+    /**
+     * @brief Get number of columns
+     */
+    std::size_t ncols() { return ncol; };
+    /**
+     * @brief Get number of rows
+     */
+    std::size_t nrows() { return nrow; };
 
     // utilities
     void resize(std::size_t const& r, size_t const& c);
