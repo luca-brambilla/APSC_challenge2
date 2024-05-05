@@ -11,6 +11,7 @@
 #include <vector>
 #include <iostream>
 #include <cmath>
+#include <complex>
 
 #include <string>
 #include <fstream>
@@ -74,7 +75,7 @@ public:
     
     Matrix(Matrix const &m);
     
-    Matrix(std::string const &name);
+    //Matrix(std::string const &name);
     Matrix(std::string const &name, Order const &o=Row_major);
 
     // getters
@@ -203,13 +204,20 @@ Matrix<T, StorageOrder>::Matrix(const std::vector<std::vector<T>> &m,
 
 
 /**
- * @brief Construct a new Matrix object reading from a file.
+ * @brief Construct a new Matrix object reading from a file in matrix market format
+ *
+ * Assume reading only real matrices (not complex).
+ *
+ * Assume reading in coordinate representation with row-major ordering.
  * 
  * @param name        String containing the path to the file to read.
+ * @param o           Desired ordering in which to store the data. 
  */
 template<typename T, typename StorageOrder>
-Matrix<T, StorageOrder>::Matrix(std::string const &name)
+Matrix<T, StorageOrder>::Matrix(std::string const &name, Order const &o)
 {
+    ordering = o;
+
     // open the file
     std::ifstream file(name);
 
@@ -230,31 +238,59 @@ Matrix<T, StorageOrder>::Matrix(std::string const &name)
     // read number of rows and columns
     std::istringstream iss(line);
     iss >> nrow >> ncol;
-    std::cout << nrow << " " << ncol << std::endl;
+    // std::cout << nrow << " " << ncol << std::endl;
 
-    // read each line from the file
-    while (getline(file, line))
+    // hold data for each line
+    std::size_t i;  // row index
+    std::size_t j;  // column index
+    T num;
+
+    switch (o) {
+    case Order::Row_major:
     {
-        // string stream from the line
-        std::istringstream iss(line);
-        
-        // hold data for each line
-        std::size_t i;
-        std::size_t j;
-        T num;
+        // read each line from the file
+        while (getline(file, line))
+        {
+            // string stream from the line
+            std::istringstream iss(line);
 
-        // read data from the line
-        if (iss >> i >> j >> num) {
-            // store value if above tolerance
-            if (std::abs(num) > ZERO_TOL)
-            {
-                dynamic_data.insert( { {i,j}, num} );
+            // read data from the line
+            if (iss >> i >> j >> num) {
+                // store value if above tolerance
+                if (std::abs(num) > ZERO_TOL)
+                {
+                    // row-column index
+                    dynamic_data.insert( { {i,j}, num} );
+                }
+            }
+            else {
+                std::cerr << "Error reading line: " << line << std::endl;
             }
         }
-        else {
-            std::cerr << "Error reading line: " << line << std::endl;
+    }
+    case Order::Column_major:
+    {
+        // read each line from the file
+        while (getline(file, line))
+        {
+            // string stream from the line
+            std::istringstream iss(line);
+
+            // read data from the line
+            if (iss >> i >> j >> num) {
+                // store value if above tolerance
+                if (std::abs(num) > ZERO_TOL)
+                {
+                    // column-row index
+                    dynamic_data.insert( { {j,i}, num} );
+                }
+            }
+            else {
+                std::cerr << "Error reading line: " << line << std::endl;
+            }
         }
     }
+    } // switch(ordering)
 
     // close the file
     file.close();
@@ -476,8 +512,9 @@ void Matrix<T, StorageOrder>::print() const
         std::cout << "print uncompressed" << std::endl;
         for (auto it=dynamic_data.cbegin(); it!=dynamic_data.cend(); ++it)
         {
-            std::cout << it->first[0] << " " << it->first[1] << ": " << it->second << std::endl;
+            std::cout << it->first[0] << "\t " << it->first[1] << ": \t" << it->second << std::endl;
         }
+        return;
     }
 
     // print if compressed format
@@ -517,7 +554,7 @@ void Matrix<T, StorageOrder>::print() const
         }
         return;
     }
-    case Compression::CSR:
+    case Compression::CSC:
     {
         return;
     }
@@ -538,7 +575,7 @@ template<typename T, typename StorageOrder>
 double Matrix<T, StorageOrder>::norm_one() const
 {
     double res=0.0;
-    std::vector<T> sums(ncol);
+    std::vector<double> sums(ncol);
     // max of sum by columns
 
 

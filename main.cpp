@@ -3,6 +3,7 @@
 #include <vector>
 #include "Matrix.hpp"
 #include <chrono>
+#include <complex>
 
 int main()
 {
@@ -81,7 +82,7 @@ int main()
     }
 
     //! norm()
-    if (true)
+    if (false)
     {
         algebra::Matrix<double, algebra::Order>::uncompressed data5{ {{1,2,3, 4}, 
                                                                         {5,6,7, 8},
@@ -91,6 +92,20 @@ int main()
         std::cout << "Norm-1: " << M_norm.norm(algebra::Norm::One) << std::endl;
         std::cout << "Infinity: " << M_norm.norm(algebra::Norm::Infinity) << std::endl;
         std::cout << "Frobenius: " << M_norm.norm(algebra::Norm::Frobenius) << std::endl;
+    }
+
+    //! norm() with complex
+    if (true)
+    {
+        std::complex<double> a(1.0, 0.0);
+        std::complex<double> b(0.0, 1.0);
+        algebra::Matrix<std::complex<double>, algebra::Order>::uncompressed data_complex{ {{a,0,0}, 
+                                                                        {0,b,0},
+                                                                        {0,0,a+b} } };
+        algebra::Matrix<std::complex<double>, algebra::Order> M_norm_complex(data_complex);
+        std::cout << "Norm-1: " << M_norm_complex.norm(algebra::Norm::One) << std::endl;
+        std::cout << "Infinity: " << M_norm_complex.norm(algebra::Norm::Infinity) << std::endl;
+        std::cout << "Frobenius: " << M_norm_complex.norm(algebra::Norm::Frobenius) << std::endl;
     }
 
     //! subscript operator[]
