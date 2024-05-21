@@ -1,0 +1,23 @@
+Readme and git are good. Good job!
+
+Checklist:
+  - sparse_matrix constructor:   OKAY
+  - compress:                    OKAY
+  - uncompress:                  OKAY
+  - data is properly cleared:    OKAY
+  - call to non-const / const assignment operator: OKAY
+  - resize method:               OKAY
+  - operator*:                   OKAY
+  - reading from file:           OKAY
+
+EXTRAs
+  - One Column Matrix:           OKAY
+  - Norms:                       OKAY 
+
+General Comments:
+  - The presence of the implementation of the fullmatrix made some confusion initially.
+  - I don't like your choice to access the data with operator[], I would have prefered something like [i,j],
+    or (i,j).
+  - What is the purpose of the folder dump? Don't push if not needed, or remove it with git rm.
+  - Where is your doxygen? Carefull, when dealing with documentation with doxygen you should let the user generate it.
+  
